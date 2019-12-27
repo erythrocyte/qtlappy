@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 #coding: utf-8
 
+import sys
+# sys.path.insert(1, '../src')
+
+import laplapy
 import matplotlib.pyplot as plt
-from src import lapltri
+import lapltri
 import triangle as tr
 
-# from matplotlib.patches import Polygon
 
-
-def main():
+def main(argv):
+    if len(argv) == 0:
+        print('bad arguments')
+        sys.exit(1)
+    contour_file = argv[0]
+    print(contour_file)
     grid2dTri = lapltri.GridTri2D()
     # draw_grid_mtplt(grid2dTri)
     draw_grid_triangle(grid2dTri)
@@ -28,12 +35,8 @@ def draw_grid_mtplt(grid2dTri):
     # Setup plot and callbacks.
     plt.subplot(111, aspect='equal')
     plt.triplot(triang, 'bo-')
-    # polygon = Polygon([[0, 0], [0, 0]], facecolor='y')  # dummy data for xs,ys
-    # update_polygon(-1)
-    # plt.gca().add_patch(polygon)
-    # plt.gcf().canvas.mpl_connect('motion_notify_event', motion_notify)
     plt.show()
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])

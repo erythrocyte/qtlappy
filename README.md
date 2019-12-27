@@ -1,3 +1,3 @@
 # laplapy
 
-laplace eauation by fem
+laplace equation by fem on triangular grid
