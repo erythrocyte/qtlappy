@@ -2,11 +2,8 @@
 #coding: utf-8
 
 import sys
-# sys.path.insert(1, '../src')
-
-import laplapy
+from laplapy import lapltri
 import matplotlib.pyplot as plt
-import lapltri
 import triangle as tr
 
 
