@@ -9,10 +9,11 @@ def read_bound_file(fn):
     """
     is_file_exists = os.path.isfile(fn)
     if is_file_exists is False:
+        print("file [{0}] does not exist".format(fn))
         return None
 
     with open(fn) as f:
-        lines = f.readlines().trim()
+        lines = map(str.strip, f.readlines())
 
         point_count_find = False
         result = []
@@ -21,11 +22,13 @@ def read_bound_file(fn):
             if l.startswith("#"):
                 continue
 
-            point_count = int(l)
-            point_count_find = True
+            if point_count_find is False:
+                point_count = int(l)
+                point_count_find = True
+                continue
 
             if point_count_find:
-                points = l.strip(' ')
+                points = l.split(' ')
 
                 k = 0
                 for i in range(0, point_count):
