@@ -1,0 +1,5 @@
+# HOLES FILE CAPTION
+# holes count
+2
+4 1 0.08 100
+-3 -1.5 0.081 100
