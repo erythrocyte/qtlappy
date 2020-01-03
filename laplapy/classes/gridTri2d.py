@@ -9,7 +9,7 @@ class GridTri2D:
     def __init__(self):
         self.gridCreated = False
 
-    def make_tri_grid(self):
+    def make_tri_grid(self, bound, holes):
         a = False
         if a:
             pts0, seg0 = self.__circle(36, 1.0)
