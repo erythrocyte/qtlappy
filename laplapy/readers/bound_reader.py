@@ -32,8 +32,8 @@ def read_bound_file(fn):
 
                 k = 0
                 for i in range(0, point_count):
-                    p1 = points[k]
-                    p2 = points[k + 1]
+                    p1 = float(points[k])
+                    p2 = float(points[k + 1])
                     k = k + 2
 
                     result.append([p1, p2])

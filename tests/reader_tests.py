@@ -15,7 +15,7 @@ class TestReaderMethods(unittest.TestCase):
     def test_rect_hole_boundary(self):
         # arrange
         dirname = os.path.realpath('')
-        fn = os.path.join(dirname, 'examples/rect_hole/boundary.txt')
+        fn = os.path.join(dirname, 'examples/data/rect_hole/boundary.txt')
 
         # act
         points = bound_reader.read_bound_file(fn)
@@ -29,7 +29,7 @@ class TestReaderMethods(unittest.TestCase):
         """
         # arrange
         dirname = os.path.realpath('')
-        fn = os.path.join(dirname, 'examples/rect_hole/holes.txt')
+        fn = os.path.join(dirname, 'examples/data/rect_hole/holes.txt')
 
         # act
         holes = holes_reader.read_holes_file(fn)
