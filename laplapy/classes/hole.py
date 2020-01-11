@@ -6,9 +6,7 @@ class Hole:
     """
 
     """
-    def __init__(self, caption, x, y, rw, pw):
-        self.caption = caption
-        self.x = x
-        self.y = y
+    def __init__(self, wid, track, rw):
+        self.wid = wid
+        self.track = track
         self.rw = rw
-        self.pw = pw

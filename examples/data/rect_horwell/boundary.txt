@@ -1,0 +1,5 @@
+# boundary contour for domain
+# points count -- first not comment row;
+4
+# points coordinates
+-5 -2 5 -2 5 2 -5 2

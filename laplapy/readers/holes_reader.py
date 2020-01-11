@@ -18,33 +18,33 @@ def read_holes_file(fn):
 
         holes_count_find = False
         holes = []
-        wi = 1
 
         for l in lines:
             if l.startswith("#"):
                 continue
 
             if holes_count_find is False:
-                holes_count = int(l)
+                # holes_count = int(l)
                 holes_count_find = True
                 continue
 
             if holes_count_find:
-                if wi > holes_count:
-                    continue
-
                 data = l.split(' ')
 
-                if len(data) != 4:
-                    continue
+                well_index = int(data[0])
+                rw = float(data[1])
 
-                x = float(data[0])
-                y = float(data[1])
-                rw = float(data[2])
-                pw = float(data[3])
+                track_point_count = int(data[2])
 
-                well = hole.Hole('w{0}'.format(wi), x, y, rw, pw)
+                track = []
+                k = 3
+                for i in range(track_point_count):
+                    x = float(data[k + i])
+                    y = float(data[k + i + 1])
+                    track.append([x, y])
+                    k = k + 1
+
+                well = hole.Hole(well_index, track, rw)
                 holes.append(well)
-                wi = wi + 1
 
     return holes

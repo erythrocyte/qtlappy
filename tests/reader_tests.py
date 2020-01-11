@@ -38,6 +38,23 @@ class TestReaderMethods(unittest.TestCase):
         self.assertEqual(2, len(holes))
         self.assertEqual(0.08, holes[0].rw)
         self.assertEqual(0.081, holes[1].rw)
+        self.assertEqual(1, len(holes[0].track))
+
+    def test_rect_horwell_welldata(self):
+        """
+
+        """
+        # arrange
+        dirname = os.path.realpath('')
+        fn = os.path.join(dirname, 'examples/data/rect_horwell/horwell.txt')
+
+        # act
+        holes = holes_reader.read_holes_file(fn)
+
+        #assert
+        self.assertEqual(1, len(holes))
+        self.assertEqual(0.08, holes[0].rw)
+        self.assertEqual(4, len(holes[0].track))
 
 
 if __name__ == '__main__':
