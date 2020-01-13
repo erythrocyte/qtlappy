@@ -39,7 +39,6 @@ class GridTri2D:
             for well in wells:
                 wx = well.track[0][0]
                 wy = well.track[0][1]
-                print(wx)
                 hls.append([wx, wy])
                 if well.isVert:
                     pts_well, seg_well = self.__circle(
