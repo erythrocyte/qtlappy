@@ -33,18 +33,20 @@ def read_holes_file(fn):
 
                 well_index = int(data[0])
                 rw = float(data[1])
+                well_type = int(data[2])
+                seg_count = int(data[3])
 
-                track_point_count = int(data[2])
+                track_point_count = int(data[4])
 
                 track = []
-                k = 3
+                k = 5
                 for i in range(track_point_count):
                     x = float(data[k + i])
                     y = float(data[k + i + 1])
                     track.append([x, y])
                     k = k + 1
 
-                well = hole.Hole(well_index, track, rw)
+                well = hole.Hole(well_index, track, rw, well_type == 0, seg_count)
                 holes.append(well)
 
     return holes
