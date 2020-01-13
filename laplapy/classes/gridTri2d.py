@@ -16,16 +16,7 @@ class GridTri2D:
         """
         if bound is None:
             return None
-        # a = False
-        # if a:
-        # pts0, seg0 = self.__circle(36, 1.0)
-        # else:
-        # pts0, seg0 = self.__rectangle(-1, -1, 2, 2)
-        # pts1, seg1 = self.__circle(36, 0.5)
-        # seg_count = seg0.shape[0] if a else len(seg0)
-        # pts = np.vstack([pts0, pts1])
-        # seg = np.vstack([seg0, seg1 + seg_count])
-        # A = dict(vertices=pts, segments=seg, holes=[[0, 0.1]])
+
         pts_bound, seg_bound = self.__polygon(bound)
 
         pts = np.vstack([pts_bound])
@@ -66,6 +57,8 @@ class GridTri2D:
         pts = [[x0, y0], [lx + x0, y0], [lx + x0, ly + y0], [x0, ly + y0]]
         seg = [[0, 1], [1, 2], [2, 3], [3, 0]]
         return pts, seg
+
+    def __polyhole(self, track, rw
 
     def __polygon(self, bound_points):
         """
