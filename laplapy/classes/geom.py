@@ -9,8 +9,15 @@ def get_line_cf(x0, y0, x1, y1):
     line y = ax + b. returns a,b
 
     """
-    a = (y1 - y0) / (x1 - x0)
-    b = (y0 * x1 - x0 * y1) / (x1 - x0)
+    if abs(x1 - x0) < 1e-6:
+        a = 0
+        b = x0
+    elif abs(y1- y0) < 1e-6:
+        a = 0
+        b = y0
+    else:
+        a = (y1 - y0) / (x1 - x0)
+        b = (y0 * x1 - x0 * y1) / (x1 - x0)
 
     return a, b
 
