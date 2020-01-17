@@ -108,4 +108,18 @@ class TestGeomMethods(unittest.TestCase):
         self.assertEqual(a1, 0.0)
         self.assertEqual(b1, 0.0)
 
+    def test_ortholinecf_valid(self):
+        x0, x1 = 0.0, 4.0
+        y0, y1 = 8.0, 0.0
+
+        a, b = geom.get_line_cf(x0, y0, x1, y1)
+
+        a1, b1 = geom.ortho_line_cf(a, b, 1.5, 0)
+
+        self.assertEqual(a, -2.0)
+        self.assertEqual(b, 8.0)
+
+        self.assertEqual(a1, 1.0 / 2.0)
+        self.assertEqual(b1, -3.0 / 4.0)
+
 
