@@ -350,3 +350,77 @@ class TestGeomMethods(unittest.TestCase):
         # assert
         self.assertEqual(a1, a)
         self.assertEqual(b1, -r * math.sin(math.pi / 4.0) + b)
+
+    def test_intersection_point_parallel_xconst(self):
+        # arrange
+        a1, b1 = None, 0.0
+        a2, b2 = None, 0.0
+
+        # act
+        x, y = geom.get_intersect_point(a1, b1, a2, b2)
+
+        # assert
+        self.assertEqual(None, x)
+        self.assertEqual(None, y)
+
+    def test_intersection_point_parallel_yconst(self):
+        # arrange
+        a1, b1 = 0.0, 4.0
+        a2, b2 = 0.0, 6.0
+
+        # act
+        x, y = geom.get_intersect_point(a1, b1, a2, b2)
+
+        # assert
+        self.assertEqual(None, x)
+        self.assertEqual(None, y)
+
+    def test_intersection_point_xconst_yconst(self):
+        # arrange
+        a1, b1 = None, 0.0
+        a2, b2 = 0.0, 6.0
+
+        # act
+        x, y = geom.get_intersect_point(a1, b1, a2, b2)
+
+        # assert
+        self.assertEqual(0.0, x)
+        self.assertEqual(6.0, y)
+
+    def test_intersection_point_yconst_xconst(self):
+        # arrange
+        a1, b1 = 0.0, 6.0
+        a2, b2 = None, 0.0
+
+        # act
+        x, y = geom.get_intersect_point(a1, b1, a2, b2)
+
+        # assert
+        self.assertEqual(0.0, x)
+        self.assertEqual(6.0, y)
+
+    def test_intersection_point_yx_negyx(self):
+        # arrange
+        a1, b1 = 1.0, 0.0
+        a2, b2 = -1.0, 0.0
+
+        # act
+        x, y = geom.get_intersect_point(a1, b1, a2, b2)
+
+        # assert
+        self.assertEqual(0.0, x)
+        self.assertEqual(0.0, y)
+
+    def test_intersection_point_custom_lines(self):
+        # arrange
+        x00, x01, y00, y01 = 2.0, 0.0, 0.0, 5.0
+        x10, x11, y10, y11 = 1.0, 4.0, 2.5, 6.0
+        a1, b1 = geom.get_line_cf(x00, y00, x01, y01)
+        a2, b2 = geom.get_line_cf(x10, y10, x11, y11)
+
+        # act
+        x, y = geom.get_intersect_point(a1, b1, a2, b2)
+
+        # assert
+        self.assertEqual(1.0, x)
+        self.assertEqual(2.5, y)

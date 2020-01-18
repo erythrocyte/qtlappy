@@ -75,6 +75,7 @@ def paral_line_cf(a, b, r, isPlus):
 
     return a, b2
 
+
 def get_intersect_point(a1, b1, a2, b2):
     """
     The point of intersection of two lines.
@@ -84,11 +85,16 @@ def get_intersect_point(a1, b1, a2, b2):
     if a1 is None and a2 is None:
         return None, None
 
-    if math.abs(a2 - a1) < 1e-6:
+    if a1 is None and abs(a2 - 0.0) < 1e-6:
+        return b1, b2
+
+    if a2 is None and abs(a1 - 0.0) < 1e-6:
+        return b2, b1
+
+    if abs(a2 - a1) < 1e-6:
         return None, None
 
     x = (b2 - b1) / (a1 - a2)
     y = (a1 * b2 - b1 * a2) / (a1 - a2)
 
     return x, y
-
