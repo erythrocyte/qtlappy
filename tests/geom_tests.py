@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import unittest
 import math
 from laplapy.classes import geom
@@ -53,7 +52,7 @@ class TestGeomMethods(unittest.TestCase):
         self.assertEqual(a, 1.0)
         self.assertEqual(b, 0.0)
 
-    def test_getlinefc_yx(self):
+    def test_getlinefc_negyx(self):
         x0, x1 = 0.0, -6.0
         y0, y1 = 0.0, 6.0
 
@@ -79,7 +78,6 @@ class TestGeomMethods(unittest.TestCase):
 
         self.assertEqual(a, -6.0 / 4.0)
         self.assertEqual(b, 6.0)
-
 
     def test_ortholinecf_x0(self):
         x0, x1 = 0.0, 0.0
@@ -172,7 +170,7 @@ class TestGeomMethods(unittest.TestCase):
         t0, t1 = geom.get_polyend_circle_angles(a, b, isLeft)
 
         # assert
-        self.assertEqual(t0, math.pi/ 2.0)
+        self.assertEqual(t0, math.pi / 2.0)
         self.assertEqual(t1, 3.0 * math.pi / 2.0)
 
     def test_get_polyend_circle_angles_yx_right(self):
@@ -227,7 +225,128 @@ class TestGeomMethods(unittest.TestCase):
         self.assertEqual(t0, 3.0 * math.pi / 4.0)
         self.assertEqual(t1, 7.0 * math.pi / 4.0)
 
+    def test_parallel_line_cf_x0_plus(self):
+        # arrange
+        a = None
+        b = 0.0
+        r = 1
+        isPlus = True
 
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
 
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, r)
 
+    def test_parallel_line_cf_x0_minus(self):
+        # arrange
+        a = None
+        b = 0.0
+        r = 1
+        isPlus = False
 
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, -r)
+
+    def test_parallel_line_cf_x0_b4_minus(self):
+        # arrange
+        a = None
+        b = 4.0
+        r = 1
+        isPlus = False
+
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, -r + b)
+
+    def test_parallel_line_cf_y0_plus(self):
+        # arrange
+        a = 0.0
+        b = 0.0
+        r = 1
+        isPlus = True
+
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, r + b)
+
+    def test_parallel_line_cf_y0_minus(self):
+        # arrange
+        a = 0.0
+        b = 0.0
+        r = 1
+        isPlus = False
+
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, -r + b)
+
+    def test_parallel_line_cf_yx_minus(self):
+        # arrange
+        a = 1.0
+        b = 0.0
+        r = 1
+        isPlus = False
+
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, -r * math.sin(math.pi / 4.0) + b)
+
+    def test_parallel_line_cf_yx_plus(self):
+        # arrange
+        a = 1.0
+        b = 0.0
+        r = 1
+        isPlus = True
+
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, r * math.sin(math.pi / 4.0) + b)
+
+    def test_parallel_line_cf_negyx_minus(self):
+        # arrange
+        a = -1.0
+        b = 0.0
+        r = 1
+        isPlus = False
+
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, r * math.sin(math.pi / 4.0) + b)
+
+    def test_parallel_line_cf_negyx_plus(self):
+        # arrange
+        a = -1.0
+        b = 0.0
+        r = 1
+        isPlus = True
+
+        # act
+        a1, b1 = geom.paral_line_cf(a, b, r, isPlus)
+
+        # assert
+        self.assertEqual(a1, a)
+        self.assertEqual(b1, -r * math.sin(math.pi / 4.0) + b)
