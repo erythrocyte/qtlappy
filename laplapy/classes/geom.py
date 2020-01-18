@@ -75,14 +75,20 @@ def paral_line_cf(a, b, r, isPlus):
 
     return a, b2
 
-    # t1, t2 = get_polyend_circle_angles(a, b, True)
+def get_intersect_point(a1, b1, a2, b2):
+    """
+    The point of intersection of two lines.
+    If lines parallel then None is returned
 
-    # t = t1 if isPlus else t2
-    # x = math.cos(t) * r
-    # y = math.sin(t) * r
+    """
+    if a1 is None and a2 is None:
+        return None, None
 
-    # xs = x0 + x if isPlus else x0 - x
-    # ys = y0 + y if isPlus else y0 - y
+    if math.abs(a2 - a1) < 1e-6:
+        return None, None
 
-    # b2 = ys - a * xs
-    # return a, b2
+    x = (b2 - b1) / (a1 - a2)
+    y = (a1 * b2 - b1 * a2) / (a1 - a2)
+
+    return x, y
+
