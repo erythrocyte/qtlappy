@@ -15,6 +15,5 @@ class Bound(object):
         with open(json_file_name, "r", encoding="utf-8") as f:
             fdata = f.read()
             data = json.loads(fdata)["bound"]
-            name = data["name"]
             points = list(map(Point.from_json, data["points"]))
-            return cls(name, points)
+            return cls(data["name"], points)
