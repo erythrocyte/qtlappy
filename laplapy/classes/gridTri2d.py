@@ -58,8 +58,6 @@ class GridTri2D:
         seg = [[0, 1], [1, 2], [2, 3], [3, 0]]
         return pts, seg
 
-    def __polyhole(self, track, rw
-
     def __polygon(self, bound_points):
         """
         make outer bound as polygon from
