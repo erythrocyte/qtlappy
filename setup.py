@@ -4,14 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="laplapy",  # Replace with your own username
+    name="qtlappy",  # Replace with your own username
     version="0.0.1",
     author="erythrocyte",
     author_email="erythrocyte.rbc@gmail.com",
-    description="A small example package",
+    description="2D reservoir simulation",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://bitbucket.org/erythrocyte/laplapy",
+    url="https://github.org/erythrocyte/qtlappy",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
