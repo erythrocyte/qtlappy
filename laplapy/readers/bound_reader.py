@@ -2,7 +2,26 @@
 #coding: utf-8
 
 import os.path
+import json
 
+
+def read_bound_file_json(filename):
+    """
+
+    """
+    is_file_exists = os.path.isfile(filename)
+    if is_file_exists is False:
+        print(f"file { filename } does not exist")
+        return None
+        
+    with open(filename, "r", encoding = "utf-8") as f:
+        data = f.read()
+        z = json.loads(data)
+
+    print(z)
+
+
+    
 
 def read_bound_file(fn):
     """
