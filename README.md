@@ -1,3 +1,3 @@
-# laplapy
+# qtlappy
 
-laplace equation by fem on triangular grid
+2D laplace equation solving by fem on triangular grid
