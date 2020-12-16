@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from src.lappy.models import bound
+from src.lappy.models.field import Field
 # from src.lappy.models import bound
 # from laplapy.readers import bound_reader, holes_reader
 # from laplapy.classes import gridTri2d
@@ -14,14 +14,16 @@ from src.lappy.models import bound
 def main():
     # read boundary points
     dirname = os.path.realpath('')
-    fn_bound_points = 'examples/data/rect_hole/boundary.json'
-    fn_bound_points = os.path.join(dirname, fn_bound_points)
-    bnd = bound.Bound.from_json(fn_bound_points)
+    fn_bound = 'examples/data/rect_hole/boundary.json'
+    fn_bound = os.path.join(dirname, fn_bound)
+    fn_wells = 'examples/data/rect_hole/wells.json'
+    fn_wells = os.path.join(dirname, fn_wells)
+
+    field = Field.create("test_field", fn_bound, fn_wells)
     # bound_points = bound_reader.read_bound_file_json(fn_bound_points)
 
     # read holes
-    # fn_holes = 'examples/data/rect_hole/holes.txt'
-    # fn_holes = os.path.join(dirname, fn_holes)
+
     # wells = holes_reader.read_holes_file(fn_holes)
 
     # gridMaker = gridTri2d.GridTri2D()
