@@ -13,11 +13,9 @@ from src.lappy.models.field import Field
 
 def main():
     # read boundary points
-    dirname = os.path.realpath('')
-    fn_bound = 'examples/data/rect_hole/boundary.json'
-    fn_bound = os.path.join(dirname, fn_bound)
-    fn_wells = 'examples/data/rect_hole/wells.json'
-    fn_wells = os.path.join(dirname, fn_wells)
+    dirname = os.path.join(os.path.realpath(''), 'examples/data/rect_hole')
+    fn_bound = os.path.join(dirname, 'boundary.json')
+    fn_wells = os.path.join(dirname, 'wells.json')
 
     field = Field.create("test_field", fn_bound, fn_wells)
     # bound_points = bound_reader.read_bound_file_json(fn_bound_points)
