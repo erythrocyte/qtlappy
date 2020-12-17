@@ -18,6 +18,7 @@ def main():
     fn_wells = os.path.join(dirname, 'wells.json')
 
     field = Field.create("test_field", fn_bound, fn_wells)
+    print ("field created")
     # bound_points = bound_reader.read_bound_file_json(fn_bound_points)
 
     # read holes
