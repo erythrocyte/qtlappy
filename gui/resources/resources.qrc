@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="qtlap">images/qtlap.svg</file>
+    <file alias="power_off">images/power-off.svg</file>
+</qresource>
+</RCC>

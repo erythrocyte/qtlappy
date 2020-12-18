@@ -3,8 +3,10 @@
 
 
 # from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QGridLayout, QWidget, QMenuBar, QMenu, QToolBar
-from PyQt5.QtCore import QSize
+from PyQt5 import QtWidgets, QtCore, QtGui
+import resources
+import functools
+import prog
 
 
 class UI_QtLapWindow:
@@ -17,15 +19,16 @@ class UI_QtLapWindow:
 
     def retranslateUi(self, widget):
         widget.setWindowTitle(self.__window_title)
+        self.__aboutqtlap.setText(u'About QtLap')
         self.status_bar.showMessage('ready')
 
     def setupUi(self, widget):
-        widget.setMinimumSize(QSize(640, 480))
+        widget.setMinimumSize(QtCore.QSize(640, 480))
 
-        self.__central_widget = QWidget(widget)
+        self.__central_widget = QtWidgets.QWidget(widget)
         widget.setCentralWidget(self.__central_widget)
 
-        self.__grid_layout = QGridLayout(widget)
+        self.__grid_layout = QtWidgets.QGridLayout()
         self.__central_widget.setLayout(self.__grid_layout)
 
         widget.showMaximized()
@@ -36,19 +39,43 @@ class UI_QtLapWindow:
         self.__createToolBar(widget)
         self.__createStatusBar(widget)
 
+        widget.setWindowIcon(QtGui.QIcon(":qtlap"))
+
         self.retranslateUi(widget)
 
     def __createMenuBar(self, widget):
-        self.menu_bar = QMenuBar(widget)
+        self.menu_bar = QtWidgets.QMenuBar(widget)
 
-        file_menu = QMenu('&File', widget)
-        self.menu_bar.addMenu(file_menu)
+        # -- File
+        self.__file_menu = QtWidgets.QMenu('&File', widget)        
+        self.menu_bar.addMenu(self.__file_menu)
 
-        help_menu = QMenu('&Help', widget)
-        self.menu_bar.addMenu(help_menu)
+        self.__close_action = QtWidgets.QAction(QtGui.QIcon(":power_off"),
+                                                '&Close', widget)
+        self.__close_action.triggered.connect(widget.close)
+        self.__file_menu.addAction(self.__close_action)
+
+        # --- Help
+        self.__help_menu = QtWidgets.QMenu('&Help', widget)
+        self.menu_bar.addMenu(self.__help_menu)
+
+        self.__aboutqtlap = QtWidgets.QAction('About QtLap', widget)
+        self.__aboutqtlap.triggered.connect(functools.partial(
+            QtWidgets.QMessageBox.about,
+            widget,
+            'About QtLap',
+            """
+            < b > Laplace equation solver and visualizer < /b >
+            < br >< br > Version {0} <br><br>
+            <a href="http://{1}/releases/latest">{1}</a>
+            """.format(prog.version, "www.github.com/erythrocyte/qtlappy/")))
+        self.__help_menu.addAction(self.__aboutqtlap)
+        self.__aboutqt = QtWidgets.QAction('About Qt', widget)
+        self.__aboutqt.triggered.connect(QtWidgets.QApplication.aboutQt)
+        self.__help_menu.addAction(self.__aboutqt)
 
     def __createToolBar(self, widget):
-        self.tool_bar = QToolBar(widget)
+        self.tool_bar = QtWidgets.QToolBar(widget)
 
     def __createStatusBar(self, widget):
         self.status_bar = widget.statusBar()
