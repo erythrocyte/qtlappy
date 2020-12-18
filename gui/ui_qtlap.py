@@ -11,7 +11,7 @@ import prog
 
 class UI_QtLapWindow:
     def __init__(self):
-        self.__window_title = 'QtLap v.0.1'
+        self.__window_title = f'QtLap v.{ prog.version }'
         self.__central_widget = None
         self.__grid_layout = None
         self.menu_bar = None
