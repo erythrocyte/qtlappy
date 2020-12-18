@@ -10,6 +10,9 @@ geom_tests:
 rect_hole:
 	python3 run_rect_hole.py
 
+gui:
+	python3 gui/qtlap.py
+
 all:
 	reader_tests
 	grid_tests

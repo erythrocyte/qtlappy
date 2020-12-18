@@ -5,10 +5,17 @@
     "version": "0.2.0",
     "configurations": [        
         {
-            "name": "main",
+            "name": "rect_hole",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/run_rect_hole.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "gui",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/gui/qtlap.py",
             "console": "integratedTerminal"
         }
     ]
