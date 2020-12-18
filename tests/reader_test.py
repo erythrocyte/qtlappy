@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#coding: utf-8
+# coding: utf-8
 
 import os
 import unittest
@@ -34,11 +34,12 @@ class TestReaderMethods(unittest.TestCase):
         # act
         holes = holes_reader.read_holes_file(fn)
 
-        #assert
+        # assert
         self.assertEqual(2, len(holes))
         self.assertEqual(0.08, holes[0].rw)
         self.assertEqual(0.081, holes[1].rw)
         self.assertEqual(1, len(holes[0].track))
+
 
 if __name__ == '__main__':
     unittest.main()
