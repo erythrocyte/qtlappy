@@ -33,7 +33,7 @@ class MeshMaker2D:
             return None
 
         poly_maker = polygon_maker.PolygonMaker()
-        pts_bound, seg_bound = poly_maker.make_polygon(bound)
+        pts_bound, seg_bound = poly_maker.make(bound)
 
         pts = np.vstack([pts_bound])
         seg = np.vstack([seg_bound])
@@ -47,7 +47,7 @@ class MeshMaker2D:
             for well in wells:
                 if not well.is_vert:
                     continue
-                [hlw, ptsw, segw] = wm.make_well(well, setts)
+                [hlw, ptsw, segw] = wm.make(well, setts)
                 hls.append(hlw)
                 pts = np.vstack([pts, ptsw])
                 seg = np.vstack([seg, segw + seg_count])

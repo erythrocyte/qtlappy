@@ -9,7 +9,7 @@ class PolygonMaker(object):
     class definition
     """
 
-    def make_polygon(self, bound: Bound):
+    def make(self, bound: Bound):
         """
         make points and segments from bound
 
