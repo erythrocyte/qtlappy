@@ -21,17 +21,7 @@ def main():
     mesh_maker = MeshMaker2D()
     mesh = mesh_maker.triangulate(field, setts)
 
-    # bound_points = bound_reader.read_bound_file_json(fn_bound_points)
-
-    # read holes
-
-    # wells = holes_reader.read_holes_file(fn_holes)
-
-    # gridMaker = gridTri2d.GridTri2D()
-    # A = gridMaker.make_tri_grid(bound_points, wells)
-    # B = tr.triangulate(A, 'qpa0.1')
     ax = plt.axes()
-    # tr.compare(plt, A, B)
     tr.plot(ax, **mesh)
     ax.get_xaxis().set_visible(True)
     ax.get_yaxis().set_visible(True)

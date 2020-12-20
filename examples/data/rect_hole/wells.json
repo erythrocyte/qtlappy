@@ -3,7 +3,7 @@
         {
             "id" : 0,
             "name" : "well1",
-            "radius" : 0.5,
+            "radius" : 0.2,
             "vert": true,
             "points": [
                 {
@@ -16,7 +16,7 @@
         {
             "id" : 1,
             "name" : "well2",
-            "radius" : 1.5,
+            "radius" : 0.15,
             "vert": true,
             "points": [
                 {
@@ -29,7 +29,7 @@
         {
             "id" : 2,
             "name" : "hor_well1",
-            "radius" : 0.5,
+            "radius" : 0.15,
             "vert": false,
             "points": [
                 {
