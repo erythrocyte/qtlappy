@@ -6,6 +6,7 @@ from typing import List
 from src.lappy.models.bound import Bound
 from src.lappy.models.well import Well
 
+
 class Field(object):
     """
     Field class. Contains information about input geometry: bound and wells.
