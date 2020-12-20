@@ -15,7 +15,7 @@ class WellMaker(object):
         self.vert_well_maker = VertWellMaker()
         self.hor_well_maker = HorWellMaker()
 
-    def make_well(self, well: well.Well, setts: global_setts.GlobalSetts):
+    def make(self, well: well.Well, setts: global_setts.GlobalSetts):
         """
 
         """
