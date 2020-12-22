@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import math
 from src.lappy.models.field import Field
 from src.lappy.services.mesh_maker_2d import MeshMaker2D
 from src.lappy.services.hor_well_maker import HorWellMaker
@@ -87,8 +88,32 @@ def test_hw():
     print('hw maker test done')
 
 
+def test_left_right():
+    p0 = [0.0, 0.0]
+    p1 = [2.0, -1.0]
+
+    pleft = [3.0, -0.5]
+    pright = [1.5, -1.5]
+
+    vmain = [p1[0] - p0[0], p1[1] - p0[1]]
+    vleft = [pleft[0] - p0[0], pleft[1]-p0[1]]
+    vright = [pright[0] - p0[0], pright[1]-p0[1]]
+
+    len_vleft = math.sqrt(vleft[0]**2 + vleft[1]**2)
+    len_vright = math.sqrt(vright[0]**2 + vright[1]**2)
+    len_vmain = math.sqrt(vmain[0]**2 + vmain[1]**2)
+
+    lm = vmain[0] * vleft[0] + vmain[1] * vleft[1]
+    rm = vmain[0] * vright[0] + vmain[1] * vright[1]
+
+    left_alp = math.acos(lm / (len_vmain * len_vleft))
+    right_alp = math.acos(rm / (len_vmain * len_vright))
+
+    print(f'left alp = {left_alp}, right alp = {right_alp}')
+
+
 def main():
-    test_hw()
+    test_left_right()
 
 
 if __name__ == '__main__':
