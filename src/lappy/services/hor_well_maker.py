@@ -3,7 +3,8 @@
 
 from src.lappy.models.well import Well
 from src.lappy.models.point import Point
-from src.lappy.services import geom_oper
+from src.lappy.models.vector import Vector
+from src.lappy.services import geom_oper, vect_oper
 import math
 import numpy as np
 
@@ -15,27 +16,61 @@ class HorWellMaker(object):
     def make(self, well: Well, nw: int, hnw: int):
         """
         """
+        temp_points = self.__get_line_points(well)
+        print("a")
+        # [pts, seg] = self.__half_circle(pbs1, track[0], nw, rw, not cw)
+
+        # # seg_count = len(seg)
+        # # [ptsw, segw] = self.__line(pbs2, track[1], hnw)
+        # # pts = np.vstack([pts, ptsw])
+        # # seg = np.vstack([seg, segw + seg_count])
+        # # seg_count = seg_count + segw.shape[0]
+
+        # return [pts, seg]
+        return temp_points
+
+    def __get_line_points(self, well: Well):
+        """
+        """
         rw = well.radius
         track = well.track
-        cw = False
-        [pbs1, pbs2] = self.__get_bound_points(track[0], track[1], rw, cw)
-        [pts, seg] = self.__half_circle(pbs1, track[0], nw, rw, not cw)
+        result = []
 
-        # seg_count = len(seg)
-        # [ptsw, segw] = self.__line(pbs2, track[1], hnw)
-        # pts = np.vstack([pts, ptsw])
-        # seg = np.vstack([seg, segw + seg_count])
-        # seg_count = seg_count + segw.shape[0]
+        for i in range(len(well.track)-1):
+            p0, p1 = track[i], track[i + 1]
+            pl, pr = self.__get_bound_points(p0, p1, rw)
+            result.append([pl, pr])
+            pl, pr = self.__get_bound_points(p1, p0, rw)
+            result.append([pl, pr])
 
-        return [pts, seg]
+        # swap left and right
+        self.__order_left_right_points(result)
 
-    def __get_bound_points(self, pt_main, pt2, rw, clockwise=True):
+        return result
+
+    def __order_left_right_points(self, points):
+        """
+        Args:
+            points : list[[Points, Point]]            
+        """
+
+        for i in range(len(points)-1):
+            p1, p2 = points[i]
+            q1, q2 = points[i + 1]
+            if geom_oper.is_segments_intersect(p1, q1, p2, q2):
+                points[i+1][0], points[i+1][1] = points[i+1][1], points[i+1][0]
+            elif geom_oper.is_segments_intersect(p1, q1, p2, q2):
+                points[i+1][0], points[i+1][1] = points[i+1][1], points[i+1][0]
+
+    def __get_bound_points(self, pt_main, pt2, rw):
+        """
+        """
         [x0, y0] = [pt_main.x, pt_main.y]
         [x1, y1] = [pt2.x, pt2.y]
         [asg, bsg] = geom_oper.get_line_cf(x0, y0, x1, y1)
         [ap, bp] = geom_oper.ortho_line_cf(asg, bsg, x0, y0)
 
-        x2 = x0 + 1.0 if clockwise else -1.0
+        x2 = x0 + 1.0
         y2 = ap * x2 + bp
 
         vx = x2 - x0
@@ -58,7 +93,8 @@ class HorWellMaker(object):
         i = np.arange(N)
         theta0 = math.acos(p.x/R)
         theta = theta0 + i * np.pi / N if clockwise else theta0 - i * np.pi / N
-        pts = np.stack([R * np.cos(theta) + p0.x, R * np.sin(theta) + p0.y], axis=1)
+        pts = np.stack([R * np.cos(theta) + p0.x, R *
+                        np.sin(theta) + p0.y], axis=1)
         seg = np.stack([i, i + 1], axis=1) % N
         seg = np.delete(seg, -1, axis=0)
         return pts, seg
@@ -80,13 +116,3 @@ class HorWellMaker(object):
             seg = np.append(seg, np.array([[i-1, i]]), axis=0)
 
         return [pts, seg]
-
-    def __point_left_right(self, pm, p0, p1):
-        """
-        args:
-            pm (Point) : main point to find "left" and "right" points
-            p0 (Point) : point before ${pm} in track
-            p1 (Point) : point after ${pm} in track
-        """
-
-        

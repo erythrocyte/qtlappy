@@ -74,7 +74,7 @@ def vtk_poly():
 
 
 def test_hw():
-    from src.lappy.services.vtk_saver import save_vtk
+    # from src.lappy.services.vtk_saver import save_vtk
 
     dirname = os.path.join(os.path.realpath(''), 'examples/data/rect_hole')
     fn_bound = os.path.join(dirname, 'boundary.json')
@@ -82,9 +82,19 @@ def test_hw():
 
     field = Field.create("test_field", fn_bound, fn_wells)
     hwm = HorWellMaker()
-    [a, b] = hwm.make(field.wells[2], 10, 2)
+    tp = hwm.make(field.wells[2], 10, 2)
 
-    save_vtk('hw.vtk', 'hw', 'index', a, b)
+    for i, t in enumerate(tp):
+        plt.scatter(t[0].x, t[0].y, s=10, c='red')
+        plt.annotate(f'l{i}', (t[0].x, t[0].y))
+        plt.scatter(t[1].x, t[1].y, s=10, c='blue')
+        plt.annotate(f'r{i}', (t[1].x, t[1].y))
+        # if i > 0:
+        #     break
+
+    plt.show()
+
+    # save_vtk('hw.vtk', 'hw', 'index', a, b)
     print('hw maker test done')
 
 
@@ -113,7 +123,7 @@ def test_left_right():
 
 
 def main():
-    test_left_right()
+    test_hw()
 
 
 if __name__ == '__main__':
