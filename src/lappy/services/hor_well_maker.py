@@ -48,19 +48,22 @@ class HorWellMaker(object):
 
         return result
 
-    def __order_left_right_points(self, points):
+    def __order_left_right_points(self, pts):
         """
         Args:
-            points : list[[Points, Point]]            
+            pts : list[[Points, Point]]            
         """
 
-        for i in range(len(points)-1):
-            p1, p2 = points[i]
-            q1, q2 = points[i + 1]
-            if geom_oper.is_segments_intersect(p1, q1, p2, q2):
-                points[i+1][0], points[i+1][1] = points[i+1][1], points[i+1][0]
-            elif geom_oper.is_segments_intersect(p1, q1, p2, q2):
-                points[i+1][0], points[i+1][1] = points[i+1][1], points[i+1][0]
+        for i in range(len(pts)-1):
+            p1, p2 = pts[i]
+            q1, q2 = pts[i + 1]
+            res, p = geom_oper.is_segments_intersect(p1, q1, p2, q2)
+            if res:
+                pts[i+1][0], pts[i+1][1] = pts[i+1][1], pts[i+1][0]
+            else:
+                res, p = geom_oper.is_segments_intersect(p1, p2, q1, q2)
+                if res:
+                    pts[i+1][0], pts[i+1][1] = pts[i+1][1], pts[i+1][0]
 
     def __get_bound_points(self, pt_main, pt2, rw):
         """
@@ -73,20 +76,12 @@ class HorWellMaker(object):
         x2 = x0 + 1.0
         y2 = ap * x2 + bp
 
-        vx = x2 - x0
-        vy = y2 - y0
+        vx, vy = x2 - x0, y2 - y0
         lv = math.sqrt(vx**2 + vy**2)
-        ux = vx / lv
-        uy = vy / lv
+        ux, uy = vx / lv, vy / lv
 
-        xa = x0 + rw * ux
-        ya = y0 + rw * uy
-        p0 = Point(xa, ya, -1)
-
-        xb = x0 - rw * ux
-        yb = y0 - rw * uy
-        p1 = Point(xb, yb, -1)
-
+        p0 = Point(x0 + rw * ux, y0 + rw * uy, -1)
+        p1 = Point(x0 - rw * ux, y0 - rw * uy, -1)
         return [p0, p1]
 
     def __half_circle(self, p, p0, N, R, clockwise):

@@ -101,68 +101,48 @@ def get_intersect_point(a1, b1, a2, b2):
     return x, y
 
 
-# Given three colinear points p, q, r, the function checks if
-# point q lies on line segment 'pr'
-def __on_segment(p: Point, q: Point, r: Point):
-    if ((q.x <= max(p.x, r.x)) and (q.x >= min(p.x, r.x)) and
-            (q.y <= max(p.y, r.y)) and (q.y >= min(p.y, r.y))):
-        return True
-    return False
+def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
+                          continuous=False):
+    # Before anything else check if lines have a mutual abcisses
+    interval_1 = [min(p1.x, q1.x), max(p1.x, q1.x)]
+    interval_2 = [min(p2.x, q2.x), max(p2.x, q2.x)]
+    interval = [
+        min(interval_1[1], interval_2[1]),
+        max(interval_1[0], interval_2[0])
+    ]
 
+    if interval_1[1] < interval_2[0]:
+        print('No mutual abcisses!')
+        return False, None
 
-def __orientation(p: Point, q: Point, r: Point):
-    # to find the orientation of an ordered triplet (p,q,r)
-    # function returns the following values:
-    # 0 : Colinear points
-    # 1 : Clockwise points
-    # 2 : Counterclockwise
+    # Try to compute interception
+    def line(p1, p2):
+        A = (p1.y - p2.y)
+        B = (p2.x - p1.x)
+        C = (p1.x*p2.y - p2.x*p1.y)
+        return A, B, -C
 
-    # See https://www.geeksforgeeks.org/orientation-3-ordered-points/amp/
-    # for details of below formula.
+    L1 = line(p1, q1)
+    L2 = line(p2, q2)
 
-    val = (float(q.y - p.y) * (r.x - q.x)) - (float(q.x - p.x) * (r.y - q.y))
-    if (val > 0):  # Clockwise orientation
-        return 1
-    elif (val < 0):  # Counterclockwise orientation
-        return 2
-    else:  # Colinear orientation
-        return 0
+    D = L1[0]*L2[1] - L1[1]*L2[0]
+    Dx = L1[2]*L2[1] - L1[1]*L2[2]
+    Dy = L1[0]*L2[2] - L1[2]*L2[0]
 
-
-def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point):
-    """
-    The main function that returns true if
-    the line segment 'p1q1' and 'p2q2' intersect.
-    """
-
-    # Find the 4 orientations required for
-    # the general and special cases
-    o1 = __orientation(p1, q1, p2)
-    o2 = __orientation(p1, q1, q2)
-    o3 = __orientation(p2, q2, p1)
-    o4 = __orientation(p2, q2, q1)
-
-    # General case
-    if ((o1 != o2) and (o3 != o4)):
-        return True
-
-    # Special Cases
-
-    # p1 , q1 and p2 are colinear and p2 lies on segment p1q1
-    if ((o1 == 0) and __on_segment(p1, p2, q1)):
-        return True
-
-    # p1 , q1 and q2 are colinear and q2 lies on segment p1q1
-    if ((o2 == 0) and __on_segment(p1, q2, q1)):
-        return True
-
-    # p2 , q2 and p1 are colinear and p1 lies on segment p2q2
-    if ((o3 == 0) and __on_segment(p2, p1, q2)):
-        return True
-
-    # p2 , q2 and q1 are colinear and q1 lies on segment p2q2
-    if ((o4 == 0) and __on_segment(p2, q1, q2)):
-        return True
-
-    # If none of the cases
-    return False
+    if D != 0:
+        x = Dx / D
+        y = Dy / D
+        p = Point(x, y, -1)
+        if continuous:  # continuous parameter allows switching between line
+            # and line segment interception
+            return True, p
+        else:
+            if p.x < interval[1] or p.x > interval[0]:
+                print('Intersection out of bound at [%.2f, %.2f]' % (p.x, p.y))
+                return False, None
+            else:
+                return True, p
+    else:
+        if (Dx == 0 or Dy == 0):
+            print('segments parallel')
+        return False, None
