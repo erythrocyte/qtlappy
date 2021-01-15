@@ -145,7 +145,3 @@ class HorWellMaker(object):
         result.x = xnew + pc.x
         result.y = ynew + pc.y
         return [result.x, result.y]
-
-    def __get_angle(self, p0, p1, pc, rw):
-        x = math.sqrt((p0.x - p1.x)**2 + (p0.y - p1.y)**2)
-        return 2.0 * math.asin(x / 2.0 / rw)
