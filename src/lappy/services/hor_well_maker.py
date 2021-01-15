@@ -16,18 +16,35 @@ class HorWellMaker(object):
     def make(self, well: Well, nw: int, hnw: int):
         """
         """
-        temp_points = self.__get_line_points(well)
-        print("a")
-        # [pts, seg] = self.__half_circle(pbs1, track[0], nw, rw, not cw)
+        tp = self.__get_line_points(well)
+        rw = well.radius
+        [pts, seg] = self.__sector(tp[0][0],
+                                   well.track[0],
+                                   nw, rw, False)
 
-        # # seg_count = len(seg)
-        # # [ptsw, segw] = self.__line(pbs2, track[1], hnw)
-        # # pts = np.vstack([pts, ptsw])
-        # # seg = np.vstack([seg, segw + seg_count])
-        # # seg_count = seg_count + segw.shape[0]
+        ltp = len(tp)
+        seg_count = len(seg)
+        for i in range(ltp-1):
+            [ptsw, segw] = self.__line(tp[i][1], tp[i+1][1], hnw)
+            pts = np.vstack([pts, ptsw])
+            seg = np.vstack([seg, segw + seg_count])
+            seg_count = seg_count + segw.shape[0]
 
-        # return [pts, seg]
-        return temp_points
+        [pts1, seg1] = self.__sector(tp[ltp-1][1],
+                                     well.track[ltp-2],
+                                     nw, rw, False)
+        pts = np.vstack([pts, pts1])
+        seg = np.vstack([seg, seg1 + seg_count])
+        seg_count = seg_count + seg1.shape[0]
+
+        for i in range(ltp-1):
+            [ptsw, segw] = self.__line(
+                tp[ltp-1 - i][0], tp[ltp-1 - (i+1)][0], hnw)
+            pts = np.vstack([pts, ptsw])
+            seg = np.vstack([seg, segw + seg_count])
+            seg_count = seg_count + segw.shape[0]
+
+        return [pts, seg, tp]
 
     def __get_line_points(self, well: Well):
         """
@@ -84,12 +101,13 @@ class HorWellMaker(object):
         p1 = Point(x0 - rw * ux, y0 - rw * uy, -1)
         return [p0, p1]
 
-    def __half_circle(self, p, p0, N, R, clockwise):
+    def __sector(self, p0, pc, N, R, clockwise):
         i = np.arange(N)
-        theta0 = math.acos(p.x/R)
-        theta = theta0 + i * np.pi / N if clockwise else theta0 - i * np.pi / N
-        pts = np.stack([R * np.cos(theta) + p0.x, R *
-                        np.sin(theta) + p0.y], axis=1)
+        theta = i * np.pi / N * (-1 if clockwise else 1)
+        pts = np.empty((0, 2))
+        for t in theta:
+            p = self.__rotate_point(p0, pc, t)
+            pts = np.append(pts, np.array([p]), axis=0)
         seg = np.stack([i, i + 1], axis=1) % N
         seg = np.delete(seg, -1, axis=0)
         return pts, seg
@@ -100,9 +118,6 @@ class HorWellMaker(object):
         [a, b] = geom_oper.get_line_cf(x0, y0, x1, y1)
         pts = np.empty((0, 2))
         seg = np.empty((0, 2), int)
-        # xy = np.append(xy, np.array([[-1, 1]]), axis=0)
-        # xy = np.append(xy, np.array([[2, 3]]), axis=0)
-        # xy = np.append(xy, np.array([[0, 0]]), axis=0)
 
         for i in range(1, n + 1):
             x = x0 + (x1 - x0) / n * i
@@ -111,3 +126,26 @@ class HorWellMaker(object):
             seg = np.append(seg, np.array([[i-1, i]]), axis=0)
 
         return [pts, seg]
+
+    def __rotate_point(self, p: Point, pc: Point, angle: float):
+        s = math.sin(angle)
+        c = math.cos(angle)
+
+        result = Point(p.x, p.y, -1)
+
+        # translate point back to origin:
+        result.x -= pc.x
+        result.y -= pc.y
+
+        # rotate point
+        xnew = result.x * c - result.y * s
+        ynew = result.x * s + result.y * c
+
+        # translate point back:
+        result.x = xnew + pc.x
+        result.y = ynew + pc.y
+        return [result.x, result.y]
+
+    def __get_angle(self, p0, p1, pc, rw):
+        x = math.sqrt((p0.x - p1.x)**2 + (p0.y - p1.y)**2)
+        return 2.0 * math.asin(x / 2.0 / rw)

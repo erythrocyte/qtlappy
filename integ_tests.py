@@ -30,7 +30,11 @@ def test_tri():
     plt.show()
 
 
-def mtp_poly():
+def mtp_poly(points):
+
+    if points is None:
+        return
+
     import numpy as np
     import matplotlib
     from matplotlib.patches import Polygon
@@ -41,15 +45,10 @@ def mtp_poly():
     patches = []
 
     xy = np.empty((0, 2))
-    xy = np.append(xy, np.array([[-1, 1]]), axis=0)
-    xy = np.append(xy, np.array([[2, 3]]), axis=0)
-    xy = np.append(xy, np.array([[0, 0]]), axis=0)
-    xy2 = np.array([(1, 1), (2, 3), (0, 0)])
+    for p in points:
+        xy = np.append(xy, np.array([[p.x, p.y]]), axis=0)
 
     pol = Polygon(xy, True)
-    patches.append(pol)
-
-    pol = Polygon(xy2, True)
     patches.append(pol)
 
     colors = 12*np.random.rand(len(patches))
@@ -82,44 +81,30 @@ def test_hw():
 
     field = Field.create("test_field", fn_bound, fn_wells)
     hwm = HorWellMaker()
-    tp = hwm.make(field.wells[2], 10, 2)
+    [pts, seg, tp] = hwm.make(field.wells[2], 10, 2)
+
+    fig, ax = plt.subplots()
+    ax.set_aspect('equal')
 
     for i, t in enumerate(tp):
         plt.scatter(t[0].x, t[0].y, s=10, c='red')
         plt.annotate(f'l{i}', (t[0].x, t[0].y))
         plt.scatter(t[1].x, t[1].y, s=10, c='blue')
         plt.annotate(f'r{i}', (t[1].x, t[1].y))
-        # if i > 0:
-        #     break
-
-    plt.show()
 
     # save_vtk('hw.vtk', 'hw', 'index', a, b)
+
+    x_values = []
+    y_values = []
+
+    for p in pts:
+        x_values.append(p[0])
+        y_values.append(p[1])
+
+    plt.plot(x_values, y_values, marker='o')
+    plt.show()
+
     print('hw maker test done')
-
-
-def test_left_right():
-    p0 = [0.0, 0.0]
-    p1 = [2.0, -1.0]
-
-    pleft = [3.0, -0.5]
-    pright = [1.5, -1.5]
-
-    vmain = [p1[0] - p0[0], p1[1] - p0[1]]
-    vleft = [pleft[0] - p0[0], pleft[1]-p0[1]]
-    vright = [pright[0] - p0[0], pright[1]-p0[1]]
-
-    len_vleft = math.sqrt(vleft[0]**2 + vleft[1]**2)
-    len_vright = math.sqrt(vright[0]**2 + vright[1]**2)
-    len_vmain = math.sqrt(vmain[0]**2 + vmain[1]**2)
-
-    lm = vmain[0] * vleft[0] + vmain[1] * vleft[1]
-    rm = vmain[0] * vright[0] + vmain[1] * vright[1]
-
-    left_alp = math.acos(lm / (len_vmain * len_vleft))
-    right_alp = math.acos(rm / (len_vmain * len_vright))
-
-    print(f'left alp = {left_alp}, right alp = {right_alp}')
 
 
 def main():
