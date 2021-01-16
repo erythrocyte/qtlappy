@@ -87,21 +87,21 @@ def test_hw():
     ax.set_aspect('equal')
 
     for i, t in enumerate(tp):
-        plt.scatter(t[0].x, t[0].y, s=10, c='red')
-        plt.annotate(f'l{i}', (t[0].x, t[0].y))
-        plt.scatter(t[1].x, t[1].y, s=10, c='blue')
-        plt.annotate(f'r{i}', (t[1].x, t[1].y))
+        plt.scatter(t.pl.x, t.pl.y, s=10, c='red')
+        plt.annotate(f'l{i}', (t.pl.x, t.pl.y))
+        plt.scatter(t.pr.x, t.pr.y, s=10, c='blue')
+        plt.annotate(f'r{i}', (t.pr.x, t.pr.y))
 
     # save_vtk('hw.vtk', 'hw', 'index', a, b)
 
-    x_values = []
-    y_values = []
+    # x_values = []
+    # y_values = []
 
-    for p in pts:
-        x_values.append(p[0])
-        y_values.append(p[1])
+    # for p in pts:
+    #     x_values.append(p[0])
+    #     y_values.append(p[1])
 
-    plt.plot(x_values, y_values, marker='o')
+    # plt.plot(x_values, y_values, marker='o')
     plt.show()
 
     print('hw maker test done')
