@@ -121,18 +121,6 @@ class HorWellMaker(object):
                         a, b = k, j
                     do_swap(pts, a, b)
 
-        # for j in range(1, len(pts)):
-        #     pp_curr = pts[j].pairs[0]
-        #     pp_prev = pts[j-1].pairs[-1]
-
-        #     if need_swap(pp_prev, pp_curr):
-        #         pts[j].pairs[0].pl, pts[j].pairs[0].pr = pts[j].pairs[0].pr, pts[j].pairs[0].pl
-        #     for i in range(1, len(pts[j].pairs)):
-        #         pp_curr = pts[j].pairs[i]
-        #         pp_prev = pts[j].pairs[i-1]
-        #         if need_swap(pp_prev, pp_curr):
-        #             pts[j].pairs[i].pl, pts[j].pairs[i].pr = pts[j].pairs[i].pr, pts[j].pairs[i].pl
-
     def __merge_points(self, prs, track, r):
         result = []
 

@@ -107,10 +107,10 @@ def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
     # Before anything else check if lines have a mutual abcisses
     interval_1 = [min(p1.x, q1.x), max(p1.x, q1.x)]
     interval_2 = [min(p2.x, q2.x), max(p2.x, q2.x)]
-    interval = [
-        min(interval_1[1], interval_2[1]),
-        max(interval_1[0], interval_2[0])
-    ]
+    # interval = [
+    #     min(interval_1[1], interval_2[1]),
+    #     max(interval_1[0], interval_2[0])
+    # ]
 
     if interval_1[1] < interval_2[0]:
         print('No mutual abcisses!')
@@ -143,10 +143,13 @@ def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
             # and line segment interception
             return True, p
         else:
-            d1 = get_dist(p, p2)
-            d2 = get_dist(p, q2)
-            d = get_dist(p2, q2)
-            if abs(d - (d1 + d2)) > 1e-6:
+            d11 = get_dist(p, p1)
+            d12 = get_dist(p, q1)
+            d1 = get_dist(p1, q1)
+            d21 = get_dist(p, p2)
+            d22 = get_dist(p, q2)
+            d2 = get_dist(p2, q2)
+            if abs(d1 - (d11 + d12)) > 1e-6 or abs(d2 - (d21 + d22)) > 1e-6:
                 print('Intersection out of bound at [%.2f, %.2f]' % (p.x, p.y))
                 return False, None
             else:
