@@ -103,6 +103,7 @@ def get_intersect_point(a1, b1, a2, b2):
 
 def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
                           continuous=False):
+
     # Before anything else check if lines have a mutual abcisses
     interval_1 = [min(p1.x, q1.x), max(p1.x, q1.x)]
     interval_2 = [min(p2.x, q2.x), max(p2.x, q2.x)]
@@ -114,6 +115,11 @@ def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
     if interval_1[1] < interval_2[0]:
         print('No mutual abcisses!')
         return False, None
+
+    if point_on_segment(p1, p2, q2):
+        return True, p1
+    if point_on_segment(q1, p2, q2):
+        return True, q1
 
     # Try to compute interception
     def line(p1, p2):
@@ -137,7 +143,10 @@ def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
             # and line segment interception
             return True, p
         else:
-            if p.x < interval[1] or p.x > interval[0]:
+            d1 = get_dist(p, p2)
+            d2 = get_dist(p, q2)
+            d = get_dist(p2, q2)
+            if abs(d - (d1 + d2)) > 1e-6:
                 print('Intersection out of bound at [%.2f, %.2f]' % (p.x, p.y))
                 return False, None
             else:
@@ -146,3 +155,33 @@ def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
         if (Dx == 0 or Dy == 0):
             print('segments parallel')
         return False, None
+
+
+def point_on_line(p, pl1, pl2):
+    """
+    """
+
+    a, b = get_line_cf(pl1.x, pl1.y, pl2.x, pl2.y)
+    if a is None:
+        return True if abs(p.y - pl1.x) < 1e-6 else False
+
+    py = a * p.x + b
+    return True if abs(py - p.y) < 1e-6 else False
+
+
+def point_on_segment(p, pl1, pl2):
+    """
+    """
+    res = point_on_line(p, pl1, pl2)
+    if not res:
+        return False
+
+    d1 = get_dist(p, pl1)
+    d2 = get_dist(p, pl2)
+    d = get_dist(pl1, pl2)
+
+    return True if abs(d - (d1 + d2)) < 1e-6 else False
+
+
+def get_dist(p1, p2):
+    return math.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)

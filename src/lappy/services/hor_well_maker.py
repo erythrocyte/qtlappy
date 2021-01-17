@@ -22,6 +22,7 @@ class HorWellMaker(object):
         """
         """
         tp = self.__get_line_points(well)
+        return [None, None, tp]
         rw = well.radius
         [pts, seg] = self.__sector(tp[0].pl,
                                    well.track[0],
@@ -66,55 +67,81 @@ class HorWellMaker(object):
             prs[i+1].pairs.append(pr2)
 
         # swap left and right
-        self.__order_left_right_points(prs)
+        self.__order_left_right_points(prs, well.track)
         result = self.__merge_points(prs, well.track, well.radius)
 
         return result
 
-    def __order_left_right_points(self, pts):
+    def __order_left_right_points(self, pts, track):
         """
         Args:
             pts : list[PointPairs]
+            track : well track
         """
 
         def check_swap(p1, q1, p2, q2):
             res, p = geom_oper.is_segments_intersect(p1, q1, p2, q2)
-            if res:
-                return True
-            else:
-                res, p = geom_oper.is_segments_intersect(p1, p2, q1, q2)
+            return True if res else False
+
+        def do_swap(pts, k, j):
+            pts[k].pairs[j].pl, pts[k].pairs[j].pr = \
+                pts[k].pairs[j].pr, pts[k].pairs[j].pl
+
+        def intersect_track(p1, q1, track):
+            for k in range(len(track)-1):
+                p2 = track[k]
+                q2 = track[k+1]
+                res = check_swap(p1, q1, p2, q2)
                 if res:
                     return True
 
             return False
 
-        def need_swap(pp_prev, pp_cur):
-            p1, p2 = pp_prev.pl, pp_prev.pr
-            q1, q2 = pp_curr.pl, pp_curr.pr
+        for k, p in enumerate(pts):
+            for j in range(1, len(p.pairs)+1):
+                if k == len(pts)-1 and j == len(p.pairs):
+                    continue
 
-            return check_swap(p1, q1, p2, q2)
+                p1 = p.pairs[j-1].pr
+                q1 = pts[k+1].pairs[0].pr if j == len(p.pairs) \
+                    else p.pairs[j].pr
+                if intersect_track(p1, q1, track):
+                    # if j == 0:
+                    #     a, b = k-1, -1
+                    # else:
+                    #     a, b = k, j-1
+                    # do_swap(pts, a, b)
+                    # p1 = pts[k-1].pairs[-1].pr if j == 0 else p.pairs[j].pr
+                    # q1 = pts[k + 1].pairs[0].pr if j == len(p.pairs)-1 \
+                    #     else p.pairs[j+1].pr
+                    # if intersect_track(p1, q1, track):
+                    if j == len(p.pairs):
+                        a, b = k+1, 0
+                    else:
+                        a, b = k, j
+                    do_swap(pts, a, b)
 
-        for j in range(1, len(pts)):
-            pp_curr = pts[j].pairs[0]
-            pp_prev = pts[j-1].pairs[-1]
+        # for j in range(1, len(pts)):
+        #     pp_curr = pts[j].pairs[0]
+        #     pp_prev = pts[j-1].pairs[-1]
 
-            if need_swap(pp_prev, pp_curr):
-                pts[j].pairs[0].pl, pts[j].pairs[0].pr = pts[j].pairs[0].pr, pts[j].pairs[0].pl
-            for i in range(1, len(pts[j].pairs)):
-                pp_curr = pts[j].pairs[i]
-                pp_prev = pts[j].pairs[i-1]
-                if need_swap(pp_prev, pp_curr):
-                    pts[j].pairs[i].pl, pts[j].pairs[i].pr = pts[j].pairs[i].pr, pts[j].pairs[i].pl
+        #     if need_swap(pp_prev, pp_curr):
+        #         pts[j].pairs[0].pl, pts[j].pairs[0].pr = pts[j].pairs[0].pr, pts[j].pairs[0].pl
+        #     for i in range(1, len(pts[j].pairs)):
+        #         pp_curr = pts[j].pairs[i]
+        #         pp_prev = pts[j].pairs[i-1]
+        #         if need_swap(pp_prev, pp_curr):
+        #             pts[j].pairs[i].pl, pts[j].pairs[i].pr = pts[j].pairs[i].pr, pts[j].pairs[i].pl
 
     def __merge_points(self, prs, track, r):
         result = []
 
         for i, pr in enumerate(prs):
-            while (len(pr.pairs) != 1):
-                prs[i].pairs = self.__merge_inner_points(pr.pairs, track[i], r)
-            result.append(PointPair(pr.pairs[0].pl, pr.pairs[0].pr))
-            # for j, p in enumerate(pr.pairs):
-            #     result.append(PointPair(p.pl, p.pr))
+            # while (len(pr.pairs) != 1):
+            #     prs[i].pairs = self.__merge_inner_points(pr.pairs, track[i], r)
+            # result.append(PointPair(pr.pairs[0].pl, pr.pairs[0].pr))
+            for j, p in enumerate(pr.pairs):
+                result.append(PointPair(p.pl, p.pr))
 
         return result
 
@@ -146,7 +173,7 @@ class HorWellMaker(object):
         e = Point((p1.x + p2.x) / 2.0, (p1.y + p2.y) / 2.0, -1)
         ux, uy = vect_oper.normalize(e, tp)
 
-        x, y = tp.x + r * ux, tp.y + r * uy
+        x, y = tp.x - r * ux, tp.y - r * uy
         return Point(x, y, -1)
 
     def __get_bound_points(self, pt_main, pt2, rw):
@@ -159,16 +186,34 @@ class HorWellMaker(object):
         [x0, y0] = [pt_main.x, pt_main.y]
         [x1, y1] = [pt2.x, pt2.y]
         [asg, bsg] = geom_oper.get_line_cf(x0, y0, x1, y1)
-        [ap, bp] = geom_oper.ortho_line_cf(asg, bsg, x0, y0)
+        if asg is None:
+            xp0 = x0 + rw
+            yp0 = y0
+            xp1 = x0 - rw
+            yp1 = y0
+        elif abs(asg - 0.0) < 1e-6 and abs(bsg - 0.0) < 1e-6:
+            xp0 = x0
+            yp0 = y0 + rw
+            xp1 = x0
+            yp1 = y0 - rw
+        else:
+            [ap, bp] = geom_oper.ortho_line_cf(asg, bsg, x0, y0)
 
-        x2 = x0 + 1.0
-        y2 = ap * x2 + bp
+            # y2 = y0 + 1.0
+            # x2 = (y2 - bp) / ap
+            x2 = x0 + 1.0
+            y2 = ap * x2 + bp
 
-        vx, vy = x2 - x0, y2 - y0
-        ux, uy = vect_oper.normalize(vx, vy)
+            vx, vy = x2 - x0, y2 - y0
+            ux, uy = vect_oper.normalize(vx, vy)
 
-        p0 = Point(x0 + rw * ux, y0 + rw * uy, -1)
-        p1 = Point(x0 - rw * ux, y0 - rw * uy, -1)
+            xp0 = x0 + rw * ux
+            yp0 = y0 + rw * uy
+            xp1 = x0 - rw * ux
+            yp1 = y0 - rw * uy
+
+        p0 = Point(xp0, yp0, -1)
+        p1 = Point(xp1, yp1, -1)
         result = PointPair(p0, p1)
         return result
 
