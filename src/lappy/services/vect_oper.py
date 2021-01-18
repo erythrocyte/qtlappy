@@ -7,15 +7,15 @@ from src.lappy.models.point import Point
 
 
 def get_dot_mult(v1: Vector, v2: Vector):
-    x1, y1 = v1.vect_comp()
-    x2, y2 = v2.vect_comp()
+    x1, y1 = v1.components()
+    x2, y2 = v2.components()
 
     return x1 * x2 + y1 * y2
 
 
 def get_determinant(v1: Vector, v2: Vector):
-    x1, y1 = v1.vect_comp()
-    x2, y2 = v2.vect_comp()
+    x1, y1 = v1.components()
+    x2, y2 = v2.components()
 
     return x1 * y2 - y1 * x2
 

@@ -6,6 +6,7 @@ from src.lappy.models.point import Point
 from src.lappy.models.pointPair import PointPair
 from src.lappy.models.vector import Vector
 from src.lappy.services import geom_oper, vect_oper
+from src.lappy.services import well_track_service
 import math
 import numpy as np
 
@@ -21,8 +22,14 @@ class HorWellMaker(object):
     def make(self, well: Well, nw: int, hnw: int):
         """
         """
+
+        # check well track suitable
+        if not well_track_service.well_track_suits(well.track):
+            print('well track is not suitable: sharp angles')
+            return None, None, None
+
         tp = self.__get_line_points(well)
-        return [None, None, tp]
+        return None, None, tp
         rw = well.radius
         [pts, seg] = self.__sector(tp[0].pl,
                                    well.track[0],
@@ -50,7 +57,7 @@ class HorWellMaker(object):
             seg = np.vstack([seg, segw + seg_count])
             seg_count = seg_count + segw.shape[0]
 
-        return [pts, seg, tp]
+        return pts, seg, tp
 
     def __get_line_points(self, well: Well):
         """
@@ -67,7 +74,7 @@ class HorWellMaker(object):
             prs[i+1].pairs.append(pr2)
 
         # swap left and right
-        self.__order_left_right_points(prs, well.track)
+        # self.__order_left_right_points(prs, well.track)
         result = self.__merge_points(prs, well.track, well.radius)
 
         return result
@@ -106,15 +113,6 @@ class HorWellMaker(object):
                 q1 = pts[k+1].pairs[0].pr if j == len(p.pairs) \
                     else p.pairs[j].pr
                 if intersect_track(p1, q1, track):
-                    # if j == 0:
-                    #     a, b = k-1, -1
-                    # else:
-                    #     a, b = k, j-1
-                    # do_swap(pts, a, b)
-                    # p1 = pts[k-1].pairs[-1].pr if j == 0 else p.pairs[j].pr
-                    # q1 = pts[k + 1].pairs[0].pr if j == len(p.pairs)-1 \
-                    #     else p.pairs[j+1].pr
-                    # if intersect_track(p1, q1, track):
                     if j == len(p.pairs):
                         a, b = k+1, 0
                     else:

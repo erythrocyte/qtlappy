@@ -83,6 +83,10 @@ def test_hw():
     hwm = HorWellMaker()
     [pts, seg, tp] = hwm.make(field.wells[2], 10, 2)
 
+    if tp is None:
+        # todo: log error message
+        return
+
     fig, ax = plt.subplots()
     ax.set_aspect('equal')
 

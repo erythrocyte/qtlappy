@@ -107,10 +107,6 @@ def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
     # Before anything else check if lines have a mutual abcisses
     interval_1 = [min(p1.x, q1.x), max(p1.x, q1.x)]
     interval_2 = [min(p2.x, q2.x), max(p2.x, q2.x)]
-    # interval = [
-    #     min(interval_1[1], interval_2[1]),
-    #     max(interval_1[0], interval_2[0])
-    # ]
 
     if interval_1[1] < interval_2[0]:
         print('No mutual abcisses!')
