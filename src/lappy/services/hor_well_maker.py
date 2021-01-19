@@ -29,7 +29,6 @@ class HorWellMaker(object):
             return None, None, None
 
         tp = self.__get_line_points(well)
-        return None, None, tp
         rw = well.radius
         [pts, seg] = self.__sector(tp[0].pl,
                                    well.track[0],
@@ -123,11 +122,9 @@ class HorWellMaker(object):
         result = []
 
         for i, pr in enumerate(prs):
-            # while (len(pr.pairs) != 1):
-            #     prs[i].pairs = self.__merge_inner_points(pr.pairs, track[i], r)
-            # result.append(PointPair(pr.pairs[0].pl, pr.pairs[0].pr))
-            for j, p in enumerate(pr.pairs):
-                result.append(PointPair(p.pl, p.pr))
+            while (len(pr.pairs) != 1):
+                prs[i].pairs = self.__merge_inner_points(pr.pairs, track[i], r)
+            result.append(PointPair(pr.pairs[0].pl, pr.pairs[0].pr))
 
         return result
 
@@ -185,8 +182,6 @@ class HorWellMaker(object):
         else:
             [ap, bp] = geom_oper.ortho_line_cf(asg, bsg, x0, y0)
 
-            # y2 = y0 + 1.0
-            # x2 = (y2 - bp) / ap
             x2 = x0 + 1.0
             y2 = ap * x2 + bp
 

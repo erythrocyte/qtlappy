@@ -101,15 +101,18 @@ def test_hw():
     x_values = []
     y_values = []
 
-    # for p in pts:
-    #     x_values.append(p[0])
-    #     y_values.append(p[1])
-
     for p in field.wells[2].track:
         x_values.append(p.x)
         y_values.append(p.y)
 
     plt.plot(x_values, y_values, marker='o')
+
+    x_values.clear()
+    y_values.clear()
+    for p in pts:
+        x_values.append(p[0])
+        y_values.append(p[1])
+    plt.plot(x_values, y_values, marker='+')
     plt.show()
 
     print('hw maker test done')
