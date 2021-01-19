@@ -74,7 +74,7 @@ class HorWellMaker(object):
             prs[i+1].pairs.append(pr2)
 
         # swap left and right
-        # self.__order_left_right_points(prs, well.track)
+        self.__order_left_right_points(prs, well.track)
         result = self.__merge_points(prs, well.track, well.radius)
 
         return result

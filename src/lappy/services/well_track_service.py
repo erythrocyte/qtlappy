@@ -23,8 +23,8 @@ def well_track_suits(track):
         v1 = make_vector(track, k + 1, k)
         v2 = make_vector(track, k + 1, k + 2)
 
-        ang = abs(vect_oper.get_angle(v1, v2))
-        if ang > (89.0 * math.pi / 180.0) / 2.0:
+        ang = 180.0 * abs(vect_oper.get_angle(v1, v2)) / math.pi
+        if ang < 91.0:
             return False
 
     return True
