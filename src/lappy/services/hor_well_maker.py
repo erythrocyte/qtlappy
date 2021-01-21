@@ -40,7 +40,13 @@ class HorWellMaker(object):
 
         # backward
         for k in range(len(track)-1, 0, -1):
-            
+            p0 = track[k]
+            p1 = track[k-1]
+            pts = np.append(pts, np.array([[p0.x, p0.y]]), axis=0)
+            [ptsw, segw] = self.__line(p0, p1, 2 * nw)
+            pts = np.vstack([pts, ptsw])
+            seg = np.vstack([seg, segw + seg_count])
+            seg_count = seg_count + segw.shape[0]
 
         return pts, seg, None
 
