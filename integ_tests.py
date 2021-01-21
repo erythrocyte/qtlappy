@@ -81,20 +81,18 @@ def test_hw():
 
     field = Field.create("test_field", fn_bound, fn_wells)
     hwm = HorWellMaker()
-    [pts, seg, tp] = hwm.make(field.wells[2], 10, 2)
-
-    if tp is None:
-        # todo: log error message
-        return
+    # [pts, seg, tp] = hwm.make(field.wells[2], 10, 2)
+    [pts, seg, tp] = hwm.make_thin(field.wells[2].track, 10)
 
     fig, ax = plt.subplots()
     ax.set_aspect('equal')
 
-    for i, t in enumerate(tp):
-        plt.scatter(t.pl.x, t.pl.y, s=10, c='red')
-        plt.annotate(f'l{i}', (t.pl.x, t.pl.y))
-        plt.scatter(t.pr.x, t.pr.y, s=10, c='blue')
-        plt.annotate(f'r{i}', (t.pr.x, t.pr.y))
+    if tp is not None:
+        for i, t in enumerate(tp):
+            plt.scatter(t.pl.x, t.pl.y, s=10, c='red')
+            plt.annotate(f'l{i}', (t.pl.x, t.pl.y))
+            plt.scatter(t.pr.x, t.pr.y, s=10, c='blue')
+            plt.annotate(f'r{i}', (t.pr.x, t.pr.y))
 
     # save_vtk('hw.vtk', 'hw', 'index', a, b)
 

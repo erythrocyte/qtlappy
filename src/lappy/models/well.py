@@ -16,7 +16,8 @@ class Well(object):
         radius (float):         well radius.
         track (List[Point]):    well trajectory.
     """
-    def __init__(self, id: int, name: str, is_vert: bool, radius: float, track: List[Point]):
+    def __init__(self, id: int, name: str, is_vert: bool,
+                 radius: float, track: List[Point]):
         self.id = id
         self.name = name
         self.is_vert = is_vert

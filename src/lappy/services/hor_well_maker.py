@@ -18,14 +18,31 @@ class HorWellMaker(object):
     class PointPairs(object):
         def __init__(self):
             self.pairs = []
-            
-    def make_thin(self, track, nw)
+
+    def make_thin(self, track, nw):
         """
         args:
             nw - segment points count
         """
-        
-        
+        pts = np.empty((0, 2))
+        seg = np.empty((0, 2))
+        seg_count = len(seg)
+
+        # forward
+        for k in range(len(track)-1):
+            p0 = track[k]
+            p1 = track[k+1]
+            pts = np.append(pts, np.array([[p0.x, p0.y]]), axis=0)
+            [ptsw, segw] = self.__line(p0, p1, nw)
+            pts = np.vstack([pts, ptsw])
+            seg = np.vstack([seg, segw + seg_count])
+            seg_count = seg_count + segw.shape[0]
+
+        # backward
+        for k in range(len(track)-1, 0, -1):
+            
+
+        return pts, seg, None
 
     def make_real(self, well: Well, nw: int, hnw: int):
         """
