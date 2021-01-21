@@ -18,8 +18,16 @@ class HorWellMaker(object):
     class PointPairs(object):
         def __init__(self):
             self.pairs = []
+            
+    def make_thin(self, track, nw)
+        """
+        args:
+            nw - segment points count
+        """
+        
+        
 
-    def make(self, well: Well, nw: int, hnw: int):
+    def make_real(self, well: Well, nw: int, hnw: int):
         """
         """
 
@@ -32,7 +40,7 @@ class HorWellMaker(object):
         rw = well.radius
         [pts, seg] = self.__sector(tp[0].pl,
                                    well.track[0],
-                                   nw, rw, False)
+                                   nw, rw, True)
 
         ltp = len(tp)
         seg_count = len(seg)
@@ -43,8 +51,8 @@ class HorWellMaker(object):
             seg_count = seg_count + segw.shape[0]
 
         [pts1, seg1] = self.__sector(tp[ltp-1].pr,
-                                     well.track[ltp-2],
-                                     nw, rw, False)
+                                     well.track[ltp-1],
+                                     nw, rw, True)
         pts = np.vstack([pts, pts1])
         seg = np.vstack([seg, seg1 + seg_count])
         seg_count = seg_count + seg1.shape[0]
