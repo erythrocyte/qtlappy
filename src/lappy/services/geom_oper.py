@@ -184,3 +184,33 @@ def point_on_segment(p, pl1, pl2):
 
 def get_dist(p1, p2):
     return math.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+
+
+def rotate_point(p: Point, pc: Point, angle: float):
+    """
+
+    calculates the point `p0` by circle around the point `pc` 
+    for the given angle
+    
+    args:
+        p - start point to rotate
+        pc - circle center
+        angle - angle in radians
+    """
+    s = math.sin(angle)
+    c = math.cos(angle)
+
+    result = Point(p.x, p.y, -1)
+
+    # translate point back to origin:
+    result.x -= pc.x
+    result.y -= pc.y
+
+    # rotate point
+    xnew = result.x * c - result.y * s
+    ynew = result.x * s + result.y * c
+
+    # translate point back:
+    result.x = xnew + pc.x
+    result.y = ynew + pc.y
+    return [result.x, result.y]

@@ -3,7 +3,7 @@
 
 import unittest
 import math
-from laplapy.classes import geom
+from src.lappy.services import geom_oper
 
 
 class TestGeomMethods(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestGeomMethods(unittest.TestCase):
         x0, x1 = 0.0, 0.0
         y0, y1 = 0.0, 0.0
 
-        a, b = geom.get_line_cf(x0, y0, x1, y1)
+        a, b = geom_oper.get_line_cf(x0, y0, x1, y1)
 
         self.assertEqual(a, None)
         self.assertEqual(b, None)
@@ -20,7 +20,7 @@ class TestGeomMethods(unittest.TestCase):
         x0, x1 = 6.0, 6.0
         y0, y1 = 0.0, 8.0
 
-        a, b = geom.get_line_cf(x0, y0, x1, y1)
+        a, b = geom_oper.get_line_cf(x0, y0, x1, y1)
 
         self.assertEqual(a, None)
         self.assertEqual(b, x0)
@@ -29,7 +29,7 @@ class TestGeomMethods(unittest.TestCase):
         x0, x1 = 4.0, 6.0
         y0, y1 = 0.0, 0.0
 
-        a, b = geom.get_line_cf(x0, y0, x1, y1)
+        a, b = geom_oper.get_line_cf(x0, y0, x1, y1)
 
         self.assertEqual(a, 0.0)
         self.assertEqual(b, y0)
@@ -38,7 +38,7 @@ class TestGeomMethods(unittest.TestCase):
         x0, x1 = 4.0, 6.0
         y0, y1 = 6.0, 6.0
 
-        a, b = geom.get_line_cf(x0, y0, x1, y1)
+        a, b = geom_oper.get_line_cf(x0, y0, x1, y1)
 
         self.assertEqual(a, 0.0)
         self.assertEqual(b, y0)
@@ -47,7 +47,7 @@ class TestGeomMethods(unittest.TestCase):
         x0, x1 = 0.0, 6.0
         y0, y1 = 0.0, 6.0
 
-        a, b = geom.get_line_cf(x0, y0, x1, y1)
+        a, b = geom_oper.get_line_cf(x0, y0, x1, y1)
 
         self.assertEqual(a, 1.0)
         self.assertEqual(b, 0.0)
@@ -56,7 +56,7 @@ class TestGeomMethods(unittest.TestCase):
         x0, x1 = 0.0, -6.0
         y0, y1 = 0.0, 6.0
 
-        a, b = geom.get_line_cf(x0, y0, x1, y1)
+        a, b = geom_oper.get_line_cf(x0, y0, x1, y1)
 
         self.assertEqual(a, -1.0)
         self.assertEqual(b, 0.0)
@@ -424,3 +424,7 @@ class TestGeomMethods(unittest.TestCase):
         # assert
         self.assertEqual(1.0, x)
         self.assertEqual(2.5, y)
+        
+    def test_rotate_point_clockwise_pi(self):
+        # arrange
+        angle = 
