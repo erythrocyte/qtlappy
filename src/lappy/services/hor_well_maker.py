@@ -254,22 +254,3 @@ class HorWellMaker(object):
             seg = np.append(seg, np.array([[i-1, i]]), axis=0)
 
         return [pts, seg]
-
-    def __rotate_point(self, p: Point, pc: Point, angle: float):
-        s = math.sin(angle)
-        c = math.cos(angle)
-
-        result = Point(p.x, p.y, -1)
-
-        # translate point back to origin:
-        result.x -= pc.x
-        result.y -= pc.y
-
-        # rotate point
-        xnew = result.x * c - result.y * s
-        ynew = result.x * s + result.y * c
-
-        # translate point back:
-        result.x = xnew + pc.x
-        result.y = ynew + pc.y
-        return [result.x, result.y]
