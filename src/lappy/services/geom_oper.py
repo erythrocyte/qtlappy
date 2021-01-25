@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+from src.lappy.models.point import Point
 
 
 def get_line_cf(x0, y0, x1, y1):
@@ -98,3 +99,118 @@ def get_intersect_point(a1, b1, a2, b2):
     y = (a1 * b2 - b1 * a2) / (a1 - a2)
 
     return x, y
+
+
+def is_segments_intersect(p1: Point, q1: Point, p2: Point, q2: Point,
+                          continuous=False):
+
+    # Before anything else check if lines have a mutual abcisses
+    interval_1 = [min(p1.x, q1.x), max(p1.x, q1.x)]
+    interval_2 = [min(p2.x, q2.x), max(p2.x, q2.x)]
+
+    if interval_1[1] < interval_2[0]:
+        print('No mutual abcisses!')
+        return False, None
+
+    if point_on_segment(p1, p2, q2):
+        return True, p1
+    if point_on_segment(q1, p2, q2):
+        return True, q1
+
+    # Try to compute interception
+    def line(p1, p2):
+        A = (p1.y - p2.y)
+        B = (p2.x - p1.x)
+        C = (p1.x*p2.y - p2.x*p1.y)
+        return A, B, -C
+
+    L1 = line(p1, q1)
+    L2 = line(p2, q2)
+
+    D = L1[0]*L2[1] - L1[1]*L2[0]
+    Dx = L1[2]*L2[1] - L1[1]*L2[2]
+    Dy = L1[0]*L2[2] - L1[2]*L2[0]
+
+    if D != 0:
+        x = Dx / D
+        y = Dy / D
+        p = Point(x, y, -1)
+        if continuous:  # continuous parameter allows switching between line
+            # and line segment interception
+            return True, p
+        else:
+            d11 = get_dist(p, p1)
+            d12 = get_dist(p, q1)
+            d1 = get_dist(p1, q1)
+            d21 = get_dist(p, p2)
+            d22 = get_dist(p, q2)
+            d2 = get_dist(p2, q2)
+            if abs(d1 - (d11 + d12)) > 1e-6 or abs(d2 - (d21 + d22)) > 1e-6:
+                print('Intersection out of bound at [%.2f, %.2f]' % (p.x, p.y))
+                return False, None
+            else:
+                return True, p
+    else:
+        if (Dx == 0 or Dy == 0):
+            print('segments parallel')
+        return False, None
+
+
+def point_on_line(p, pl1, pl2):
+    """
+    """
+
+    a, b = get_line_cf(pl1.x, pl1.y, pl2.x, pl2.y)
+    if a is None:
+        return True if abs(p.y - pl1.x) < 1e-6 else False
+
+    py = a * p.x + b
+    return True if abs(py - p.y) < 1e-6 else False
+
+
+def point_on_segment(p, pl1, pl2):
+    """
+    """
+    res = point_on_line(p, pl1, pl2)
+    if not res:
+        return False
+
+    d1 = get_dist(p, pl1)
+    d2 = get_dist(p, pl2)
+    d = get_dist(pl1, pl2)
+
+    return True if abs(d - (d1 + d2)) < 1e-6 else False
+
+
+def get_dist(p1, p2):
+    return math.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+
+
+def rotate_point(p: Point, pc: Point, angle: float):
+    """
+
+    calculates the point `p0` by circle around the point `pc` 
+    for the given angle
+    
+    args:
+        p - start point to rotate
+        pc - circle center
+        angle - angle in radians
+    """
+    s = math.sin(angle)
+    c = math.cos(angle)
+
+    result = Point(p.x, p.y, -1)
+
+    # translate point back to origin:
+    result.x -= pc.x
+    result.y -= pc.y
+
+    # rotate point
+    xnew = result.x * c - result.y * s
+    ynew = result.x * s + result.y * c
+
+    # translate point back:
+    result.x = xnew + pc.x
+    result.y = ynew + pc.y
+    return [result.x, result.y]

@@ -10,6 +10,7 @@ class Point(object):
         y (float):  y coordinate.
         tp (int):   point type.
     """
+
     def __init__(self, x: float, y: float, tp: int):
         self.x = x
         self.y = y
