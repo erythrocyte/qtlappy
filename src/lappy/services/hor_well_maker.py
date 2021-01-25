@@ -228,29 +228,3 @@ class HorWellMaker(object):
         p1 = Point(xp1, yp1, -1)
         result = PointPair(p0, p1)
         return result
-
-    def __sector(self, p0, pc, N, R, clockwise):
-        i = np.arange(N)
-        theta = i * np.pi / N * (-1 if clockwise else 1)
-        pts = np.empty((0, 2))
-        for t in theta:
-            p = self.__rotate_point(p0, pc, t)
-            pts = np.append(pts, np.array([p]), axis=0)
-        seg = np.stack([i, i + 1], axis=1) % N
-        seg = np.delete(seg, -1, axis=0)
-        return pts, seg
-
-    def __line(self, p1, p2, n):
-        [x0, y0] = [p1.x, p1.y]
-        [x1, y1] = [p2.x, p2.y]
-        [a, b] = geom_oper.get_line_cf(x0, y0, x1, y1)
-        pts = np.empty((0, 2))
-        seg = np.empty((0, 2), int)
-
-        for i in range(1, n + 1):
-            x = x0 + (x1 - x0) / n * i
-            y = a * x + b
-            pts = np.append(pts, np.array([[x, y]]), axis=0)
-            seg = np.append(seg, np.array([[i-1, i]]), axis=0)
-
-        return [pts, seg]
