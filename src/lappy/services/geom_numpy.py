@@ -3,10 +3,20 @@
 
 import numpy as np
 
+from src.lappy.models.point import Point
 from src.lappy.services import geom_oper
 
 
-def line(self, p1, p2, n):
+def line(p1: Point, p2: Point, n: int):
+    """
+    returns line points and segments
+    between given points with step 'n'
+
+    args:
+        p1[] - Point begin
+        p2 - Point end
+        n - line division step
+    """
     [x0, y0] = [p1.x, p1.y]
     [x1, y1] = [p2.x, p2.y]
     [a, b] = geom_oper.get_line_cf(x0, y0, x1, y1)
@@ -20,3 +30,25 @@ def line(self, p1, p2, n):
         seg = np.append(seg, np.array([[i-1, i]]), axis=0)
 
     return [pts, seg]
+
+
+def sector(p0: Point, pc: Point, n: int, clockwise: bool):
+    """
+
+    returns points and segments
+
+    args:
+        p0 - start point
+        pc - center point (imagine circle)
+        n - step count
+        clokwise - rotate direction
+    """
+    i = np.arange(n)
+    theta = i * np.pi / n * (-1 if clockwise else 1)
+    pts = np.empty((0, 2))
+    for t in theta:
+        p = geom_oper.rotate_point(p0, pc, t)
+        pts = np.append(pts, np.array([p]), axis=0)
+    seg = np.stack([i, i + 1], axis=1) % n
+    seg = np.delete(seg, -1, axis=0)
+    return pts, seg
