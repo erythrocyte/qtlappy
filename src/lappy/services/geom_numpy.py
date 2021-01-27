@@ -27,10 +27,16 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
         use_first_pt - include 'p1' to result
         use_last_pt - include 'p2' to result
     """
-    
-    if n <=0 or p1 is None or p2 is None:
+
+    if n == 1 and (not use_last_pt or not use_first_pt):
         return None, None
-    
+
+    if n == 2 and not use_first_pt and not use_last_pt:
+        return None, None
+
+    if n <= 0 or p1 is None or p2 is None:
+        return None, None
+
     [x0, y0] = [p1.x, p1.y]
     [x1, y1] = [p2.x, p2.y]
     [a, b] = geom_oper.get_line_cf(x0, y0, x1, y1)
@@ -52,10 +58,15 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
     return [pts, seg]
 
 
-def sector(p0: Point, pc: Point, n: int, clockwise: bool):
+def sector(p0: Point, pc: Point, n: int, clockwise: bool,
+           use_first_pt=True, use_last_pt=True):
     """
 
     returns points and segments
+
+    returns[pts, seg]:
+        pts - numpy array of points
+        seg - numpy array of segments
 
     args:
         p0 - start point
@@ -63,12 +74,40 @@ def sector(p0: Point, pc: Point, n: int, clockwise: bool):
         n - step count
         clokwise - rotate direction
     """
-    i = np.arange(n)
-    theta = i * np.pi / n * (-1 if clockwise else 1)
+    # check for suits
+    if n == 1 and (not use_last_pt or not use_first_pt):
+        return None, None
+
+    if n == 2 and not use_first_pt and not use_last_pt:
+        return None, None
+
+    if n <= 0 or p0 is None or pc is None:
+        return None, None
+
+    n0 = 0 if use_first_pt else 1
+    n1 = n+1 if use_last_pt else n
+    # i = np.arange(n0, n1)
+    # theta = i * np.pi / n * (-1 if clockwise else 1)
     pts = np.empty((0, 2))
-    for t in theta:
-        p = geom_oper.rotate_point(p0, pc, t)
+    seg = np.empty((0, 2))
+    
+    n0 = 0 if use_first_pt else 1
+    n1 = n+1 if use_last_pt else n
+
+    dtet = np.pi / float(n) * (-1 if clockwise else 1)
+
+    for i in range(n0, n1):
+        tet = dtet * i
+        p = geom_oper.rotate_point(p0, pc, tet)
         pts = np.append(pts, np.array([p]), axis=0)
-    seg = np.stack([i, i + 1], axis=1) % n
-    seg = np.delete(seg, -1, axis=0)
+        if i > 0:
+            seg = np.append(seg, np.array([[i-1, i]]), axis=0)
+
+    # for k, t in enumerate(theta):
+    #     p = geom_oper.rotate_point(p0, pc, t)
+    #     pts = np.append(pts, np.array([p]), axis=0)
+    #     if k > 0:
+    #         seg = np.append(seg, np.array([[k-1, k]]), axis=0)
+    #     # seg = np.stack([i, i + 1], axis=1) % n
+    # # seg = np.delete(seg, -1, axis=0)
     return pts, seg

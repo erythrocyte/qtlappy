@@ -55,3 +55,37 @@ class TestGeomNumpy(unittest.TestCase):
         # asssert
         self.assertEqual(None, pts)
         self.assertEqual(None, seg)
+
+    def test_sector_usefirstpt_uselastpt_n1(self):
+        # arrange
+        p0 = Point(-1., 0., -1)
+        pc = Point(0., 0., -1)
+        n = 1
+        clockwise = True
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+                                     use_first_pt=True,
+                                     use_last_pt=True)
+
+        # assert
+        self.assertEqual(n+1, len(pts))
+        self.assertEqual(n, len(seg))
+        self.assertTrue(np.array_equal(np.array([0, 1]), seg[0],
+                                       equal_nan=True))
+
+    def test_sector_notusefirstpt_uselastpt_n1(self):
+        # arrange
+        p0 = Point(-1., 0., -1)
+        pc = Point(0., 0., -1)
+        n = 1
+        clockwise = True
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+                                     use_first_pt=False,
+                                     use_last_pt=True)
+
+        # assert
+        self.assertEqual(None, pts)
+        self.assertEqual(None, seg)
