@@ -12,6 +12,14 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
     returns line points and segments
     between given points with step 'n'
 
+    returns `[None, None]` if:
+        a. 'n <= 0';
+        b. 'p1' or 'p2' is None
+
+    return [pts, seg]:
+        pts - numpy array of points
+        seg - numpy array of segments
+
     args:
         p1[] - Point begin
         p2 - Point end
@@ -19,6 +27,10 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
         use_first_pt - include 'p1' to result
         use_last_pt - include 'p2' to result
     """
+    
+    if n <=0 or p1 is None or p2 is None:
+        return None, None
+    
     [x0, y0] = [p1.x, p1.y]
     [x1, y1] = [p2.x, p2.y]
     [a, b] = geom_oper.get_line_cf(x0, y0, x1, y1)
