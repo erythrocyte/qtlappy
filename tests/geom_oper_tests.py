@@ -426,7 +426,7 @@ class TestGeomMethods(unittest.TestCase):
         self.assertEqual(1.0, x)
         self.assertEqual(2.5, y)
 
-    def test_rotate_point_clockwise_pi(self):
+    def test_rotate_pcase1_point_clockwise_pi(self):
         # arrange
         angle = math.pi
         p0 = Point(1.0, 0.0, -1)
@@ -438,6 +438,32 @@ class TestGeomMethods(unittest.TestCase):
         # assert
         self.assertAlmostEqual(x, -1.0, places=4)
         self.assertAlmostEqual(y, 0.0, places=4)
+
+    def test_rotate_pcase2_point_clockwise_pi(self):
+        # arrange
+        angle = 0
+        p0 = Point(-1.0, 0.0, -1)
+        pc = Point(0.0, 0.0, -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, -1.0, places=4)
+        self.assertAlmostEqual(y, 0.0, places=4)
+
+    def test_rotate_pcase3_point_clockwise_pi(self):
+        # arrange
+        angle = math.pi
+        p0 = Point(2., 7., -1)
+        pc = Point(3.0, 6., -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, 4.0, places=4)
+        self.assertAlmostEqual(y, 5.0, places=4)
 
     def test_rotate_point_clockwise_pi_half(self):
         # arrange
@@ -451,3 +477,29 @@ class TestGeomMethods(unittest.TestCase):
         # assert
         self.assertAlmostEqual(x, 0.0, places=4)
         self.assertAlmostEqual(y, 1.0, places=4)
+
+    def test_rotate_p1_p3_point_clockwise_pi_half(self):
+        # arrange
+        angle = math.pi / 2.0
+        p0 = Point(1.0, 0.0, -1)
+        pc = Point(3.0, 0.0, -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, 3.0, places=4)
+        self.assertAlmostEqual(y, 2.0, places=4)
+
+    def test_rotate_p1_p3_point_notclockwise_pi_half(self):
+        # arrange
+        angle = - math.pi / 2.0
+        p0 = Point(1.0, 0.0, -1)
+        pc = Point(3.0, 0.0, -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, 3.0, places=4)
+        self.assertAlmostEqual(y, -2.0, places=4)

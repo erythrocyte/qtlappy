@@ -194,7 +194,7 @@ class TestGeomNumpy(unittest.TestCase):
         self.assertEqual(None, pts)
         self.assertEqual(None, seg)
 
-    def test_sector_usefirstpt_uselastpt_n1(self):
+    def test_sector_usefirstpt_uselastpt_clockwise_n1(self):
         # arrange
         p0 = Point(-1., 0., -1)
         pc = Point(0., 0., -1)
@@ -209,10 +209,32 @@ class TestGeomNumpy(unittest.TestCase):
         # assert
         self.assertEqual(n+1, len(pts))
         self.assertEqual(n, len(seg))
+        self.assertTrue(np.allclose(np.array([1., 0]), pts[-1],
+                                    equal_nan=True))
         self.assertTrue(np.array_equal(np.array([0, 1]), seg[0],
                                        equal_nan=True))
 
-    def test_sector_notusefirstpt_uselastpt_n1(self):
+    def test_sector_usefirstpt_uselastpt_notclockwise_n1(self):
+        # arrange
+        p0 = Point(-1., 0., -1)
+        pc = Point(0., 0., -1)
+        n = 1
+        clockwise = False
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+                                     use_first_pt=True,
+                                     use_last_pt=True)
+
+        # assert
+        self.assertEqual(n+1, len(pts))
+        self.assertEqual(n, len(seg))
+        self.assertTrue(np.allclose(np.array([1., 0]), pts[-1],
+                                    equal_nan=True))
+        self.assertTrue(np.array_equal(np.array([0, 1]), seg[0],
+                                       equal_nan=True))
+
+    def test_sector_notusefirstpt_uselastpt_clockwise_n1(self):
         # arrange
         p0 = Point(-1., 0., -1)
         pc = Point(0., 0., -1)
@@ -227,3 +249,75 @@ class TestGeomNumpy(unittest.TestCase):
         # assert
         self.assertEqual(None, pts)
         self.assertEqual(None, seg)
+
+    def test_sector_notusefirstpt_notuselastpt_clockwise_n1(self):
+        # arrange
+        p0 = Point(-1., 0., -1)
+        pc = Point(0., 0., -1)
+        n = 1
+        clockwise = True
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+                                     use_first_pt=False,
+                                     use_last_pt=False)
+
+        # assert
+        self.assertEqual(None, pts)
+        self.assertEqual(None, seg)
+
+    def test_sector_notusefirstpt_notuselastpt_notclockwise_n1(self):
+        # arrange
+        p0 = Point(-1., 0., -1)
+        pc = Point(0., 0., -1)
+        n = 1
+        clockwise = False
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+                                     use_first_pt=False,
+                                     use_last_pt=False)
+
+        # assert
+        self.assertEqual(None, pts)
+        self.assertEqual(None, seg)
+
+    def test_sector_p3_p4_usefirstpt_uselastpt_clockwise_n1(self):
+        # arrange
+        p0 = Point(3., 6., -1)
+        pc = Point(4., 5., -1)
+        n = 1
+        clockwise = True
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+                                     use_first_pt=True,
+                                     use_last_pt=True)
+
+        # assert
+        self.assertEqual(n+1, len(pts))
+        self.assertEqual(n, len(seg))
+        self.assertTrue(np.allclose(np.array([5., 4.]), pts[-1],
+                                    equal_nan=True))
+        self.assertTrue(np.array_equal(np.array([0, 1]), seg[0],
+                                       equal_nan=True))
+
+    def test_sector_pcase1_usefirstpt_uselastpt_clockwise_n10(self):
+        # arrange
+        p0 = Point(3., 6., -1)
+        pc = Point(4., 5., -1)
+        n = 2
+        clockwise = True
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+                                     use_first_pt=True,
+                                     use_last_pt=True)
+
+        # assert
+        self.assertEqual(n+1, len(pts))
+        self.assertEqual(n, len(seg))
+        self.assertTrue(np.allclose(np.array([5., 6.]), pts[1],
+                                    equal_nan=True))
+        self.assertTrue(np.array_equal(np.array([1, 2]), seg[1],
+                                       equal_nan=True))
