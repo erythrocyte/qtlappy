@@ -189,14 +189,17 @@ def get_dist(p1, p2):
 def rotate_point(p: Point, pc: Point, angle: float):
     """
 
-    calculates the point `p0` by circle around the point `pc` 
+    calculates the point `p0` by circle around the point `pc`
     for the given angle
-    
+
     args:
         p - start point to rotate
         pc - circle center
         angle - angle in radians
     """
+    if angle < 0. or p.x < pc.x or p.y < pc.y:
+        angle = 2. * math.pi - angle
+
     s = math.sin(angle)
     c = math.cos(angle)
 
