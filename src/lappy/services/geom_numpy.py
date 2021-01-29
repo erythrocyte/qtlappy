@@ -28,6 +28,9 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
         use_last_pt - include 'p2' to result
     """
 
+    if n is None or use_first_pt is None or use_last_pt is None:
+        return None, None
+
     if n == 1 and (not use_last_pt or not use_first_pt):
         return None, None
 
@@ -40,6 +43,10 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
     [x0, y0] = [p1.x, p1.y]
     [x1, y1] = [p2.x, p2.y]
     [a, b] = geom_oper.get_line_cf(x0, y0, x1, y1)
+
+    if a is None or b is None:
+        return None, None
+
     pts = np.empty((0, 2))
     seg = np.empty((0, 2), int)
 
@@ -48,12 +55,14 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
 
     dx = (x1 - x0) / float(n)
 
+    index = 0
     for i in range(n0, n1):
         x = x0 + dx * i
         y = a * x + b
         pts = np.append(pts, np.array([[x, y]]), axis=0)
-        if i > 0:
-            seg = np.append(seg, np.array([[i-1, i]]), axis=0)
+        if index > 0:
+            seg = np.append(seg, np.array([[index-1, index]]), axis=0)
+        index += 1
 
     return [pts, seg]
 
@@ -90,7 +99,7 @@ def sector(p0: Point, pc: Point, n: int, clockwise: bool,
     # theta = i * np.pi / n * (-1 if clockwise else 1)
     pts = np.empty((0, 2))
     seg = np.empty((0, 2))
-    
+
     n0 = 0 if use_first_pt else 1
     n1 = n+1 if use_last_pt else n
 
