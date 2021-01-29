@@ -465,6 +465,58 @@ class TestGeomMethods(unittest.TestCase):
         self.assertAlmostEqual(x, 4.0, places=4)
         self.assertAlmostEqual(y, 5.0, places=4)
 
+    def test_rotate_pcase3_point_clockwise_pi_half(self):
+        # arrange
+        angle = math.pi / 2.
+        p0 = Point(2., 7., -1)
+        pc = Point(3.0, 6., -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, 4.0, places=4)
+        self.assertAlmostEqual(y, 7.0, places=4)
+
+    def test_rotate_pcase4_point_clockwise_pi_half(self):
+        # arrange
+        angle = math.pi / 2.
+        p0 = Point(4., 5., -1)
+        pc = Point(3.0, 6., -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, 2.0, places=4)
+        self.assertAlmostEqual(y, 5.0, places=4)
+        
+    def test_rotate_pcase5_point_clockwise_pi_half(self):
+        # arrange
+        angle = math.pi / 2.
+        p0 = Point(2., 5., -1)
+        pc = Point(3.0, 6., -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, 2.0, places=4)
+        self.assertAlmostEqual(y, 7.0, places=4)
+    
+    def test_rotate_pcase5_point_notclockwise_pi_half(self):
+        # arrange
+        angle = - math.pi / 2.
+        p0 = Point(2., 5., -1)
+        pc = Point(3.0, 6., -1)
+
+        # act
+        x, y = geom_oper.rotate_point(p0, pc, angle)
+
+        # assert
+        self.assertAlmostEqual(x, 4.0, places=4)
+        self.assertAlmostEqual(y, 5.0, places=4)
+
     def test_rotate_point_clockwise_pi_half(self):
         # arrange
         angle = math.pi / 2.0

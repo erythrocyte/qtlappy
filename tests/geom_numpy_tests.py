@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+
+import math
 import numpy.testing as nptest
 import numpy as np
 
@@ -200,9 +202,10 @@ class TestGeomNumpy(unittest.TestCase):
         pc = Point(0., 0., -1)
         n = 1
         clockwise = True
+        angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 
@@ -220,9 +223,10 @@ class TestGeomNumpy(unittest.TestCase):
         pc = Point(0., 0., -1)
         n = 1
         clockwise = False
+        angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 
@@ -240,9 +244,10 @@ class TestGeomNumpy(unittest.TestCase):
         pc = Point(0., 0., -1)
         n = 1
         clockwise = True
+        angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
                                      use_first_pt=False,
                                      use_last_pt=True)
 
@@ -256,9 +261,10 @@ class TestGeomNumpy(unittest.TestCase):
         pc = Point(0., 0., -1)
         n = 1
         clockwise = True
+        angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
                                      use_first_pt=False,
                                      use_last_pt=False)
 
@@ -272,9 +278,10 @@ class TestGeomNumpy(unittest.TestCase):
         pc = Point(0., 0., -1)
         n = 1
         clockwise = False
+        angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
                                      use_first_pt=False,
                                      use_last_pt=False)
 
@@ -288,9 +295,10 @@ class TestGeomNumpy(unittest.TestCase):
         pc = Point(4., 5., -1)
         n = 1
         clockwise = True
+        angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 
@@ -308,9 +316,10 @@ class TestGeomNumpy(unittest.TestCase):
         pc = Point(4., 5., -1)
         n = 2
         clockwise = True
+        angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise,
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 
@@ -321,3 +330,54 @@ class TestGeomNumpy(unittest.TestCase):
                                     equal_nan=True))
         self.assertTrue(np.array_equal(np.array([1, 2]), seg[1],
                                        equal_nan=True))
+
+    def test_sector_nNone(self):
+        # arrange
+        p0 = Point(3., 6., -1)
+        pc = Point(4., 5., -1)
+        n = None
+        angle = math.pi
+        clockwise = True
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+                                     use_first_pt=True,
+                                     use_last_pt=True)
+
+        # assert
+        self.assertEqual(None, pts)
+        self.assertEqual(None, seg)
+
+    def test_sector_usefirstptNone(self):
+        # arrange
+        p0 = Point(3., 6., -1)
+        pc = Point(4., 5., -1)
+        n = 10
+        angle = math.pi
+        clockwise = True
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+                                     use_first_pt=None,
+                                     use_last_pt=True)
+
+        # assert
+        self.assertEqual(None, pts)
+        self.assertEqual(None, seg)
+
+    def test_sector_uselastptNone(self):
+        # arrange
+        p0 = Point(3., 6., -1)
+        pc = Point(4., 5., -1)
+        n = 10
+        clockwise = True
+        angle = math.pi
+
+        # act
+        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+                                     use_first_pt=True,
+                                     use_last_pt=None)
+
+        # assert
+        self.assertEqual(None, len(pts)
+        self.assertEqual(None, len(seg)

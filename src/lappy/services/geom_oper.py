@@ -197,6 +197,9 @@ def rotate_point(p: Point, pc: Point, angle: float):
         pc - circle center
         angle - angle in radians
     """
+    if angle < 0. or p.x < pc.x or p.y < pc.y:
+        angle = 2. * math.pi - angle
+
     s = math.sin(angle)
     c = math.cos(angle)
 

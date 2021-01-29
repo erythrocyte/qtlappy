@@ -67,7 +67,7 @@ def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
     return [pts, seg]
 
 
-def sector(p0: Point, pc: Point, n: int, clockwise: bool,
+def sector(p0: Point, pc: Point, n: int, clockwise: bool, angle: float,
            use_first_pt=True, use_last_pt=True):
     """
 
@@ -84,6 +84,13 @@ def sector(p0: Point, pc: Point, n: int, clockwise: bool,
         clokwise - rotate direction
     """
     # check for suits
+
+    if n is None or use_last_pt is None or use_first_pt is None:
+        return None, None
+
+    if angle is None:
+        return None, None
+
     if n == 1 and (not use_last_pt or not use_first_pt):
         return None, None
 
@@ -95,15 +102,13 @@ def sector(p0: Point, pc: Point, n: int, clockwise: bool,
 
     n0 = 0 if use_first_pt else 1
     n1 = n+1 if use_last_pt else n
-    # i = np.arange(n0, n1)
-    # theta = i * np.pi / n * (-1 if clockwise else 1)
     pts = np.empty((0, 2))
     seg = np.empty((0, 2))
 
     n0 = 0 if use_first_pt else 1
     n1 = n+1 if use_last_pt else n
 
-    dtet = np.pi / float(n) * (-1 if clockwise else 1)
+    dtet = angle / float(n) * (-1 if clockwise else 1)
 
     for i in range(n0, n1):
         tet = dtet * i
@@ -111,12 +116,4 @@ def sector(p0: Point, pc: Point, n: int, clockwise: bool,
         pts = np.append(pts, np.array([p]), axis=0)
         if i > 0:
             seg = np.append(seg, np.array([[i-1, i]]), axis=0)
-
-    # for k, t in enumerate(theta):
-    #     p = geom_oper.rotate_point(p0, pc, t)
-    #     pts = np.append(pts, np.array([p]), axis=0)
-    #     if k > 0:
-    #         seg = np.append(seg, np.array([[k-1, k]]), axis=0)
-    #     # seg = np.stack([i, i + 1], axis=1) % n
-    # # seg = np.delete(seg, -1, axis=0)
     return pts, seg
