@@ -7,7 +7,9 @@ from src.lappy.models.point import Point
 from src.lappy.services import geom_oper
 
 
-def line(p1: Point, p2: Point, n: int, use_first_pt: bool, use_last_pt: bool):
+def line(p1: Point, p2: Point, n: int,
+         use_first_pt=True,
+         use_last_pt=True):
     """
     returns line points and segments
     between given points with step 'n'

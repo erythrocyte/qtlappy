@@ -5,7 +5,7 @@ from src.lappy.models.well import Well
 from src.lappy.models.point import Point
 from src.lappy.models.pointPair import PointPair
 from src.lappy.models.vector import Vector
-from src.lappy.services import geom_oper, vect_oper
+from src.lappy.services import geom_oper, vect_oper, geom_numpy
 from src.lappy.services import well_track_service
 import math
 import numpy as np
@@ -33,7 +33,7 @@ class HorWellMaker(object):
             p0 = track[k]
             p1 = track[k+1]
             pts = np.append(pts, np.array([[p0.x, p0.y]]), axis=0)
-            [ptsw, segw] = self.__line(p0, p1, nw)
+            [ptsw, segw] = geom_numpy.line(p0, p1, nw)
             pts = np.vstack([pts, ptsw])
             seg = np.vstack([seg, segw + seg_count])
             seg_count = seg_count + segw.shape[0]
@@ -43,7 +43,7 @@ class HorWellMaker(object):
             p0 = track[k]
             p1 = track[k-1]
             pts = np.append(pts, np.array([[p0.x, p0.y]]), axis=0)
-            [ptsw, segw] = self.__line(p0, p1, 2 * nw)
+            [ptsw, segw] = geom_numpy.line(p0, p1, 2 * nw)
             pts = np.vstack([pts, ptsw])
             seg = np.vstack([seg, segw + seg_count])
             seg_count = seg_count + segw.shape[0]
