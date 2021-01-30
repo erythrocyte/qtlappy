@@ -4,14 +4,13 @@
 import unittest
 
 import math
-import numpy.testing as nptest
 import numpy as np
 
 from src.lappy.models.point import Point
 from src.lappy.services import geom_numpy
 
 
-class TestGeomNumpy(unittest.TestCase):
+class GeomNumpyTest(unittest.TestCase):
     def test_line_usefirst_uselast_n1(self):
         # arrange
         p0 = Point(0.0, 0.0, -1)
@@ -25,8 +24,8 @@ class TestGeomNumpy(unittest.TestCase):
         # asssert
         self.assertEqual(n+1, len(pts))
         self.assertEqual(n, len(seg))
-        self.assertTrue(np.array_equal(np.array([0.0, 0.0]), pts[0],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([0.0, 0.0]), pts[0],
+                                    equal_nan=True))
 
     def test_line_notusefirst_uselast_n1(self):
         # arrange
@@ -85,8 +84,8 @@ class TestGeomNumpy(unittest.TestCase):
         # asssert
         self.assertEqual(n+1, len(pts))
         self.assertEqual(n, len(seg))
-        self.assertTrue(np.array_equal(np.array([0.5, 0.0]), pts[5],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([0.5, 0.0]), pts[5],
+                                    equal_nan=True))
 
     def test_line_notusefirst_uselast_n10(self):
         # arrange
@@ -102,8 +101,8 @@ class TestGeomNumpy(unittest.TestCase):
         # asssert
         self.assertEqual(n, len(pts))
         self.assertEqual(n-1, len(seg))
-        self.assertTrue(np.array_equal(np.array([0.1, 0.0]), pts[0],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([0.1, 0.0]), pts[0],
+                                    equal_nan=True))
 
     def test_line_usefirst_notuselast_n10(self):
         # arrange
@@ -119,8 +118,8 @@ class TestGeomNumpy(unittest.TestCase):
         # asssert
         self.assertEqual(n, len(pts))
         self.assertEqual(n-1, len(seg))
-        self.assertTrue(np.array_equal(np.array([0.9, 0.0]), pts[-1],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([0.9, 0.0]), pts[-1],
+                                    equal_nan=True))
 
     def test_line_usefirst_uselast_n0(self):
         # arrange
@@ -214,8 +213,8 @@ class TestGeomNumpy(unittest.TestCase):
         self.assertEqual(n, len(seg))
         self.assertTrue(np.allclose(np.array([1., 0]), pts[-1],
                                     equal_nan=True))
-        self.assertTrue(np.array_equal(np.array([0, 1]), seg[0],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([0, 1]), seg[0],
+                                    equal_nan=True))
 
     def test_sector_usefirstpt_uselastpt_notclockwise_n1(self):
         # arrange
@@ -235,8 +234,8 @@ class TestGeomNumpy(unittest.TestCase):
         self.assertEqual(n, len(seg))
         self.assertTrue(np.allclose(np.array([1., 0]), pts[-1],
                                     equal_nan=True))
-        self.assertTrue(np.array_equal(np.array([0, 1]), seg[0],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([0, 1]), seg[0],
+                                    equal_nan=True))
 
     def test_sector_notusefirstpt_uselastpt_clockwise_n1(self):
         # arrange
@@ -307,8 +306,8 @@ class TestGeomNumpy(unittest.TestCase):
         self.assertEqual(n, len(seg))
         self.assertTrue(np.allclose(np.array([5., 4.]), pts[-1],
                                     equal_nan=True))
-        self.assertTrue(np.array_equal(np.array([0, 1]), seg[0],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([0, 1]), seg[0],
+                                    equal_nan=True))
 
     def test_sector_pcase1_usefirstpt_uselastpt_clockwise_n10(self):
         # arrange
@@ -328,8 +327,8 @@ class TestGeomNumpy(unittest.TestCase):
         self.assertEqual(n, len(seg))
         self.assertTrue(np.allclose(np.array([5., 6.]), pts[1],
                                     equal_nan=True))
-        self.assertTrue(np.array_equal(np.array([1, 2]), seg[1],
-                                       equal_nan=True))
+        self.assertTrue(np.allclose(np.array([1, 2]), seg[1],
+                                    equal_nan=True))
 
     def test_sector_nNone(self):
         # arrange
@@ -379,5 +378,5 @@ class TestGeomNumpy(unittest.TestCase):
                                      use_last_pt=None)
 
         # assert
-        self.assertEqual(None, len(pts)
-        self.assertEqual(None, len(seg)
+        self.assertEqual(None, pts)
+        self.assertEqual(None, seg)

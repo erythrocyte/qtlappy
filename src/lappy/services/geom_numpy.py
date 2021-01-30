@@ -108,7 +108,7 @@ def sector(p0: Point, pc: Point, n: int, clockwise: bool, angle: float,
     n0 = 0 if use_first_pt else 1
     n1 = n+1 if use_last_pt else n
 
-    dtet = angle / float(n) * (-1 if clockwise else 1)
+    dtet = angle / float(n) * (1 if clockwise else -1)
 
     for i in range(n0, n1):
         tet = dtet * i
