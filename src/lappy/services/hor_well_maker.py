@@ -7,7 +7,7 @@ from src.lappy.models.pointPair import PointPair
 from src.lappy.models.vector import Vector
 from src.lappy.services import geom_oper, vect_oper, geom_numpy
 from src.lappy.services import well_track_service
-import math
+
 import numpy as np
 
 
@@ -24,31 +24,30 @@ class HorWellMaker(object):
         args:
             nw - segment points count
         """
+
+        if track is None or nw is None:
+            return None, None
+
         pts = np.empty((0, 2))
         seg = np.empty((0, 2))
-        seg_count = len(seg)
 
         # forward
         for k in range(len(track)-1):
-            p0 = track[k]
-            p1 = track[k+1]
-            pts = np.append(pts, np.array([[p0.x, p0.y]]), axis=0)
-            [ptsw, segw] = geom_numpy.line(p0, p1, nw)
-            pts = np.vstack([pts, ptsw])
-            seg = np.vstack([seg, segw + seg_count])
-            seg_count = seg_count + segw.shape[0]
+            res = geom_numpy.line(track[k], track[k+1], nw, use_last_pt=False)
+            if res[0] is not None:
+                pts = np.vstack([pts, res[0]])
 
         # backward
         for k in range(len(track)-1, 0, -1):
-            p0 = track[k]
-            p1 = track[k-1]
-            pts = np.append(pts, np.array([[p0.x, p0.y]]), axis=0)
-            [ptsw, segw] = geom_numpy.line(p0, p1, 2 * nw)
-            pts = np.vstack([pts, ptsw])
-            seg = np.vstack([seg, segw + seg_count])
-            seg_count = seg_count + segw.shape[0]
+            res = geom_numpy.line(track[k], track[k-1], nw, use_last_pt=False)
+            if res[0] is not None:
+                pts = np.vstack([pts, res[0]])
 
-        return pts, seg, None
+        N = len(pts)
+        i = np.arange(N)
+        seg = np.stack([i, i + 1], axis=1) % N
+
+        return pts, seg
 
     def make_real(self, well: Well, nw: int, hnw: int):
         """
@@ -61,9 +60,9 @@ class HorWellMaker(object):
 
         tp = self.__get_line_points(well)
         rw = well.radius
-        [pts, seg] = self.__sector(tp[0].pl,
-                                   well.track[0],
-                                   nw, rw, True)
+        [pts, seg] = geom_numpy.sector(tp[0].pl,
+                                       well.track[0],
+                                       nw, True, )
 
         ltp = len(tp)
         seg_count = len(seg)

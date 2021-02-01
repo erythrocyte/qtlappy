@@ -30,11 +30,20 @@ def line(p1: Point, p2: Point, n: int,
         use_last_pt - include 'p2' to result
     """
 
+    pts = np.empty((0, 2))
+    seg = np.empty((0, 2), int)
+
     if n is None or use_first_pt is None or use_last_pt is None:
         return None, None
 
-    if n == 1 and (not use_last_pt or not use_first_pt):
-        return None, None
+    if n == 1:
+        if use_first_pt:
+            pts = np.append(pts, np.array([[p1.x, p1.y]]), axis=0)
+        if use_last_pt:
+            pts = np.append(pts, np.array([[p2.x, p2.y]]), axis=0)
+        if use_last_pt and use_first_pt:
+            seg = np.append(seg, np.array([[0, 1]]), axis=0)
+        return pts, seg
 
     if n == 2 and not use_first_pt and not use_last_pt:
         return None, None
@@ -48,9 +57,6 @@ def line(p1: Point, p2: Point, n: int,
 
     if a is None or b is None:
         return None, None
-
-    pts = np.empty((0, 2))
-    seg = np.empty((0, 2), int)
 
     n0 = 0 if use_first_pt else 1
     n1 = n+1 if use_last_pt else n

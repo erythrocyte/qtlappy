@@ -38,8 +38,8 @@ class GeomNumpyTest(unittest.TestCase):
                                    use_last_pt=True)
 
         # asssert
-        self.assertEqual(None, pts)
-        self.assertEqual(None, seg)
+        self.assertTrue(np.allclose([1., 0.], pts[0]))
+        self.assertTrue(np.empty(seg))
 
     def test_line_usefirst_notuselast_n1(self):
         # arrange
@@ -53,8 +53,8 @@ class GeomNumpyTest(unittest.TestCase):
                                    use_last_pt=False)
 
         # asssert
-        self.assertEqual(None, pts)
-        self.assertEqual(None, seg)
+        self.assertTrue(np.allclose([0., 0.], pts[0]))
+        self.assertTrue(np.empty(seg))
 
     def test_line_notusefirst_notuselast_n1(self):
         # arrange
@@ -68,8 +68,8 @@ class GeomNumpyTest(unittest.TestCase):
                                    use_last_pt=False)
 
         # asssert
-        self.assertEqual(None, pts)
-        self.assertEqual(None, seg)
+        self.assertEqual(0, len(pts))
+        self.assertEqual(0, len(seg))
 
     def test_line_usefirst_uselast_n10(self):
         # arrange
