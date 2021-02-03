@@ -56,37 +56,40 @@ class HorWellMaker(object):
         # check well track suitable
         if not well_track_service.well_track_suits(well.track):
             print('well track is not suitable: sharp angles')
-            return None, None, None
+            return None, None
 
         tp = self.__get_line_points(well)
-        rw = well.radius
-        [pts, seg] = geom_numpy.sector(tp[0].pl,
-                                       well.track[0],
-                                       nw, True, )
+
+        pts = np.empty((0, 2))
+
+        sf = geom_numpy.sector(tp[0].pl, well.track[0],
+                               nw, True, np.pi, use_last_pt=False)
+
+        if sf[0] is not None:
+            pts = np.vstack([pts, sf[0]])
 
         ltp = len(tp)
-        seg_count = len(seg)
         for i in range(ltp-1):
-            [ptsw, segw] = self.__line(tp[i].pr, tp[i+1].pr, hnw)
-            pts = np.vstack([pts, ptsw])
-            seg = np.vstack([seg, segw + seg_count])
-            seg_count = seg_count + segw.shape[0]
+            lnn = geom_numpy.line(tp[i].pr, tp[i+1].pr, hnw, use_last_pt=False)
+            if lnn[0] is not None:
+                pts = np.vstack([pts, lnn[0]])
 
-        [pts1, seg1] = self.__sector(tp[ltp-1].pr,
-                                     well.track[ltp-1],
-                                     nw, rw, True)
-        pts = np.vstack([pts, pts1])
-        seg = np.vstack([seg, seg1 + seg_count])
-        seg_count = seg_count + seg1.shape[0]
+        sf = geom_numpy.sector(tp[ltp-1].pr, well.track[ltp-1],
+                               nw, False, np.pi, use_last_pt=False)
+        if sf[0] is not None:
+            pts = np.vstack([pts, sf[0]])
 
         for i in range(ltp-1):
-            [ptsw, segw] = self.__line(
-                tp[ltp-1 - i].pl, tp[ltp-1 - (i+1)].pl, hnw)
-            pts = np.vstack([pts, ptsw])
-            seg = np.vstack([seg, segw + seg_count])
-            seg_count = seg_count + segw.shape[0]
+            lnn = geom_numpy.line(tp[ltp-1 - i].pl, tp[ltp-1 - (i+1)].pl, hnw,
+                                  use_last_pt=False)
+            if lnn[0] is not None:
+                pts = np.vstack([pts, lnn[0]])
 
-        return pts, seg, tp
+        N = len(pts)
+        i = np.arange(N)
+        seg = np.stack([i, i + 1], axis=1) % N
+
+        return pts, seg
 
     def __get_line_points(self, well: Well):
         """

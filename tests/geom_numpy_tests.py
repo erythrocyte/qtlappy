@@ -251,8 +251,8 @@ class GeomNumpyTest(unittest.TestCase):
                                      use_last_pt=True)
 
         # assert
-        self.assertEqual(None, pts)
-        self.assertEqual(None, seg)
+        self.assertEqual(1, len(pts))
+        self.assertTrue(np.empty(seg))
 
     def test_sector_notusefirstpt_notuselastpt_clockwise_n1(self):
         # arrange
