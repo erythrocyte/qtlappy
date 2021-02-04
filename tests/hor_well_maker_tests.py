@@ -160,7 +160,7 @@ class HorWellMakerTest(unittest.TestCase):
         self.assertTrue(np.allclose([-0.1, 0.], pts[5]))
         self.assertTrue(np.allclose([1.1, 0.], pts[25]))
 
-    def test_hor_well_threepoints_angle88_n10_hn10(self):
+    def test_hor_well_threepoints_anglemore90_n10_hn10(self):
         # arrange
         track = []
         track.append(Point(0.0, 0.0, -1))
@@ -178,8 +178,8 @@ class HorWellMakerTest(unittest.TestCase):
         # assert
         self.assertEqual(3 * (n1 + n2), len(pts))
         self.assertEqual(3 * (n1 + n2), len(seg))
-        self.assertTrue(np.allclose([0.0, -rw], pts[10]))
-        self.assertTrue(np.allclose([-rw, 0.], pts[5]))
+        self.assertTrue(np.allclose([0.7071067812, -0.7071067812], pts[0]))
+        self.assertTrue(np.allclose([9.83, 10.987], pts[20], rtol=1e-2))
 
     def test_hor_well_threepoints_angle90_not_suite(self):
         # arrange
