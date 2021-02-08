@@ -16,11 +16,12 @@ class HorWellMakerTest(unittest.TestCase):
         track.append(Point(0.0, 0.0, -1))
         track.append(Point(1.0, 0.0, -1))
         track.append(Point(2.0, 0.0, -1))
+        wl = Well(0, 'duduka', False, 0.1, track)
         hwm = HorWellMaker()
         n = 1
 
         # act
-        pts, seg = hwm.make_thin(track, n)
+        hl, pts, seg = hwm.make_thin(wl, n)
 
         # assert
         self.assertEqual(4, len(pts))
@@ -34,11 +35,12 @@ class HorWellMakerTest(unittest.TestCase):
         track.append(Point(0.0, 0.0, -1))
         track.append(Point(1.0, 0.0, -1))
         track.append(Point(2.0, 0.0, -1))
+        wl = Well(0, 'duduka', False, 0.1, track)
         hwm = HorWellMaker()
         n = 0
 
         # act
-        pts, seg = hwm.make_thin(track, n)
+        hl, pts, seg = hwm.make_thin(wl, n)
 
         # assert
         self.assertEqual(0, len(pts))
@@ -50,11 +52,12 @@ class HorWellMakerTest(unittest.TestCase):
         track.append(Point(0.0, 0.0, -1))
         track.append(Point(1.0, 0.0, -1))
         track.append(Point(2.0, 0.0, -1))
+        wl = Well(0, 'duduka', False, 0.1, track)
         hwm = HorWellMaker()
         n = -1
 
         # act
-        pts, seg = hwm.make_thin(track, n)
+        hl, pts, seg = hwm.make_thin(wl, n)
 
         # assert
         self.assertTrue(np.empty(pts))
@@ -78,10 +81,11 @@ class HorWellMakerTest(unittest.TestCase):
         track.append(Point(0.0, 0.0, -1))
         track.append(Point(1.0, 0.0, -1))
         track.append(Point(2.0, 0.0, -1))
+        wl = Well(0, 'duduka', False, 0.1, track)
         hwm = HorWellMaker()
 
         # act
-        pts, seg = hwm.make_thin(track, None)
+        pts, seg = hwm.make_thin(wl, None)
 
         # assert
         self.assertEqual(None, pts)
@@ -98,7 +102,7 @@ class HorWellMakerTest(unittest.TestCase):
         hwm = HorWellMaker()
 
         # act
-        pts, seg = hwm.make_real(wl, n1, n2)
+        hl, pts, seg = hwm.make_real(wl, n1, n2)
 
         # assert
         self.assertEqual(2 * (n1 + n2), len(pts))
@@ -115,7 +119,7 @@ class HorWellMakerTest(unittest.TestCase):
         hwm = HorWellMaker()
 
         # act
-        pts, seg = hwm.make_real(wl, n1, n2)
+        hl, pts, seg = hwm.make_real(wl, n1, n2)
 
         # assert
         self.assertEqual(2 * (n1 + n2), len(pts))
@@ -133,7 +137,7 @@ class HorWellMakerTest(unittest.TestCase):
         hwm = HorWellMaker()
 
         # act
-        pts, seg = hwm.make_real(wl, n1, n2)
+        hl, pts, seg = hwm.make_real(wl, n1, n2)
 
         # assert
         self.assertEqual(2 * (n1 + n2), len(pts))
@@ -143,22 +147,25 @@ class HorWellMakerTest(unittest.TestCase):
     def test_hor_well_y_const0_n10_hn10(self):
         # arrange
         track = []
-        track.append(Point(0.0, 0.0, -1))
-        track.append(Point(1.0, 0.0, -1))
+        track.append(Point(0.0, 1.0, -1))
+        track.append(Point(1.0, 1.0, -1))
         wl = Well(0, 'duduka', False, 0.1, track)
         n1 = 10
         n2 = 10
         hwm = HorWellMaker()
 
         # act
-        pts, seg = hwm.make_real(wl, n1, n2)
+        hl, pts, seg = hwm.make_real(wl, n1, n2)
 
         # assert
         self.assertEqual(2 * (n1 + n2), len(pts))
         self.assertEqual(2 * (n1 + n2), len(seg))
-        self.assertTrue(np.allclose([0.0, -0.1], pts[10]))
-        self.assertTrue(np.allclose([-0.1, 0.], pts[5]))
-        self.assertTrue(np.allclose([1.1, 0.], pts[25]))
+        self.assertTrue(np.allclose([wl.track[0].x, wl.track[0].y - wl.radius],
+                                    pts[10]))
+        self.assertTrue(np.allclose([wl.track[0].x - wl.radius, wl.track[0].y],
+                                    pts[5]))
+        self.assertTrue(np.allclose([wl.track[1].x + wl.radius, wl.track[0].y],
+                                    pts[25]))
 
     def test_hor_well_threepoints_anglemore90_n10_hn10(self):
         # arrange
@@ -173,7 +180,7 @@ class HorWellMakerTest(unittest.TestCase):
         hwm = HorWellMaker()
 
         # act
-        pts, seg = hwm.make_real(wl, n1, n2)
+        hl, pts, seg = hwm.make_real(wl, n1, n2)
 
         # assert
         self.assertEqual(3 * (n1 + n2), len(pts))

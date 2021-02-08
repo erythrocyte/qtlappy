@@ -102,11 +102,11 @@ class TestGeomMethods(unittest.TestCase):
 
         a1, b1 = geom_oper.ortho_line_cf(a, b, x0, y0)
 
-        self.assertEqual(a, 0.0)
-        self.assertEqual(b, 0.0)
+        self.assertAlmostEqual(a, 0.0)
+        self.assertAlmostEqual(b, y0)
 
-        self.assertEqual(a1, 0.0)
-        self.assertEqual(b1, 0.0)
+        self.assertEqual(a1, None)
+        self.assertAlmostEqual(b1, 1.0)
 
     def test_ortholinecf_valid(self):
         x0, x1 = 0.0, 4.0

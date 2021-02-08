@@ -34,8 +34,15 @@ def ortho_line_cf(a, b, x0, y0):
     get orthogonal line to y = ax * b
 
     """
-    a2 = 0.0 if a is None else 0.0 if abs(a - 0.0) < 1e-6 else -1.0 / a
-    b2 = y0 - a2 * x0
+    if a is None:  # x=const
+        a2 = 0
+        b2 = y0
+    elif abs(a - 0.0) < 1e-6:  # y=const
+        a2 = None
+        b2 = x0
+    else:
+        a2 = -1.0 / a
+        b2 = y0 - a2 * x0
 
     return a2, b2
 
