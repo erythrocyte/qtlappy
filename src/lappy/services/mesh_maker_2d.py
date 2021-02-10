@@ -44,8 +44,6 @@ class MeshMaker2D:
             seg_count = len(seg_bound)
             hls = []
             for well in wells:
-                # if not well.is_vert:
-                #     continue
                 [hlw, ptsw, segw] = wm.make(well, setts)
                 hls.append(hlw)
                 pts = np.vstack([pts, ptsw])
