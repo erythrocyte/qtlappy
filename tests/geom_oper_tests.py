@@ -490,7 +490,7 @@ class TestGeomMethods(unittest.TestCase):
         # assert
         self.assertAlmostEqual(x, 2.0, places=4)
         self.assertAlmostEqual(y, 5.0, places=4)
-        
+
     def test_rotate_pcase5_point_clockwise_pi_half(self):
         # arrange
         angle = math.pi / 2.
@@ -503,7 +503,7 @@ class TestGeomMethods(unittest.TestCase):
         # assert
         self.assertAlmostEqual(x, 2.0, places=4)
         self.assertAlmostEqual(y, 7.0, places=4)
-    
+
     def test_rotate_pcase5_point_notclockwise_pi_half(self):
         # arrange
         angle = - math.pi / 2.
@@ -555,3 +555,63 @@ class TestGeomMethods(unittest.TestCase):
         # assert
         self.assertAlmostEqual(x, 3.0, places=4)
         self.assertAlmostEqual(y, -2.0, places=4)
+
+    def test_point_inside_trinagle(self):
+        # given triangle:
+        #         B
+        #        /\
+        #       /  \
+        #    A /____\ C
+
+        # arrange
+        pt = Point(2., 2., -1)
+        a = Point(1., 1., -1)
+        b = Point(2., 4., -1)
+        c = Point(3., 1., -1)
+        expected = True
+
+        # act
+        actual = geom_oper.is_point_inside_triangle(pt, a, b, c)
+
+        # assert
+        self.assertEqual(expected, actual)
+
+    def test_point_outside_trinagle(self):
+        # given triangle:
+        #         B
+        #        /\
+        #       /  \
+        #    A /____\ C
+
+        # arrange
+        pt = Point(0.9, 1., -1)
+        a = Point(1., 1., -1)
+        b = Point(2., 4., -1)
+        c = Point(3., 1., -1)
+        expected = False
+
+        # act
+        actual = geom_oper.is_point_inside_triangle(pt, a, b, c)
+
+        # assert
+        self.assertEqual(expected, actual)
+
+    def test_point_isnode_trinagle(self):
+        # given triangle:
+        #         B
+        #        /\
+        #       /  \
+        #    A /____\ C
+
+        # arrange
+        pt = Point(1., 1., -1)
+        a = Point(1., 1., -1)
+        b = Point(2., 4., -1)
+        c = Point(3., 1., -1)
+        expected = True
+
+        # act
+        actual = geom_oper.is_point_inside_triangle(pt, a, b, c)
+
+        # assert
+        self.assertEqual(expected, actual)

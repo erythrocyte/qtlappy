@@ -167,6 +167,29 @@ class HorWellMakerTest(unittest.TestCase):
         self.assertTrue(np.allclose([wl.track[1].x + wl.radius, wl.track[0].y],
                                     pts[25]))
 
+    def test_hor_well_x_const0_n10_hn10(self):
+        # arrange
+        track = []
+        track.append(Point(1.0, 1.0, -1))
+        track.append(Point(1.0, 1.5, -1))
+        wl = Well(0, 'duduka', False, 0.1, track)
+        n1 = 10
+        n2 = 10
+        hwm = HorWellMaker()
+
+        # act
+        hl, pts, seg = hwm.make_real(wl, n1, n2)
+
+        # assert
+        self.assertEqual(2 * (n1 + n2), len(pts))
+        self.assertEqual(2 * (n1 + n2), len(seg))
+        self.assertTrue(np.allclose([wl.track[0].x - wl.radius, wl.track[0].y],
+                                    pts[10]))
+        self.assertTrue(np.allclose([wl.track[0].x, wl.track[0].y - wl.radius],
+                                    pts[5]))
+        self.assertTrue(np.allclose([wl.track[1].x, wl.track[1].y + wl.radius],
+                                    pts[25]))
+
     def test_hor_well_threepoints_anglemore90_n10_hn10(self):
         # arrange
         track = []

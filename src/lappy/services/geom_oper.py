@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+
 from src.lappy.models.point import Point
 
 
@@ -204,7 +205,10 @@ def rotate_point(p: Point, pc: Point, angle: float):
         pc - circle center
         angle - angle in radians
     """
-    if angle < 0. or p.x < pc.x or p.y < pc.y:
+    # if angle < 0. or p.x < pc.x or p.y < pc.y:
+    #     angle = 2. * math.pi - angle
+        
+    if p.x < pc.x or p.y < pc.y:
         angle = 2. * math.pi - angle
 
     s = math.sin(angle)
@@ -224,3 +228,25 @@ def rotate_point(p: Point, pc: Point, angle: float):
     result.x = xnew + pc.x
     result.y = ynew + pc.y
     return [result.x, result.y]
+
+
+def is_point_inside_triangle(pt: Point, a: Point, b: Point, c: Point):
+    """
+    define is given point 'pt' inside the triangle
+
+    args:
+        a,b,c - triangle nodes
+        pt - point
+    """
+    
+    a1 = (a.x - pt.x) * (b.y - a.y) - (b.x - a.x) * (a.y - pt.y)
+    a2 = (b.x - pt.x) * (c.y - b.y) - (c.x - b.x) * (b.y - pt.y)
+    a3 = (c.x - pt.x) * (a.y - c.y) - (a.x - c.x) * (c.y - pt.y)
+
+    if a1 <= 0 and a2 <= 0 and a3 <= 0:
+        return True
+
+    if a1 >= 0 and a2 >= 0 and a3 >= 0:
+        return True
+
+    return False

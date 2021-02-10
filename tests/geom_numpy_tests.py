@@ -199,12 +199,12 @@ class GeomNumpyTest(unittest.TestCase):
         # arrange
         p0 = Point(-1., 0., -1)
         pc = Point(0., 0., -1)
+        p_track = Point(0., 1., -1)
         n = 1
-        clockwise = True
         angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+        pts, seg = geom_numpy.sector(p0, pc, n, p_track, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 
@@ -220,12 +220,12 @@ class GeomNumpyTest(unittest.TestCase):
         # arrange
         p0 = Point(-1., 0., -1)
         pc = Point(0., 0., -1)
+        p_track = Point(0., 1., -1)
         n = 1
-        clockwise = False
         angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+        pts, seg = geom_numpy.sector(p0, pc, n, p_track, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 
@@ -241,12 +241,12 @@ class GeomNumpyTest(unittest.TestCase):
         # arrange
         p0 = Point(-1., 0., -1)
         pc = Point(0., 0., -1)
+        p_track = Point(0., 1., -1)
         n = 1
-        clockwise = True
         angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+        pts, seg = geom_numpy.sector(p0, pc, n, p_track, angle,
                                      use_first_pt=False,
                                      use_last_pt=True)
 
@@ -292,12 +292,12 @@ class GeomNumpyTest(unittest.TestCase):
         # arrange
         p0 = Point(3., 6., -1)
         pc = Point(4., 5., -1)
+        p_track = Point(5., 6., -1)
         n = 1
-        clockwise = True
         angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+        pts, seg = geom_numpy.sector(p0, pc, n, p_track, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 
@@ -313,12 +313,12 @@ class GeomNumpyTest(unittest.TestCase):
         # arrange
         p0 = Point(3., 6., -1)
         pc = Point(4., 5., -1)
+        p_track = Point(5., 6., -1)
         n = 2
-        clockwise = True
         angle = math.pi
 
         # act
-        pts, seg = geom_numpy.sector(p0, pc, n, clockwise, angle,
+        pts, seg = geom_numpy.sector(p0, pc, n, p_track, angle,
                                      use_first_pt=True,
                                      use_last_pt=True)
 

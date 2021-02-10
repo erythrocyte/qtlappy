@@ -65,7 +65,7 @@ class HorWellMaker(object):
         pts = np.empty((0, 2))
 
         sf = geom_numpy.sector(tp[0].pl, well.track[0],
-                               nw, True, np.pi, use_last_pt=False)
+                               nw, well.track[1], np.pi, use_last_pt=False)
 
         if sf[0] is not None:
             pts = np.vstack([pts, sf[0]])
@@ -77,7 +77,7 @@ class HorWellMaker(object):
                 pts = np.vstack([pts, lnn[0]])
 
         sf = geom_numpy.sector(tp[ltp-1].pr, well.track[ltp-1],
-                               nw, False, np.pi, use_last_pt=False)
+                               nw, well.track[ltp-2], np.pi, use_last_pt=False)
         if sf[0] is not None:
             pts = np.vstack([pts, sf[0]])
 
