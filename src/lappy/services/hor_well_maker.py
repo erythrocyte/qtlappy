@@ -19,27 +19,29 @@ class HorWellMaker(object):
         def __init__(self):
             self.pairs = []
 
-    def make_thin(self, track, nw):
+    def make_thin(self, well, nw):
         """
         args:
             nw - segment points count
         """
 
-        if track is None or nw is None:
+        if well is None or well.track is None or nw is None:
             return None, None
 
         pts = np.empty((0, 2))
         seg = np.empty((0, 2))
 
         # forward
-        for k in range(len(track)-1):
-            res = geom_numpy.line(track[k], track[k+1], nw, use_last_pt=False)
+        for k in range(len(well.track)-1):
+            res = geom_numpy.line(well.track[k], well.track[k+1],
+                                  nw, use_last_pt=False)
             if res[0] is not None:
                 pts = np.vstack([pts, res[0]])
 
         # backward
-        for k in range(len(track)-1, 0, -1):
-            res = geom_numpy.line(track[k], track[k-1], nw, use_last_pt=False)
+        for k in range(len(well.track)-1, 0, -1):
+            res = geom_numpy.line(well.track[k], well.track[k-1],
+                                  nw, use_last_pt=False)
             if res[0] is not None:
                 pts = np.vstack([pts, res[0]])
 
@@ -47,7 +49,7 @@ class HorWellMaker(object):
         i = np.arange(N)
         seg = np.stack([i, i + 1], axis=1) % N
 
-        return pts, seg
+        return [[well.track[0].x, well.track[0].y], pts, seg]
 
     def make_real(self, well: Well, nw: int, hnw: int):
         """
@@ -63,7 +65,7 @@ class HorWellMaker(object):
         pts = np.empty((0, 2))
 
         sf = geom_numpy.sector(tp[0].pl, well.track[0],
-                               nw, True, np.pi, use_last_pt=False)
+                               nw, well.track[1], np.pi, use_last_pt=False)
 
         if sf[0] is not None:
             pts = np.vstack([pts, sf[0]])
@@ -75,7 +77,7 @@ class HorWellMaker(object):
                 pts = np.vstack([pts, lnn[0]])
 
         sf = geom_numpy.sector(tp[ltp-1].pr, well.track[ltp-1],
-                               nw, False, np.pi, use_last_pt=False)
+                               nw, well.track[ltp-2], np.pi, use_last_pt=False)
         if sf[0] is not None:
             pts = np.vstack([pts, sf[0]])
 
@@ -89,7 +91,7 @@ class HorWellMaker(object):
         i = np.arange(N)
         seg = np.stack([i, i + 1], axis=1) % N
 
-        return pts, seg
+        return [[well.track[0].x, well.track[0].y], pts, seg]
 
     def __get_line_points(self, well: Well):
         """
@@ -202,19 +204,19 @@ class HorWellMaker(object):
         [x0, y0] = [pt_main.x, pt_main.y]
         [x1, y1] = [pt2.x, pt2.y]
         [asg, bsg] = geom_oper.get_line_cf(x0, y0, x1, y1)
-        if asg is None:
+        if asg is None:  # x=const
             xp0 = x0 + rw
             yp0 = y0
             xp1 = x0 - rw
             yp1 = y0
-        elif abs(asg - 0.0) < 1e-6 and abs(bsg - 0.0) < 1e-6:
+        elif abs(asg - 0.0) < 1e-6:  # y = const
             xp0 = x0
             yp0 = y0 + rw
             xp1 = x0
             yp1 = y0 - rw
         else:
             [ap, bp] = geom_oper.ortho_line_cf(asg, bsg, x0, y0)
-
+            
             x2 = x0 + 1.0
             y2 = ap * x2 + bp
 

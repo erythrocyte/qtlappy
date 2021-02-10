@@ -19,7 +19,6 @@ class MeshMaker2D:
 
         """
         geom = self.__make_geom(field.bound, field.wells, setts)
-        # geom = self.__make_geom(field.bound, None, setts)
         mesh = tr.triangulate(geom, 'qpa0.2')
 
         return mesh
@@ -45,8 +44,6 @@ class MeshMaker2D:
             seg_count = len(seg_bound)
             hls = []
             for well in wells:
-                if not well.is_vert:
-                    continue
                 [hlw, ptsw, segw] = wm.make(well, setts)
                 hls.append(hlw)
                 pts = np.vstack([pts, ptsw])

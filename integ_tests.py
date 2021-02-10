@@ -117,7 +117,8 @@ def test_hw():
 
 
 def main():
-    test_hw()
+    # test_hw()
+    test_tri()
 
 
 if __name__ == '__main__':

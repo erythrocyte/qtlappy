@@ -25,5 +25,5 @@ class WellMaker(object):
         if well.is_vert:
             [hl, pts, seg] = self.vert_well_maker.make(well, nw)
         else:
-            [hl, pts, seg] = self.hor_well_maker.make(well, nw, hnw)
+            [hl, pts, seg] = self.hor_well_maker.make_real(well, nw, hnw)
         return [hl, pts, seg]
