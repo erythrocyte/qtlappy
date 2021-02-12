@@ -17,8 +17,12 @@ class UI_QtLapWindow:
         self.menu_bar = None
         self.tool_bar = None
         self.__dock = None
-        self.__obj_brows_widget = None
-        self.__obj_brows_tree = None
+        self.__project_explorer = None
+        self.__proj_explorer_tree = None
+        self.__message_window = None
+        self.__message_window_textbox = None
+        # self.__main_dock_widget = None
+        # self.__tabs = None
 
     def retranslateUi(self, widget):
         widget.setWindowTitle(self.__window_title)
@@ -28,7 +32,7 @@ class UI_QtLapWindow:
     def setupUi(self, widget):
         widget.setMinimumSize(QtCore.QSize(640, 480))
 
-        self.__central_widget = QtWidgets.QWidget(widget)
+        self.__central_widget = QtWidgets.QTabWidget(widget)
         widget.setCentralWidget(self.__central_widget)
 
         self.__grid_layout = QtWidgets.QGridLayout()
@@ -44,15 +48,22 @@ class UI_QtLapWindow:
 
         widget.setWindowIcon(QtGui.QIcon(":qtlap"))
 
-        self.__obj_brows_tree = QtWidgets.QTreeView(widget)
-
-        # self.__dock = QtWidgets.QDockWidget(widget)
-        self.__obj_brows_widget = QtWidgets.QDockWidget(widget)
-        self.__obj_brows_widget.setWidget(self.__obj_brows_tree)
-
-        # self.__grid_layout.addWidget(self.__dock)
+        self.__proj_explorer_tree = QtWidgets.QTreeView(widget)
+        self.__project_explorer = QtWidgets.QDockWidget('Project explorer',
+                                                        widget)
+        self.__project_explorer.setWidget(self.__proj_explorer_tree)
         widget.addDockWidget(QtCore.Qt.LeftDockWidgetArea,
-                             self.__obj_brows_widget)
+                             self.__project_explorer)
+
+        self.__message_window_textbox = QtWidgets.QPlainTextEdit(widget)
+        self.__message_window_textbox.setReadOnly(True)
+        self.__message_window_textbox.appendPlainText('First info message')
+        self.__message_window = QtWidgets.QDockWidget('Message window', widget)
+        self.__message_window.setWidget(self.__message_window_textbox)
+        widget.addDockWidget(QtCore.Qt.BottomDockWidgetArea,
+                             self.__message_window)
+
+        # self.__main_dock_widget = QtWidgets.QDockWidget('')
 
         self.retranslateUi(widget)
 
@@ -71,12 +82,18 @@ class UI_QtLapWindow:
         # -- View
         self.__view_menu = QtWidgets.QMenu('&View', widget)
         self.menu_bar.addMenu(self.__view_menu)
-        self.__view_obj_browser_action = QtWidgets.QAction('&Explorer', widget)
+
+        self.__view_obj_browser_action = QtWidgets.QAction('&Project explorer',
+                                                           widget)
         self.__view_obj_browser_action.triggered.connect(
             self.__visible_obj_browser)
         self.__view_menu.addAction(self.__view_obj_browser_action)
 
-        self.__obj_brows_action = QtWidgets.QAction()
+        self.__view_message_widget_action = QtWidgets.QAction('&Messages',
+                                                              widget)
+        self.__view_message_widget_action.triggered.connect(
+            self.__view_message)
+        self.__view_menu.addAction(self.__view_message_widget_action)
 
         # --- Help
         self.__help_menu = QtWidgets.QMenu('&Help', widget)
@@ -104,5 +121,7 @@ class UI_QtLapWindow:
         self.status_bar = widget.statusBar()
 
     def __visible_obj_browser(self):
-        self.__obj_brows_widget.setVisible(True)
-        # self.__obj_brows_widget.setWidget(self.__obj_brows_tree)
+        self.__project_explorer.setVisible(True)
+
+    def __view_message(self):
+        self.__message_window.setVisible(True)
