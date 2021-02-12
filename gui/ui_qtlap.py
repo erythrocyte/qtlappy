@@ -21,8 +21,6 @@ class UI_QtLapWindow:
         self.__proj_explorer_tree = None
         self.__message_window = None
         self.__message_window_textbox = None
-        # self.__main_dock_widget = None
-        # self.__tabs = None
 
     def retranslateUi(self, widget):
         widget.setWindowTitle(self.__window_title)
