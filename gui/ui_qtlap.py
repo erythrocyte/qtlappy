@@ -16,6 +16,9 @@ class UI_QtLapWindow:
         self.__grid_layout = None
         self.menu_bar = None
         self.tool_bar = None
+        self.__dock = None
+        self.__obj_brows_widget = None
+        self.__obj_brows_tree = None
 
     def retranslateUi(self, widget):
         widget.setWindowTitle(self.__window_title)
@@ -41,19 +44,39 @@ class UI_QtLapWindow:
 
         widget.setWindowIcon(QtGui.QIcon(":qtlap"))
 
+        self.__obj_brows_tree = QtWidgets.QTreeView(widget)
+
+        # self.__dock = QtWidgets.QDockWidget(widget)
+        self.__obj_brows_widget = QtWidgets.QDockWidget(widget)
+        self.__obj_brows_widget.setWidget(self.__obj_brows_tree)
+
+        # self.__grid_layout.addWidget(self.__dock)
+        widget.addDockWidget(QtCore.Qt.LeftDockWidgetArea,
+                             self.__obj_brows_widget)
+
         self.retranslateUi(widget)
 
     def __createMenuBar(self, widget):
         self.menu_bar = QtWidgets.QMenuBar(widget)
 
         # -- File
-        self.__file_menu = QtWidgets.QMenu('&File', widget)        
+        self.__file_menu = QtWidgets.QMenu('&File', widget)
         self.menu_bar.addMenu(self.__file_menu)
 
         self.__close_action = QtWidgets.QAction(QtGui.QIcon(":power_off"),
                                                 '&Close', widget)
         self.__close_action.triggered.connect(widget.close)
         self.__file_menu.addAction(self.__close_action)
+
+        # -- View
+        self.__view_menu = QtWidgets.QMenu('&View', widget)
+        self.menu_bar.addMenu(self.__view_menu)
+        self.__view_obj_browser_action = QtWidgets.QAction('&Explorer', widget)
+        self.__view_obj_browser_action.triggered.connect(
+            self.__visible_obj_browser)
+        self.__view_menu.addAction(self.__view_obj_browser_action)
+
+        self.__obj_brows_action = QtWidgets.QAction()
 
         # --- Help
         self.__help_menu = QtWidgets.QMenu('&Help', widget)
@@ -79,3 +102,7 @@ class UI_QtLapWindow:
 
     def __createStatusBar(self, widget):
         self.status_bar = widget.statusBar()
+
+    def __visible_obj_browser(self):
+        self.__obj_brows_widget.setVisible(True)
+        # self.__obj_brows_widget.setWidget(self.__obj_brows_tree)
