@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from PyQt5 import QtWidgets, QtCore, QtGui
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import sys
 import matplotlib
 matplotlib.use('Qt5Agg')
-import matplotlib.pyplot as plt
-
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
-from PyQt5 import QtWidgets, QtCore, QtGui
 
 
 class MplCanvas(FigureCanvasQTAgg):
@@ -17,6 +16,8 @@ class MplCanvas(FigureCanvasQTAgg):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
+
+        fig.subplots_adjust(left=0.0, bottom=0.0, right=0.99, top=1.0)
 
 
 class UI_MapPlotView:

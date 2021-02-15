@@ -37,7 +37,7 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
         mesh_maker = MeshMaker2D()
         mesh = mesh_maker.triangulate(field, setts)
 
-        ax = mp.scene.axes.axes()
+        ax = mp.scene.axes
         tr.plot(ax, **mesh)
         self.addTab(mp)
 
