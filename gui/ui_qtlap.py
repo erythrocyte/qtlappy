@@ -12,7 +12,7 @@ import prog
 class UI_QtLapWindow:
     def __init__(self):
         self.__window_title = f'QtLap v.{ prog.version }'
-        self.__central_widget = None
+        self.central_widget = None
         self.__grid_layout = None
         self.menu_bar = None
         self.tool_bar = None
@@ -30,11 +30,12 @@ class UI_QtLapWindow:
     def setupUi(self, widget):
         widget.setMinimumSize(QtCore.QSize(640, 480))
 
-        self.__central_widget = QtWidgets.QTabWidget(widget)
-        widget.setCentralWidget(self.__central_widget)
+        self.central_widget = QtWidgets.QTabWidget(widget)
+        self.central_widget.document_mode = True
+        widget.setCentralWidget(self.central_widget)
 
         self.__grid_layout = QtWidgets.QGridLayout()
-        self.__central_widget.setLayout(self.__grid_layout)
+        self.central_widget.setLayout(self.__grid_layout)
 
         widget.showMaximized()
 

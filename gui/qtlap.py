@@ -2,17 +2,44 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
+sys.path.insert(1, os.path.realpath(''))
 
-from ui_qtlap import UI_QtLapWindow
+## do not change
+from src.lappy.models.settings.global_setts import GlobalSetts
+from src.lappy.services.mesh_maker_2d import MeshMaker2D
+from src.lappy.models.field import Field
+from views.map_plot_view import MapPlotView
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow
+from ui_qtlap import UI_QtLapWindow
+import triangle as tr
 
 
-class QtLapWindow(QMainWindow, UI_QtLapWindow):
+class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
     def __init__(self):
-        QMainWindow.__init__(self)
-        self.ui = UI_QtLapWindow()
-        self.ui.setupUi(self)
+        QtWidgets.QMainWindow.__init__(self)
+        self.setupUi(self)
+        self.testMethod()
+
+    def addTab(self, widget: QtWidgets.QWidget):
+        self.central_widget.addTab(widget, "Test")
+
+    def testMethod(self):
+        mp = MapPlotView()
+        # mp.scene.axes.plot([0, 1, 2, 3, 4], [10, 1, 20, 3, 40])
+
+        dirname = os.path.join(os.path.realpath(''), 'examples/data/rect_hole')
+        fn_bound = os.path.join(dirname, 'boundary.json')
+        fn_wells = os.path.join(dirname, 'wells.json')
+        field = Field.create("test_field", fn_bound, fn_wells)
+
+        setts = GlobalSetts()
+        mesh_maker = MeshMaker2D()
+        mesh = mesh_maker.triangulate(field, setts)
+
+        ax = mp.scene.axes.axes()
+        tr.plot(ax, **mesh)
+        self.addTab(mp)
 
 
 if __name__ == "__main__":
