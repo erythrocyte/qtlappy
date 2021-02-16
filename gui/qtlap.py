@@ -26,7 +26,6 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
 
     def testMethod(self):
         mp = MapPlotView()
-        # mp.scene.axes.plot([0, 1, 2, 3, 4], [10, 1, 20, 3, 40])
 
         dirname = os.path.join(os.path.realpath(''), 'examples/data/rect_hole')
         fn_bound = os.path.join(dirname, 'boundary.json')
