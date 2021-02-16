@@ -12,14 +12,24 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         self.__base_scale = 1.2
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-        super(MplCanvas, self).__init__(fig)
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.add_subplot(111)
+        self.__press = None
+        super(MplCanvas, self).__init__(self.fig)
 
-        fig.subplots_adjust(left=0.0, bottom=0.0, right=0.99, top=1.0)
-        fig.canvas.mpl_connect('scroll_event', self.on_scroll_event)
-        fig.canvas.mpl_connect('button_press_event',
-                               self.on_button_press_event)
+        self.fig.subplots_adjust(left=0.0, bottom=0.0, right=0.99, top=1.0)
+
+        self.connect()
+
+    def connect(self):
+        self.cidscroll = self.fig.canvas.mpl_connect(
+            'scroll_event', self.on_scroll_event)
+        self.cidpress = self.fig.canvas.mpl_connect('button_press_event',
+                                                    self.on_button_press_event)
+        self.cidrelease = self.fig.canvas.mpl_connect('button_release_event',
+                                                      self.on_button_release_event)
+        self.cidmotion = self.fig.canvas.mpl_connect('motion_notify_event',
+                                                     self.on_motion_notify_event)
 
     def on_scroll_event(self, event):
         toolbar = self.axes.get_figure().canvas.toolbar
@@ -57,6 +67,36 @@ class MplCanvas(FigureCanvasQTAgg):
         self.draw()  # force re-draw
 
     def on_button_press_event(self, event):
-        print('%s click: button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %
-              ('double' if event.dblclick else 'single', event.button,
-               event.x, event.y, event.xdata, event.ydata))
+        if event.inaxes != self.axes:
+            return
+
+        if event.button == 3:  # right click
+            self.__press = event.xdata, event.ydata
+
+    def on_motion_notify_event(self, event):
+        toolbar = self.axes.get_figure().canvas.toolbar
+        toolbar.push_current()  # stay at home
+        if self.__press is None:
+            return
+        if event.inaxes != self.axes:
+            return
+
+        xpress, ypress = self.__press
+        dx = event.xdata - xpress
+        dy = event.ydata - ypress
+
+        cur_xlim = self.axes.get_xlim()
+        cur_ylim = self.axes.get_ylim()
+
+        new_xlim = cur_xlim[0] - dx, cur_xlim[1] - dx
+        new_ylim = cur_ylim[0] - dy, cur_ylim[1] - dy
+
+        # set new limits
+        self.axes.set_xlim(new_xlim)
+        self.axes.set_ylim(new_ylim)
+
+        self.draw()
+
+    def on_button_release_event(self, event):
+        self.__press = None
+        self.draw()
