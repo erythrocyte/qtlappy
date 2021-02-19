@@ -5,7 +5,6 @@ import sys
 import os
 sys.path.insert(1, os.path.realpath(''))
 
-## do not change
 from src.lappy.models.settings.global_setts import GlobalSetts
 from src.lappy.services.mesh_maker_2d import MeshMaker2D
 from src.lappy.models.field import Field
@@ -13,6 +12,7 @@ from views.map_plot_view import MapPlotView
 from PyQt5 import QtWidgets
 from ui_qtlap import UI_QtLapWindow
 import triangle as tr
+from models.log_level_enum import LogLevelEnum
 
 
 class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
@@ -31,6 +31,11 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
         fn_bound = os.path.join(dirname, 'boundary.json')
         fn_wells = os.path.join(dirname, 'wells.json')
         field = Field.create("test_field", fn_bound, fn_wells)
+
+        self.log_message('Test info', LogLevelEnum.info)
+        self.log_message('Test error', LogLevelEnum.error)
+        self.log_message('Test warning', LogLevelEnum.warning)
+        self.log_message('Test debug', LogLevelEnum.debug)
 
         setts = GlobalSetts()
         mesh_maker = MeshMaker2D()

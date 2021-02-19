@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-# from PyQt5 import QtCore, QtWidgets
 from PyQt5 import QtWidgets, QtCore, QtGui
 import resources
 import functools
 import prog
+from widgets.log_text_editor_handler import LogTextEditHadler
+import logging
+from models.log_level_enum import LogLevelEnum
 
 
 class UI_QtLapWindow:
@@ -20,7 +22,6 @@ class UI_QtLapWindow:
         self.__project_explorer = None
         self.__proj_explorer_tree = None
         self.__message_window = None
-        self.__message_window_textbox = None
 
     def retranslateUi(self, widget):
         widget.setWindowTitle(self.__window_title)
@@ -54,11 +55,19 @@ class UI_QtLapWindow:
         widget.addDockWidget(QtCore.Qt.LeftDockWidgetArea,
                              self.__project_explorer)
 
-        self.__message_window_textbox = QtWidgets.QPlainTextEdit(widget)
-        self.__message_window_textbox.setReadOnly(True)
-        self.__message_window_textbox.appendPlainText('First info message')
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+        text_editor_handler = LogTextEditHadler(self)
+        self.logger.addHandler(text_editor_handler)
+
+        file_handler = logging.FileHandler('app.log', 'w')
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s - %(levelname)s - %(message)s'))
+        self.logger.addHandler(file_handler)
+
         self.__message_window = QtWidgets.QDockWidget('Message window', widget)
-        self.__message_window.setWidget(self.__message_window_textbox)
+        self.__message_window.setWidget(text_editor_handler.widget)
         widget.addDockWidget(QtCore.Qt.BottomDockWidgetArea,
                              self.__message_window)
 
@@ -124,3 +133,13 @@ class UI_QtLapWindow:
 
     def __view_message(self):
         self.__message_window.setVisible(True)
+
+    def log_message(self, mess: str, level: LogLevelEnum):
+        if level is LogLevelEnum.debug:
+            self.logger.debug(mess)
+        elif level is LogLevelEnum.error:
+            self.logger.error(mess)
+        elif level is LogLevelEnum.warning:
+            self.logger.warning(mess)
+        else:
+            self.logger.info(mess)
