@@ -7,3 +7,4 @@ dist/
 .vscode/.ropeproject/objectdb
 gui/resources/__init__.py
 *.vtk
+*.log
