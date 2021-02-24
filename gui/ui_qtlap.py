@@ -20,7 +20,6 @@ class UI_QtLapWindow:
         self.tool_bar = None
         self.__dock = None
         self.__project_explorer = None
-        self.__proj_explorer_tree = None
         self.__message_window = None
 
     def retranslateUi(self, widget):
@@ -48,10 +47,10 @@ class UI_QtLapWindow:
 
         widget.setWindowIcon(QtGui.QIcon(":qtlap"))
 
-        self.__proj_explorer_tree = QtWidgets.QTreeView(widget)
+        self.proj_explorer_tree = QtWidgets.QTreeWidget(widget)
         self.__project_explorer = QtWidgets.QDockWidget('Project explorer',
                                                         widget)
-        self.__project_explorer.setWidget(self.__proj_explorer_tree)
+        self.__project_explorer.setWidget(self.proj_explorer_tree)
         widget.addDockWidget(QtCore.Qt.LeftDockWidgetArea,
                              self.__project_explorer)
 
@@ -103,6 +102,19 @@ class UI_QtLapWindow:
             self.__view_message)
         self.__view_menu.addAction(self.__view_message_widget_action)
 
+        # -- Project
+        self.__project_menu = QtWidgets.QMenu('&Project', widget)
+        self.menu_bar.addMenu(self.__project_menu)
+
+        self.new_project_action = QtWidgets.QAction('&New', widget)
+        self.__project_menu.addAction(self.new_project_action)
+
+        self.open_project_action = QtWidgets.QAction('&Open', widget)
+        self.__project_menu.addAction(self.open_project_action)
+
+        self.open_project_action = QtWidgets.QAction('&Delete', widget)
+        self.__project_menu.addAction(self.open_project_action)
+
         # --- Help
         self.__help_menu = QtWidgets.QMenu('&Help', widget)
         self.menu_bar.addMenu(self.__help_menu)
@@ -133,13 +145,3 @@ class UI_QtLapWindow:
 
     def __view_message(self):
         self.__message_window.setVisible(True)
-
-    def log_message(self, mess: str, level: LogLevelEnum):
-        if level is LogLevelEnum.debug:
-            self.logger.debug(mess)
-        elif level is LogLevelEnum.error:
-            self.logger.error(mess)
-        elif level is LogLevelEnum.warning:
-            self.logger.warning(mess)
-        else:
-            self.logger.info(mess)
