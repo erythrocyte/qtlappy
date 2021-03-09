@@ -48,6 +48,7 @@ class UI_QtLapWindow:
         widget.setWindowIcon(QtGui.QIcon(":qtlap"))
 
         self.proj_explorer_tree = QtWidgets.QTreeWidget(widget)
+        self.proj_explorer_tree.setHeaderHidden(True)
         self.__project_explorer = QtWidgets.QDockWidget('Project explorer',
                                                         widget)
         self.__project_explorer.setWidget(self.proj_explorer_tree)
