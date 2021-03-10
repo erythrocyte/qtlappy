@@ -54,6 +54,8 @@ class UI_QtLapWindow:
 
     def __createProjectWindow(self, widget):
         self.proj_explorer_tree = QtWidgets.QTreeWidget(widget)
+        self.proj_explorer_tree.setContextMenuPolicy(
+            QtCore.Qt.CustomContextMenu)
         self.proj_explorer_tree.setHeaderHidden(True)
         self.__project_explorer = QtWidgets.QDockWidget('Project explorer',
                                                         widget)

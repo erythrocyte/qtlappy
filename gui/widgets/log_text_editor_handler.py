@@ -12,7 +12,8 @@ class LogTextEditHadler(logging.Handler):
         self.widget.setReadOnly(True)
         self.setLevel(logging.INFO)
         self.setFormatter(logging.Formatter(
-            '%(asctime)s - %(levelname)s - %(message)s'))
+            '%(asctime)s - %(levelname)s - %(message)s',
+            '%Y-%m-%d %H:%M:%S'))
 
     def emit(self, record):
         frmt_msg = self.format(record)

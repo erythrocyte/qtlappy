@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# ===============should be isolated ======
-import sys
-import os
-sys.path.insert(1, os.path.realpath(''))
-# ========================================
 
-from models.log_level_enum import LogLevelEnum
-import triangle as tr
-from ui_qtlap import UI_QtLapWindow
-from PyQt5 import QtWidgets, QtGui, QtCore
-from views.map_plot_view import MapPlotView
-from src.lappy.models.field import Field
-from src.lappy.services.mesh_maker_2d import MeshMaker2D
+from import_lib import *
+
+from src.lappy.models.lap_project import LapProject
 from src.lappy.models.settings.global_setts import GlobalSetts
+from src.lappy.services.mesh_maker_2d import MeshMaker2D
+from src.lappy.models.field import Field
+from views.map_plot_view import MapPlotView
+from PyQt5 import QtWidgets, QtGui, QtCore
+from ui_qtlap import UI_QtLapWindow
+import triangle as tr
+from models.log_level_enum import LogLevelEnum
+# ===============should be isolated ======
+# ========================================
 
 
 class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
@@ -61,14 +61,52 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
 
     def __connect(self):
         self.new_project_action.triggered.connect(self.__on_new_project_create)
+        self.save_project_action.triggered.connect(self.__on_save_project)
+        self.proj_explorer_tree.customContextMenuRequested.connect(
+            self.__prepareProjectItemContextMenu)
 
     def __on_new_project_create(self):
-        t = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
-        t.setText(0, f'Project {self.__project_count + 1}')
-        t.setFlags(t.flags()
-                   | QtCore.Qt.ItemIsTristate
-                   | QtCore.Qt.ItemIsUserCheckable)
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(
+            self, 'Select Folder')
+        lp = LapProject(folderpath)
+        project = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
+        project.setText(0, f'Project {self.__project_count + 1}')
+        project.setFlags(project.flags()
+                         | QtCore.Qt.ItemIsTristate
+                         | QtCore.Qt.ItemIsUserCheckable)
+        project.Type = lp
+
+        bound = QtWidgets.QTreeWidgetItem(project)
+        bound.setText(0, 'Bound')
+        bound.setDisabled(True)
+        bound.Type = 'A'
+
+        wells = QtWidgets.QTreeWidgetItem(project)
+        wells.setText(0, 'Wells')
+        wells.setDisabled(True)
+
+        grid = QtWidgets.QTreeWidgetItem(project)
+        grid.setText(0, 'Grid')
+        grid.setDisabled(True)
+
+        fields = QtWidgets.QTreeWidgetItem(project)
+        fields.setText(0, 'Field')
+        fields.setDisabled(True)
+
         self.__project_count += 1
+
+    def __prepareProjectItemContextMenu(self, point):
+        # Infos about the node selected.
+        index = self.proj_explorer_tree.indexAt(point)
+
+        if not index.isValid():
+            return
+
+        item = self.proj_explorer_tree.itemAt(point)
+        name = item.text(0)  # The text of the node.
+        tp = item.Type
+        self.log_message(f'context menu for {name} with type = {tp}',
+                         LogLevelEnum.info)
 
 
 if __name__ == "__main__":
