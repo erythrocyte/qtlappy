@@ -47,6 +47,12 @@ class UI_QtLapWindow:
 
         widget.setWindowIcon(QtGui.QIcon(":qtlap"))
 
+        self.__createProjectWindow(widget)
+        self.__createMessageWindow(widget)
+
+        self.retranslateUi(widget)
+
+    def __createProjectWindow(self, widget):
         self.proj_explorer_tree = QtWidgets.QTreeWidget(widget)
         self.proj_explorer_tree.setHeaderHidden(True)
         self.__project_explorer = QtWidgets.QDockWidget('Project explorer',
@@ -55,6 +61,7 @@ class UI_QtLapWindow:
         widget.addDockWidget(QtCore.Qt.LeftDockWidgetArea,
                              self.__project_explorer)
 
+    def __createMessageWindow(self, widget):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
         text_editor_handler = LogTextEditHadler(self)
@@ -71,14 +78,22 @@ class UI_QtLapWindow:
         widget.addDockWidget(QtCore.Qt.BottomDockWidgetArea,
                              self.__message_window)
 
-        # self.__main_dock_widget = QtWidgets.QDockWidget('')
-
-        self.retranslateUi(widget)
-
     def __createMenuBar(self, widget):
         self.menu_bar = QtWidgets.QMenuBar(widget)
 
         # -- File
+        self.__menuBarFile(widget)
+
+        # -- View
+        self.__menuBarView(widget)
+
+        # -- Project
+        self.__menuBarProject(widget)
+
+        # --- Help
+        self.__menuBarHelp(widget)
+
+    def __menuBarFile(self, widget):
         self.__file_menu = QtWidgets.QMenu('&File', widget)
         self.menu_bar.addMenu(self.__file_menu)
 
@@ -87,7 +102,7 @@ class UI_QtLapWindow:
         self.__close_action.triggered.connect(widget.close)
         self.__file_menu.addAction(self.__close_action)
 
-        # -- View
+    def __menuBarView(self, widget):
         self.__view_menu = QtWidgets.QMenu('&View', widget)
         self.menu_bar.addMenu(self.__view_menu)
 
@@ -103,7 +118,7 @@ class UI_QtLapWindow:
             self.__view_message)
         self.__view_menu.addAction(self.__view_message_widget_action)
 
-        # -- Project
+    def __menuBarProject(self, widget):
         self.__project_menu = QtWidgets.QMenu('&Project', widget)
         self.menu_bar.addMenu(self.__project_menu)
 
@@ -113,10 +128,13 @@ class UI_QtLapWindow:
         self.open_project_action = QtWidgets.QAction('&Open', widget)
         self.__project_menu.addAction(self.open_project_action)
 
+        self.save_project_action = QtWidgets.QAction('&Save', widget)
+        self.__project_menu.addAction(self.save_project_action)
+
         self.open_project_action = QtWidgets.QAction('&Delete', widget)
         self.__project_menu.addAction(self.open_project_action)
 
-        # --- Help
+    def __menuBarHelp(self, widget):
         self.__help_menu = QtWidgets.QMenu('&Help', widget)
         self.menu_bar.addMenu(self.__help_menu)
 

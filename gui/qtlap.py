@@ -64,10 +64,11 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
 
     def __on_new_project_create(self):
         t = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
-        t.setText(0, f'Project {self.__project_count}')
+        t.setText(0, f'Project {self.__project_count + 1}')
         t.setFlags(t.flags()
                    | QtCore.Qt.ItemIsTristate
                    | QtCore.Qt.ItemIsUserCheckable)
+        self.__project_count += 1
 
 
 if __name__ == "__main__":
