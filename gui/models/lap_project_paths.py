@@ -5,7 +5,7 @@ import os
 import json
 
 
-class LapProject:
+class LapProjectPaths:
 
     def __init__(self, dr: str):
         """

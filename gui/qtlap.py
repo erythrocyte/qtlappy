@@ -4,7 +4,7 @@
 
 from import_lib import *
 
-from src.lappy.models.lap_project import LapProject
+from models.lap_project_paths import LapProjectPaths
 from src.lappy.models.settings.global_setts import GlobalSetts
 from src.lappy.services.mesh_maker_2d import MeshMaker2D
 from src.lappy.models.field import Field
@@ -68,7 +68,7 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
     def __on_new_project_create(self):
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(
             self, 'Select Folder')
-        lp = LapProject(folderpath)
+        lp = LapProjectPaths(folderpath)
         project = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
         project.setText(0, f'Project {self.__project_count + 1}')
         project.setFlags(project.flags()
@@ -95,6 +95,9 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
 
         self.__project_count += 1
 
+    def __on_save_project(self):
+        pass
+
     def __prepareProjectItemContextMenu(self, point):
         # Infos about the node selected.
         index = self.proj_explorer_tree.indexAt(point)
@@ -104,7 +107,7 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
 
         item = self.proj_explorer_tree.itemAt(point)
         name = item.text(0)  # The text of the node.
-        tp = item.Type
+        tp = type(item.Type).__name__
         self.log_message(f'context menu for {name} with type = {tp}',
                          LogLevelEnum.info)
 
