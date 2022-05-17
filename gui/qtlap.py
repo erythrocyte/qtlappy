@@ -8,6 +8,7 @@ from models.lap_project_paths import LapProjectPaths
 from src.lappy.models.settings.global_setts import GlobalSetts
 from src.lappy.services.mesh_maker_2d import MeshMaker2D
 from src.lappy.models.field import Field
+from models.projectTreeItem import ProjectItemType
 from views.map_plot_view import MapPlotView
 from PyQt5 import QtWidgets, QtGui, QtCore
 from ui_qtlap import UI_QtLapWindow
@@ -83,19 +84,22 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
         bound = QtWidgets.QTreeWidgetItem(project)
         bound.setText(0, 'Bound')
         bound.setDisabled(True)
-        bound.Type = 'A'
+        bound.Type = ProjectItemType.BOUND
 
         wells = QtWidgets.QTreeWidgetItem(project)
         wells.setText(0, 'Wells')
         wells.setDisabled(True)
+        wells.Type = ProjectItemType.WELL
 
         grid = QtWidgets.QTreeWidgetItem(project)
         grid.setText(0, 'Grid')
         grid.setDisabled(True)
+        grid.Type = ProjectItemType.GRID
 
         fields = QtWidgets.QTreeWidgetItem(project)
         fields.setText(0, 'Field')
         fields.setDisabled(True)
+        fields.Type = ProjectItemType.FIELD
 
         self.__project_count += 1
 
@@ -111,9 +115,18 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
 
         item = self.proj_explorer_tree.itemAt(point)
         name = item.text(0)  # The text of the node.
-        tp = type(item.Type).__name__
+        tp = item.Type  # type(item.Type) //.__name__
+
+        if tp == ProjectItemType.BOUND:
+            self.__boundContextMenu()
+        
         self.log_message(f'context menu for {name} with type = {tp}',
                          LogLevelEnum.info)
+
+    def __boundContextMenu(self):
+        menu = QtWidgets.QMenu(self)
+        createAction = menu.addAction('Create')
+        menu.popup(QtGui.QCursor.pos())
 
 
 if __name__ == "__main__":
