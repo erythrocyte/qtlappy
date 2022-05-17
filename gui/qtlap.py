@@ -68,6 +68,10 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
     def __on_new_project_create(self):
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(
             self, 'Select Folder')
+
+        if not folderpath:
+            return
+
         lp = LapProjectPaths(folderpath)
         project = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
         project.setText(0, f'Project {self.__project_count + 1}')
