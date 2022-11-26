@@ -96,10 +96,10 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
         grid.setDisabled(True)
         grid.Type = ProjectItemType.GRID
 
-        fields = QtWidgets.QTreeWidgetItem(project)
-        fields.setText(0, 'Field')
-        fields.setDisabled(True)
-        fields.Type = ProjectItemType.FIELD
+        # fields = QtWidgets.QTreeWidgetItem(project)
+        # fields.setText(0, 'Field')
+        # fields.setDisabled(True)
+        # fields.Type = ProjectItemType.FIELD
 
         self.__project_count += 1
 
@@ -119,14 +119,18 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
 
         if tp == ProjectItemType.BOUND:
             self.__boundContextMenu()
-        
+
         self.log_message(f'context menu for {name} with type = {tp}',
                          LogLevelEnum.info)
 
     def __boundContextMenu(self):
         menu = QtWidgets.QMenu(self)
         createAction = menu.addAction('Create')
+        createAction.triggered.connect(self.__createBound)
         menu.popup(QtGui.QCursor.pos())
+
+    def __createBound(self):
+        pass
 
 
 if __name__ == "__main__":
