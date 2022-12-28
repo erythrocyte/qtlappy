@@ -1,19 +1,24 @@
+"""
+module docstring
+"""
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 
-from import_lib import *
+import triangle as tr
+from PyQt5 import QtWidgets, QtGui, QtCore
 
+from import_lib import *
+from ui_qtlap import UI_QtLapWindow
 from models.lap_project_paths import LapProjectPaths
+from views.map_plot_view import MapPlotView
+from models.projectTreeItem import ProjectItemType
+from models.log_level_enum import LogLevelEnum
 from src.lappy.models.settings.global_setts import GlobalSetts
 from src.lappy.services.mesh_maker_2d import MeshMaker2D
 from src.lappy.models.field import Field
-from models.projectTreeItem import ProjectItemType
-from views.map_plot_view import MapPlotView
-from PyQt5 import QtWidgets, QtGui, QtCore
-from ui_qtlap import UI_QtLapWindow
-import triangle as tr
-from models.log_level_enum import LogLevelEnum
+
 # ===============should be isolated ======
 # ========================================
 

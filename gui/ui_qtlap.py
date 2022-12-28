@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
-from PyQt5 import QtWidgets, QtCore, QtGui
-import resources
 import functools
+from PyQt5 import QtWidgets, QtCore, QtGui
 import prog
 from widgets.log_text_editor_handler import LogTextEditHadler
 import logging
@@ -130,8 +128,8 @@ class UI_QtLapWindow:
         self.open_project_action = QtWidgets.QAction('&Open', widget)
         self.__project_menu.addAction(self.open_project_action)
 
-        # self.save_project_action = QtWidgets.QAction('&Save', widget)
-        # self.__project_menu.addAction(self.save_project_action)
+        self.save_project_action = QtWidgets.QAction('&Save', widget)
+        self.__project_menu.addAction(self.save_project_action)
 
         # self.open_project_action = QtWidgets.QAction('&Delete', widget)
         # self.__project_menu.addAction(self.open_project_action)

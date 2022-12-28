@@ -1,11 +1,20 @@
+"""
+module docstting
+"""
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtWidgets
+
 import logging
+from PyQt5 import QtWidgets
 
 
 class LogTextEditHadler(logging.Handler):
+    """
+    Doc string
+    """
+
     def __init__(self, parent):
         super().__init__()
         self.widget = QtWidgets.QPlainTextEdit(parent)

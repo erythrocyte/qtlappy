@@ -1,3 +1,7 @@
+"""
+Mesh maker
+"""
+
 #!/usr/bin/env python3
 # coding: utf-8
 
@@ -38,7 +42,7 @@ class MeshMaker2D:
         seg = np.vstack([seg_bound])
 
         if wells is None:
-            A = dict(vertices=pts, segments=seg)
+            result = dict(vertices=pts, segments=seg)
         else:
             wm = well_maker.WellMaker()
             seg_count = len(seg_bound)
@@ -50,6 +54,6 @@ class MeshMaker2D:
                 seg = np.vstack([seg, segw + seg_count])
                 seg_count = seg_count + segw.shape[0]
 
-            A = dict(vertices=pts, segments=seg, holes=hls)
+            result = dict(vertices=pts, segments=seg, holes=hls)
 
-        return A
+        return result
