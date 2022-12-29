@@ -9,12 +9,12 @@ module docstring
 import triangle as tr
 from PyQt5 import QtWidgets, QtGui, QtCore
 
-from import_lib import *
-from ui_qtlap import UI_QtLapWindow
-from models.lap_project_paths import LapProjectPaths
-from views.map_plot_view import MapPlotView
-from models.projectTreeItem import ProjectItemType
-from models.log_level_enum import LogLevelEnum
+from gui.import_lib import *
+from gui.views.uis.ui_qt_lap_view import UIQtLapView
+from gui.models.lap_project_paths import LapProjectPaths
+from gui.views.map_plot_view import MapPlotView
+from gui.models.projectTreeItem import ProjectItemType
+from gui.models.loglevelenum import LogLevelEnum
 from src.lappy.models.settings.global_setts import GlobalSetts
 from src.lappy.services.mesh_maker_2d import MeshMaker2D
 from src.lappy.models.field import Field
@@ -23,37 +23,37 @@ from src.lappy.models.field import Field
 # ========================================
 
 
-class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
+class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
-        self.setupUi(self)
-        self.testMethod()
+        self.setup_ui(self)
+        # self.testMethod()
         self.__project_count = 0
         self.__connect()
 
-    def addTab(self, widget: QtWidgets.QWidget):
+    def add_tab(self, widget: QtWidgets.QWidget):
         self.central_widget.addTab(widget, "Test")
 
-    def testMethod(self):
-        mp = MapPlotView()
+    # def testMethod(self):
+    #     mp = MapPlotView()
 
-        dirname = os.path.join(os.path.realpath(''), 'examples/data/rect_hole')
-        fn_bound = os.path.join(dirname, 'boundary.json')
-        fn_wells = os.path.join(dirname, 'wells.json')
-        field = Field.create("test_field", fn_bound, fn_wells)
+    #     dirname = os.path.join(os.path.realpath(''), 'examples/data/rect_hole')
+    #     fn_bound = os.path.join(dirname, 'boundary.json')
+    #     fn_wells = os.path.join(dirname, 'wells.json')
+    #     field = Field.create("test_field", fn_bound, fn_wells)
 
-        self.log_message('Test info', LogLevelEnum.info)
-        self.log_message('Test error', LogLevelEnum.error)
-        self.log_message('Test warning', LogLevelEnum.warning)
-        self.log_message('Test debug', LogLevelEnum.debug)
+    #     self.log_message('Test info', LogLevelEnum.info)
+    #     self.log_message('Test error', LogLevelEnum.error)
+    #     self.log_message('Test warning', LogLevelEnum.warning)
+    #     self.log_message('Test debug', LogLevelEnum.debug)
 
-        setts = GlobalSetts()
-        mesh_maker = MeshMaker2D()
-        mesh = mesh_maker.triangulate(field, setts)
+    #     setts = GlobalSetts()
+    #     mesh_maker = MeshMaker2D()
+    #     mesh = mesh_maker.triangulate(field, setts)
 
-        ax = mp.scene.axes
-        tr.plot(ax, **mesh)
-        self.addTab(mp)
+    #     ax = mp.scene.axes
+    #     tr.plot(ax, **mesh)
+    #     self.addTab(mp)
 
     def log_message(self, mess: str, level: LogLevelEnum):
         if level is LogLevelEnum.debug:
@@ -137,9 +137,3 @@ class QtLapWindow(QtWidgets.QMainWindow, UI_QtLapWindow):
     def __createBound(self):
         pass
 
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    mainWin = QtLapWindow()
-    mainWin.show()
-    sys.exit(app.exec_())

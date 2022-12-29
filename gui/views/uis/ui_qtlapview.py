@@ -1,31 +1,37 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+"""
+main view user interface definition
+"""
 
 import functools
 from PyQt5 import QtWidgets, QtCore, QtGui
-import prog
-from widgets.log_text_editor_handler import LogTextEditHadler
+from gui import prog
+from gui.services.logtextedithandler import LogTextEditHandler
 import logging
-from models.log_level_enum import LogLevelEnum
 
 
-class UI_QtLapWindow:
+class UIQtLapView:
+    """
+    ui for qt lap view
+    """
+
     def __init__(self):
-        self.__window_title = f'QtLap v.{ prog.version }'
+        self.__window_title = f'QtLap v.{ prog.VERSION }'
         self.central_widget = None
         self.__grid_layout = None
         self.menu_bar = None
         self.tool_bar = None
-        self.__dock = None
+        # self.__dock = None
         self.__project_explorer = None
         self.__message_window = None
+        self.proj_explorer_tree = None
+        self.logger = None
 
-    def retranslateUi(self, widget):
+    def retranslate_ui(self, widget):
         widget.setWindowTitle(self.__window_title)
         self.__aboutqtlap.setText(u'About QtLap')
         self.status_bar.showMessage('ready')
 
-    def setupUi(self, widget):
+    def setup_ui(self, widget):
         widget.setMinimumSize(QtCore.QSize(640, 480))
 
         self.central_widget = QtWidgets.QTabWidget(widget)
@@ -48,7 +54,7 @@ class UI_QtLapWindow:
         self.__createProjectWindow(widget)
         self.__createMessageWindow(widget)
 
-        self.retranslateUi(widget)
+        self.retranslate_ui(widget)
 
     def __createProjectWindow(self, widget):
         self.proj_explorer_tree = QtWidgets.QTreeWidget(widget)
@@ -64,7 +70,7 @@ class UI_QtLapWindow:
     def __createMessageWindow(self, widget):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
-        text_editor_handler = LogTextEditHadler(self)
+        text_editor_handler = LogTextEditHandler(self)
         self.logger.addHandler(text_editor_handler)
 
         file_handler = logging.FileHandler('app.log', 'w')
@@ -147,7 +153,7 @@ class UI_QtLapWindow:
             < b > Laplace equation solver and visualizer < /b >
             < br >< br > Version {0} <br><br>
             <a href="http://{1}/releases/latest">{1}</a>
-            """.format(prog.version, "www.github.com/erythrocyte/qtlappy/")))
+            """.format(prog.VERSION, "www.github.com/erythrocyte/qtlappy/")))
         self.__help_menu.addAction(self.__aboutqtlap)
         self.__aboutqt = QtWidgets.QAction('About Qt', widget)
         self.__aboutqt.triggered.connect(QtWidgets.QApplication.aboutQt)
