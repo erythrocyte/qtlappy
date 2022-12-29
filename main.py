@@ -2,13 +2,9 @@
 main file
 """
 
-import sys
-from PyQt5 import QtWidgets
-from gui.views.qtlapview import QtLapView
+from src.models.qtlap import QtLappy
 
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    mainWin = QtLapView()
-    mainWin.show()
-    sys.exit(app.exec_())
+    qtlappy = QtLappy()
+    qtlappy.run()
