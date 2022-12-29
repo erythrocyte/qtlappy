@@ -3,10 +3,11 @@ main view user interface definition
 """
 
 import functools
+import logging
 from PyQt5 import QtWidgets, QtCore, QtGui
 from gui import prog
 from gui.services.logtextedithandler import LogTextEditHandler
-import logging
+from gui.resources import resources
 
 
 class UIQtLapView:
@@ -49,7 +50,7 @@ class UIQtLapView:
         self.__createToolBar(widget)
         self.__createStatusBar(widget)
 
-        widget.setWindowIcon(QtGui.QIcon(":qtlap"))
+        widget.setWindowIcon(QtGui.QIcon(":/qtlap"))
 
         self.__createProjectWindow(widget)
         self.__createMessageWindow(widget)
@@ -103,7 +104,7 @@ class UIQtLapView:
         self.__file_menu = QtWidgets.QMenu('&File', widget)
         self.menu_bar.addMenu(self.__file_menu)
 
-        self.__close_action = QtWidgets.QAction(QtGui.QIcon(":power_off"),
+        self.__close_action = QtWidgets.QAction(QtGui.QIcon(":/power_off"),
                                                 '&Close', widget)
         self.__close_action.triggered.connect(widget.close)
         self.__file_menu.addAction(self.__close_action)
