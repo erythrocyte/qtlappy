@@ -2,6 +2,7 @@
 qt lappy main view
 """
 
+from gui import prog
 from PyQt5 import QtWidgets, QtGui, QtCore
 from gui.views.uis.ui_qtlapview import UIQtLapView
 from src.models.lapmodel import LapModel
@@ -21,6 +22,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         QtWidgets.QMainWindow.__init__(self)
         self.setup_ui(self)
         self.__connect()
+        self.__readSettings()
 
     def add_tab(self, widget: QtWidgets.QWidget, name: str):
         """
@@ -40,11 +42,15 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             self.__prepareProjectItemContextMenu)
 
     def __on_new_project_create(self):
+        last_dir = self.settings.value('new_project_last_dir')
+        last_dir = '' if last_dir is None else last_dir
         project_folder = QtWidgets.QFileDialog.getExistingDirectory(
-            self, 'Select Folder')
+            self, 'Select Folder', last_dir)
 
         if not project_folder:
             return
+
+        self.settings.setValue('new_project_last_dir', project_folder)
 
         input = QtWidgets.QInputDialog()
         input.setWhatsThis('test')
@@ -112,3 +118,6 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
     #     createAction = menu.addAction('Create')
     #     createAction.triggered.connect(self.__createBound)
     #     menu.popup(QtGui.QCursor.pos())
+
+    def __readSettings(self):
+        self.settings = QtCore.QSettings(prog.ORGANIZATION, prog.PRODUCT_NAME)

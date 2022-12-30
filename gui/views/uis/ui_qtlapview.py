@@ -16,7 +16,7 @@ class UIQtLapView:
     """
 
     def __init__(self):
-        self.__window_title = f'QtLap v.{ prog.VERSION }'
+        self.__window_title = f'{prog.PRODUCT_NAME} v.{ prog.VERSION }'
         self.central_widget = None
         self.__grid_layout = None
         self.menu_bar = None
