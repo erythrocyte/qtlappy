@@ -5,7 +5,7 @@ import os
 import typing
 import jsonpickle
 from src.models.lapproject import LapProject
-from src.utils.helpers import dir_helper
+from src.utils.helpers import dir_helper, file_helper
 
 
 def remove_projects_in_dir(dir: str) -> None:
@@ -15,7 +15,7 @@ def remove_projects_in_dir(dir: str) -> None:
         return
 
     for project in projects:
-        remove_project_files(project)
+        remove_project_files(os.path.join(dir,project))
 
 
 def remove_project_files(project_main_file: str) -> None:
@@ -30,18 +30,19 @@ def remove_project_files(project_main_file: str) -> None:
 
     project = typing.cast(LapProject, jsonpickle.decode(json_string))
 
-    os.remove(project.boundary)
-    os.remove(project.contours_file)
-    os.remove(project.fluid_props)
+    
+    file_helper.delete_file_if_exists(project.boundary)
+    file_helper.delete_file_if_exists(project.contours_file)
+    file_helper.delete_file_if_exists(project.fluid_props)
     __remove_model_geo_maps(project.geo_maps)
-    os.remove(project.grid)
-    os.remove(project.reservoir_props)
-    os.remove(project.wells_event)
-    os.remove(project.wells_geom)
-    os.remove(project.wells_history)
+    file_helper.delete_file_if_exists(project.grid)
+    file_helper.delete_file_if_exists(project.reservoir_props)
+    file_helper.delete_file_if_exists(project.wells_event)
+    file_helper.delete_file_if_exists(project.wells_geom)
+    file_helper.delete_file_if_exists(project.wells_history)
     __remove_results(project.results_folder)
 
-    os.remove(project_main_file)
+    file_helper.delete_file_if_exists(project_main_file)
 
 
 def __remove_model_geo_maps(geo_maps_file: str):

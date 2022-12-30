@@ -59,10 +59,12 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         if not project_folder:
             return
 
-        if dir_helper.dir_contains_files_with_ext(project_folder, '.lap'):
+        if dir_helper.dir_contains_files_pattern(project_folder, '.lap'):
             # ask for delete files
-            ask_result = question_box.ask_a_question(
-                'Preparing project directory', 'Chosen directory contains project file. Do you want to delete previous project?')
+            ask_result = question_box.ask_a_question(self,
+                                                     'Preparing project directory',
+                                                     'Chosen directory contains project(s) files. ' +
+                                                     'Do you want to delete previous project(s)?')
 
             if ask_result:
                 project_remover_service.remove_projects_in_dir(project_folder)
