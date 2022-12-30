@@ -1,16 +1,21 @@
 """
+model docstring
 """
 
 from PyQt5 import QtWidgets, QtGui
-from src.models.lapproject import LapProject
+from src.models.lapmodel import LapModel
 from gui.resources import resources
 
 
-def to_tree_widget_item(project: LapProject) -> QtWidgets.QTreeWidgetItem:
-    if project is None:
+def to_tree_widget_item(model: LapModel) -> QtWidgets.QTreeWidgetItem:
+    """
+    def docstring
+    """
+
+    if model is None:
         return None
 
-    main = __create_item(project.name, ":/project2", None)
+    main = __create_item(model.name, ":/project2", None)
 
     # sub items
 

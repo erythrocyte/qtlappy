@@ -4,9 +4,9 @@ qt lappy main view
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from gui.views.uis.ui_qtlapview import UIQtLapView
-from gui.models.loglevelenum import LogLevelEnum
-from src.models.lapproject import LapProject
+from src.models.lapmodel import LapModel
 from gui.services import lapproject_service
+from gui.models.loglevelenum import LogLevelEnum
 
 
 class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
@@ -14,7 +14,8 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
     view
     """
 
-    create_empty_project = QtCore.pyqtSignal()
+    create_empty_project = QtCore.pyqtSignal(str, str)
+    log_message = QtCore.pyqtSignal(str, LogLevelEnum)
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -27,20 +28,8 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         """
         self.central_widget.addTab(widget, name)
 
-    def log_message(self, mess: str, level: LogLevelEnum):
-        if level is LogLevelEnum.DEBUG:
-            self.logger.debug(mess)
-        elif level is LogLevelEnum.ERROR:
-            self.logger.error(mess)
-        elif level is LogLevelEnum.WARNING:
-            self.logger.warning(mess)
-        elif level is LogLevelEnum.FATAL:
-            self.logger.fatal(mess)
-        else:
-            self.logger.info(mess)
-
-    def add_project_to_projects_view(self, project: LapProject):
-        item = lapproject_service.to_tree_widget_item(project)
+    def add_project_to_projects_view(self, model: LapModel):
+        item = lapproject_service.to_tree_widget_item(model)
         if item is not None:
             self.proj_explorer_tree.addTopLevelItem(item)
 
@@ -57,7 +46,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         if not folderpath:
             return
 
-        self.create_empty_project.emit()
+        self.create_empty_project.emit(folderpath, 'project_test')
 
         # lp = LapProjectPaths(folderpath)
         # project = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)

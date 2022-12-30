@@ -25,7 +25,6 @@ class UIQtLapView:
         self.__project_explorer = None
         self.__message_window = None
         self.proj_explorer_tree = None
-        self.logger = None
 
     def retranslate_ui(self, widget):
         widget.setWindowTitle(self.__window_title)
@@ -57,6 +56,9 @@ class UIQtLapView:
 
         self.retranslate_ui(widget)
 
+    def set_logger_viewer_widget(self, widget: QtWidgets):
+        self.__message_window.setWidget(widget)
+
     def __createProjectWindow(self, widget):
         self.proj_explorer_tree = QtWidgets.QTreeWidget(widget)
         self.proj_explorer_tree.setContextMenuPolicy(
@@ -69,19 +71,7 @@ class UIQtLapView:
                              self.__project_explorer)
 
     def __createMessageWindow(self, widget):
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
-        text_editor_handler = LogTextEditHandler(self)
-        self.logger.addHandler(text_editor_handler)
-
-        file_handler = logging.FileHandler('app.log', 'w')
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(logging.Formatter(
-            '%(asctime)s - %(levelname)s - %(message)s'))
-        self.logger.addHandler(file_handler)
-
         self.__message_window = QtWidgets.QDockWidget('Message window', widget)
-        self.__message_window.setWidget(text_editor_handler.widget)
         widget.addDockWidget(QtCore.Qt.BottomDockWidgetArea,
                              self.__message_window)
 
