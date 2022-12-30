@@ -15,6 +15,7 @@ def create(projects: List[LapModel], name: str, project_path: str) -> LapModel:
     item.name = name if name != '' else f'Project{item.id+1}'
     item.project = LapProject()
     project_file_name = os.path.join(project_path, f'{name}.lap')
+    item.project.main_file = project_file_name
     status = project_saver_service.save(project_file_name, item.project)
 
     if not status:
@@ -26,7 +27,14 @@ def create(projects: List[LapModel], name: str, project_path: str) -> LapModel:
     return item
 
 
-def __valid_id(projects: List[LapProject]) -> int:
+def check_project_folder(project_folder: str) -> bool:
+    """
+    """
+
+    pass
+
+
+def __valid_id(projects: List[LapModel]) -> int:
     if not projects:
         return 0
 

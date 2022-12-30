@@ -2,12 +2,20 @@
 qt lappy main view
 """
 
-from gui import prog
-from PyQt5 import QtWidgets, QtGui, QtCore
-from gui.views.uis.ui_qtlapview import UIQtLapView
+
+from PyQt5 import QtWidgets, QtCore
+
+
 from src.models.lapmodel import LapModel
+from src.utils.helpers import dir_helper
+from src.services import project_remover_service
+
+
+from gui import prog
+from gui.views.uis.ui_qtlapview import UIQtLapView
 from gui.services import lapproject_service
 from gui.models.loglevelenum import LogLevelEnum
+from gui.utils.helpers import question_box
 
 
 class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
@@ -44,11 +52,22 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
     def __on_new_project_create(self):
         last_dir = self.settings.value('new_project_last_dir')
         last_dir = '' if last_dir is None else last_dir
+
         project_folder = QtWidgets.QFileDialog.getExistingDirectory(
-            self, 'Select Folder', last_dir)
+            self, 'Select Folder', last_dir, options=QtWidgets.QFileDialog.DontUseNativeDialog)
 
         if not project_folder:
             return
+
+        if dir_helper.dir_contains_files_pattern(project_folder, '.lap'):
+            # ask for delete files
+            ask_result = question_box.positive_answer(self,
+                                                      'Preparing project directory',
+                                                      'Chosen directory contains project(s) files. ' +
+                                                      'Do you want to delete previous project(s)?')
+
+            if ask_result:
+                project_remover_service.remove_projects_in_dir(project_folder)
 
         self.settings.setValue('new_project_last_dir', project_folder)
 
