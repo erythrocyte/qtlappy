@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtWidgets
-from views.uis.ui_map_plot_view import UI_MapPlotView
+from gui.views.uis.ui_map_plot_view import UI_MapPlotView
 
 
 class MapPlotView(QtWidgets.QWidget, UI_MapPlotView):

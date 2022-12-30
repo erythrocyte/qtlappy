@@ -3,20 +3,20 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [        
+    "configurations": [
         {
-            "name": "integ tests",
+            "name": "main",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/integ_tests.py",
+            "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal"
         },
         {
-            "name": "gui",
+            "name": "integational tests",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/gui/qtlap.py",
+            "program": "${workspaceFolder}/tests/integ_tests/integ_tests.py",
             "console": "integratedTerminal"
-        }
+        },
     ]
 }

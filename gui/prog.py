@@ -1,3 +1,7 @@
-version = '0.1'
+"""
+prog common settings
+"""
+
+VERSION = '0.1'
 if __debug__:
-    version = version + ' (debug)'
+    VERSION += ' (debug)'

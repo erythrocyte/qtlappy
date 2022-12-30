@@ -2,5 +2,22 @@
 <qresource>
     <file alias="qtlap">images/qtlap.svg</file>
     <file alias="power_off">images/power-off.svg</file>
+    <file alias="project2">images/proj.svg</file>
+    <file alias="init_data">images/presentation-chart-graph.svg</file>
+    <file alias="contour">images/inkpen.svg</file>
+    <file alias="well">images/oil-pump.svg</file>
+    <file alias="well_geom">images/trajectory.svg</file>
+    <file alias="well_events">images/calendar.svg</file>
+    <file alias="well_history">images/clipboard.svg</file>
+    <file alias="fluid">images/fluid.svg</file>
+    <file alias="reservoir_prop">images/geology.svg</file>
+    <file alias="model_data">images/browser.svg</file>
+    <file alias="grid">images/grid.svg</file>
+    <file alias="field">images/field.svg</file>
+    <file alias="boundary">images/frame.svg</file>
+    <file alias="results">images/lab-medical-test.svg</file>
+    <file alias="result_maps">images/field.svg</file>
+    <file alias="result_wells_work">images/oil-pump.svg</file>
+    <file alias="result_field_data">images/chart.svg</file>
 </qresource>
 </RCC>

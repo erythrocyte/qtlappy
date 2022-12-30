@@ -1,34 +1,39 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+module docstring
+"""
 
-from PyQt5 import QtWidgets, QtCore, QtGui
-import resources
 import functools
-import prog
-from widgets.log_text_editor_handler import LogTextEditHadler
 import logging
-from models.log_level_enum import LogLevelEnum
+from PyQt5 import QtWidgets, QtCore, QtGui
+from gui import prog
+from gui.widgets.log_text_editor_handler import LogTextEditHadler
+# from gui.models.log_level_enum import LogLevelEnum
 
 
-class UI_QtLapWindow:
+class UIQtLapView:
+    """
+    ui for qt lap view
+    """
     def __init__(self):
         self.__window_title = f'QtLap v.{ prog.version }'
         self.central_widget = None
         self.__grid_layout = None
         self.menu_bar = None
         self.tool_bar = None
-        self.__dock = None
+        # self.__dock = None
         self.__project_explorer = None
-        self.__proj_explorer_tree = None
         self.__message_window = None
+        self.proj_explorer_tree = None
 
-    def retranslateUi(self, widget):
+    def retranslate_ui(self, widget):
         widget.setWindowTitle(self.__window_title)
         self.__aboutqtlap.setText(u'About QtLap')
         self.status_bar.showMessage('ready')
 
-    def setupUi(self, widget):
+    def setup_ui(self, widget):
         widget.setMinimumSize(QtCore.QSize(640, 480))
 
         self.central_widget = QtWidgets.QTabWidget(widget)
@@ -48,13 +53,23 @@ class UI_QtLapWindow:
 
         widget.setWindowIcon(QtGui.QIcon(":qtlap"))
 
-        self.__proj_explorer_tree = QtWidgets.QTreeView(widget)
+        self.__createProjectWindow(widget)
+        self.__createMessageWindow(widget)
+
+        self.retranslate_ui(widget)
+
+    def __createProjectWindow(self, widget):
+        self.proj_explorer_tree = QtWidgets.QTreeWidget(widget)
+        self.proj_explorer_tree.setContextMenuPolicy(
+            QtCore.Qt.CustomContextMenu)
+        self.proj_explorer_tree.setHeaderHidden(True)
         self.__project_explorer = QtWidgets.QDockWidget('Project explorer',
                                                         widget)
-        self.__project_explorer.setWidget(self.__proj_explorer_tree)
+        self.__project_explorer.setWidget(self.proj_explorer_tree)
         widget.addDockWidget(QtCore.Qt.LeftDockWidgetArea,
                              self.__project_explorer)
 
+    def __createMessageWindow(self, widget):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
         text_editor_handler = LogTextEditHadler(self)
@@ -71,14 +86,22 @@ class UI_QtLapWindow:
         widget.addDockWidget(QtCore.Qt.BottomDockWidgetArea,
                              self.__message_window)
 
-        # self.__main_dock_widget = QtWidgets.QDockWidget('')
-
-        self.retranslateUi(widget)
-
     def __createMenuBar(self, widget):
         self.menu_bar = QtWidgets.QMenuBar(widget)
 
         # -- File
+        self.__menuBarFile(widget)
+
+        # -- View
+        self.__menuBarView(widget)
+
+        # -- Project
+        self.__menuBarProject(widget)
+
+        # --- Help
+        self.__menuBarHelp(widget)
+
+    def __menuBarFile(self, widget):
         self.__file_menu = QtWidgets.QMenu('&File', widget)
         self.menu_bar.addMenu(self.__file_menu)
 
@@ -87,7 +110,7 @@ class UI_QtLapWindow:
         self.__close_action.triggered.connect(widget.close)
         self.__file_menu.addAction(self.__close_action)
 
-        # -- View
+    def __menuBarView(self, widget):
         self.__view_menu = QtWidgets.QMenu('&View', widget)
         self.menu_bar.addMenu(self.__view_menu)
 
@@ -103,7 +126,23 @@ class UI_QtLapWindow:
             self.__view_message)
         self.__view_menu.addAction(self.__view_message_widget_action)
 
-        # --- Help
+    def __menuBarProject(self, widget):
+        self.__project_menu = QtWidgets.QMenu('&Project', widget)
+        self.menu_bar.addMenu(self.__project_menu)
+
+        self.new_project_action = QtWidgets.QAction('&New', widget)
+        self.__project_menu.addAction(self.new_project_action)
+
+        self.open_project_action = QtWidgets.QAction('&Open', widget)
+        self.__project_menu.addAction(self.open_project_action)
+
+        self.save_project_action = QtWidgets.QAction('&Save', widget)
+        self.__project_menu.addAction(self.save_project_action)
+
+        # self.open_project_action = QtWidgets.QAction('&Delete', widget)
+        # self.__project_menu.addAction(self.open_project_action)
+
+    def __menuBarHelp(self, widget):
         self.__help_menu = QtWidgets.QMenu('&Help', widget)
         self.menu_bar.addMenu(self.__help_menu)
 
@@ -133,13 +172,3 @@ class UI_QtLapWindow:
 
     def __view_message(self):
         self.__message_window.setVisible(True)
-
-    def log_message(self, mess: str, level: LogLevelEnum):
-        if level is LogLevelEnum.debug:
-            self.logger.debug(mess)
-        elif level is LogLevelEnum.error:
-            self.logger.error(mess)
-        elif level is LogLevelEnum.warning:
-            self.logger.warning(mess)
-        else:
-            self.logger.info(mess)
