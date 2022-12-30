@@ -42,7 +42,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             self.__prepareProjectItemContextMenu)
 
     def __on_new_project_create(self):
-        last_dir = self.settings.value('project_initial_dir')
+        last_dir = self.settings.value('new_project_last_dir')
         last_dir = '' if last_dir is None else last_dir
         project_folder = QtWidgets.QFileDialog.getExistingDirectory(
             self, 'Select Folder', last_dir)
@@ -50,7 +50,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         if not project_folder:
             return
 
-        self.settings.setValue('project_initial_dir', project_folder)
+        self.settings.setValue('new_project_last_dir', project_folder)
 
         input = QtWidgets.QInputDialog()
         input.setWhatsThis('test')
