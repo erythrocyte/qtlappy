@@ -21,7 +21,7 @@ def create(projects: List[LapModel], name: str, project_path: str) -> LapModel:
         return None
 
     logger = logging.getLogger()
-    logger.info(f'Model {item.name} created')
+    logger.info(f'Model \'{item.name}\' created')
 
     return item
 

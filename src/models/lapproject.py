@@ -13,6 +13,17 @@ class LapProject:
     def __init__(self) -> None:
         self.main_file = ''
         self.contours_file = ''
+        self.wells_geom = ''
+        self.wells_event = ''
+        self.wells_history = ''
+        self.fluid_props = ''
+        self.reservoir_props = ''
+
+        self.grid = ''
+        self.geo_maps = ''
+        self.boundary = ''
+
+        self.results_folder = ''
 
     # @jsonpickle_decorators.remove_unused_from_dict(['main_file'])
     # @jsonpickle_decorators.remove_unused_from_dict

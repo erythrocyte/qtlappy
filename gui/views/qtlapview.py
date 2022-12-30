@@ -40,13 +40,22 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             self.__prepareProjectItemContextMenu)
 
     def __on_new_project_create(self):
-        folderpath = QtWidgets.QFileDialog.getExistingDirectory(
+        project_folder = QtWidgets.QFileDialog.getExistingDirectory(
             self, 'Select Folder')
 
-        if not folderpath:
+        if not project_folder:
             return
 
-        self.create_empty_project.emit(folderpath, 'project_test')
+        input = QtWidgets.QInputDialog()
+        input.setWhatsThis('test')
+
+        project_name, status = input.getText(
+            self, 'Project name', 'Please, insert project name')
+
+        if not status:
+            return
+
+        self.create_empty_project.emit(project_folder, project_name)
 
         # lp = LapProjectPaths(folderpath)
         # project = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
