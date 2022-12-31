@@ -18,6 +18,7 @@ from gui.services.project_contextmenu_maker import ProjectContextMenuMaker
 from gui.models.loglevelenum import LogLevelEnum
 from gui.utils.helpers import question_box, qtreewidgetitem_helper
 from gui.models.project_treeview_item_type import ProjectTreeViewItemType
+from gui.views.mapplotview import MapPlotView
 
 
 class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
@@ -35,22 +36,30 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         self.__connect()
         self.__readSettings()
 
-    def add_tab(self, widget: QtWidgets.QWidget, name: str):
-        """
-        add tab to pages
-        """
-        self.central_widget.addTab(widget, name)
-
     def add_project_to_projects_view(self, model: LapModel):
         item = lapproject_service.to_tree_widget_item(model)
         if item is not None:
             self.proj_explorer_tree.addTopLevelItem(item)
 
+    def __add_tab(self, widget: QtWidgets.QWidget, name: str):
+        """
+        add tab to pages
+        """
+        self.central_widget.addTab(widget, name)
+
     def __connect(self):
         self.new_project_action.triggered.connect(self.__on_new_project_create)
-        # self.save_project_action.triggered.connect(self.__on_save_project)
         self.proj_explorer_tree.customContextMenuRequested.connect(
             self.__prepareProjectItemContextMenu)
+        self.proj_explorer_tree.itemClicked.connect(self.__on_item_clicked)
+
+    @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, int)
+    def __on_item_clicked(self, item, column):
+        if not item:
+            return
+
+        plot = MapPlotView()
+        self.__add_tab(plot, item.text(column))
 
     def __on_new_project_create(self):
         last_dir = self.settings.value('new_project_last_dir')
@@ -84,39 +93,6 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             return
 
         self.create_empty_project.emit(project_folder, project_name)
-
-        # lp = LapProjectPaths(folderpath)
-        # project = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
-        # project.setText(0, f'Project {self.__project_count + 1}')
-        # project.setFlags(project.flags()
-        #                  | QtCore.Qt.ItemIsTristate
-        #                  | QtCore.Qt.ItemIsUserCheckable)
-        # project.Type = lp
-
-        # bound = QtWidgets.QTreeWidgetItem(project)
-        # bound.setText(0, 'Bound')
-        # bound.setDisabled(True)
-        # bound.Type = ProjectItemType.BOUND
-
-        # wells = QtWidgets.QTreeWidgetItem(project)
-        # wells.setText(0, 'Wells')
-        # wells.setDisabled(True)
-        # wells.Type = ProjectItemType.WELL
-
-        # grid = QtWidgets.QTreeWidgetItem(project)
-        # grid.setText(0, 'Grid')
-        # grid.setDisabled(True)
-        # grid.Type = ProjectItemType.GRID
-
-        # # fields = QtWidgets.QTreeWidgetItem(project)
-        # # fields.setText(0, 'Field')
-        # # fields.setDisabled(True)
-        # # fields.Type = ProjectItemType.FIELD
-
-        # self.__project_count += 1
-
-    def __on_save_project(self):
-        pass
 
     def __delete_model(self, item):
         model = self.__close_model(item)

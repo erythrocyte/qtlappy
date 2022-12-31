@@ -7,7 +7,7 @@ import sys
 import matplotlib
 
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from gui.widgets.mpl_canvas import MplCanvas
+from gui.views.widgets.mpl_canvas import MplCanvas
 
 
 class UI_MapPlotView:
