@@ -27,13 +27,6 @@ def create(projects: List[LapModel], name: str, project_path: str) -> LapModel:
     return item
 
 
-def check_project_folder(project_folder: str) -> bool:
-    """
-    """
-
-    pass
-
-
 def __valid_id(projects: List[LapModel]) -> int:
     if not projects:
         return 0

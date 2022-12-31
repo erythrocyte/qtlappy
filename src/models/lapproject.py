@@ -12,8 +12,7 @@ class LapProject:
 
     def __init__(self) -> None:
         self.main_file = ''
-        self.contours_file = ''
-        self.wells_geom = ''
+        self.geom_file = ''
         self.wells_event = ''
         self.wells_history = ''
         self.fluid_props = ''
