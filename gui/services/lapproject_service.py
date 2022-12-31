@@ -28,7 +28,7 @@ def to_tree_widget_item(model: LapModel) -> QtWidgets.QTreeWidgetItem:
 
     # initial data sub items
     geom = __create_item('Geometry', ':/contour',
-                             init_data, ProjectTreeViewItemType.INIT_DATA_CONTOURS)
+                         init_data, ProjectTreeViewItemType.INIT_DATA_GEOM)
     wells = __create_item('Wells', ':/well', init_data,
                           ProjectTreeViewItemType.INIT_DATA_WELLS)
     wells_events = __create_item(

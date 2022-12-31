@@ -32,13 +32,12 @@ def remove_project_files(project_main_file: str) -> None:
 
     
     file_helper.delete_file_if_exists(project.boundary)
-    file_helper.delete_file_if_exists(project.contours_file)
+    file_helper.delete_file_if_exists(project.geom_file)
     file_helper.delete_file_if_exists(project.fluid_props)
     __remove_model_geo_maps(project.geo_maps)
     file_helper.delete_file_if_exists(project.grid)
     file_helper.delete_file_if_exists(project.reservoir_props)
     file_helper.delete_file_if_exists(project.wells_event)
-    file_helper.delete_file_if_exists(project.wells_geom)
     file_helper.delete_file_if_exists(project.wells_history)
     __remove_results(project.results_folder)
 

@@ -18,6 +18,7 @@ from gui.services.project_contextmenu_maker import ProjectContextMenuMaker
 from gui.models.loglevelenum import LogLevelEnum
 from gui.utils.helpers import question_box, qtreewidgetitem_helper
 from gui.models.project_treeview_item_type import ProjectTreeViewItemType
+from gui.views.geomview import GeomView
 
 
 class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
@@ -35,22 +36,33 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         self.__connect()
         self.__readSettings()
 
-    def add_tab(self, widget: QtWidgets.QWidget, name: str):
-        """
-        add tab to pages
-        """
-        self.central_widget.addTab(widget, name)
-
     def add_project_to_projects_view(self, model: LapModel):
         item = lapproject_service.to_tree_widget_item(model)
         if item is not None:
             self.proj_explorer_tree.addTopLevelItem(item)
 
+    def __add_tab(self, widget: QtWidgets.QWidget, name: str):
+        """
+        add tab to pages
+        """
+        self.main_tab_widget.addTab(widget, name)
+
     def __connect(self):
         self.new_project_action.triggered.connect(self.__on_new_project_create)
-        # self.save_project_action.triggered.connect(self.__on_save_project)
         self.proj_explorer_tree.customContextMenuRequested.connect(
             self.__prepareProjectItemContextMenu)
+        self.proj_explorer_tree.itemClicked.connect(self.__on_item_clicked)
+
+        self.main_tab_widget.tabCloseRequested.connect(
+            lambda index: self.main_tab_widget.removeTab(index))
+
+    @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, int)
+    def __on_item_clicked(self, item, column):
+        if not item:
+            return
+
+        plot = GeomView(self.main_tab_widget)
+        self.__add_tab(plot, item.text(column))
 
     def __on_new_project_create(self):
         last_dir = self.settings.value('new_project_last_dir')
@@ -85,39 +97,6 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
         self.create_empty_project.emit(project_folder, project_name)
 
-        # lp = LapProjectPaths(folderpath)
-        # project = QtWidgets.QTreeWidgetItem(self.proj_explorer_tree)
-        # project.setText(0, f'Project {self.__project_count + 1}')
-        # project.setFlags(project.flags()
-        #                  | QtCore.Qt.ItemIsTristate
-        #                  | QtCore.Qt.ItemIsUserCheckable)
-        # project.Type = lp
-
-        # bound = QtWidgets.QTreeWidgetItem(project)
-        # bound.setText(0, 'Bound')
-        # bound.setDisabled(True)
-        # bound.Type = ProjectItemType.BOUND
-
-        # wells = QtWidgets.QTreeWidgetItem(project)
-        # wells.setText(0, 'Wells')
-        # wells.setDisabled(True)
-        # wells.Type = ProjectItemType.WELL
-
-        # grid = QtWidgets.QTreeWidgetItem(project)
-        # grid.setText(0, 'Grid')
-        # grid.setDisabled(True)
-        # grid.Type = ProjectItemType.GRID
-
-        # # fields = QtWidgets.QTreeWidgetItem(project)
-        # # fields.setText(0, 'Field')
-        # # fields.setDisabled(True)
-        # # fields.Type = ProjectItemType.FIELD
-
-        # self.__project_count += 1
-
-    def __on_save_project(self):
-        pass
-
     def __delete_model(self, item):
         model = self.__close_model(item)
         project_remover_service.remove_project_files(model.project.main_file)
@@ -149,24 +128,6 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             menu = maker.get_menu()
             point.setY(point.y() + 60)
             menu.exec_(self.mapToGlobal(point))
-
-        # if not project_item.Type == ProjectTreeViewItemType
-
-        # item = self.proj_explorer_tree.itemAt(point)
-        # name = item.text(0)  # The text of the node.
-        # tp = item.Type  # type(item.Type) //.__name__
-
-        # if tp == ProjectItemType.BOUND:
-        #     self.__boundContextMenu()
-
-        # self.log_message(f'context menu for {name} with type = {tp}',
-        #                  LogLevelEnum.info)
-
-    # def __boundContextMenu(self):
-    #     menu = QtWidgets.QMenu(self)
-    #     createAction = menu.addAction('Create')
-    #     createAction.triggered.connect(self.__createBound)
-    #     menu.popup(QtGui.QCursor.pos())
 
     def __readSettings(self):
         self.settings = QtCore.QSettings(prog.ORGANIZATION, prog.PRODUCT_NAME)

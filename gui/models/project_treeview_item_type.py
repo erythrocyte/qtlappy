@@ -7,9 +7,8 @@ from enum import Enum
 class ProjectTreeViewItemType(Enum):
     PROJECT = 0
     INIT_DATA = 1
-    INIT_DATA_CONTOURS = 2
+    INIT_DATA_GEOM = 2
     INIT_DATA_WELLS = 3
-    INIT_DATA_WELLS_WELLSGEOM = 4
     INIT_DATA_WELLS_WELLSEVENT = 5
     INIT_DATA_WELLS_WELLSHISTORY = 6
     INIT_DATA_FLUID = 7
