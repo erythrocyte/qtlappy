@@ -12,8 +12,6 @@ from gui.models.loglevelenum import LogLevelEnum
 
 class QtLappy:
 
-    on_create_empty_project = QtCore.pyqtSlot()
-
     def __init__(self) -> None:
         self.__main_window = None
         self.__models = []
@@ -59,6 +57,7 @@ class QtLappy:
     def __connect_main_view(self):
         self.__main_window.create_empty_project.connect(
             self.__create_empty_project)
+        self.__main_window.delete_model.connect(self.__delete_model)
 
     def __create_empty_project(self, folder: str, name: str):
         model = model_creator_service.create(self.__models, name, folder)
@@ -69,6 +68,10 @@ class QtLappy:
         self.__models.append(model)
 
         self.__main_window.add_project_to_projects_view(model)
+
+    def __delete_model(self, model):
+        if model in self.__models:
+            self.__models.remove(model)
 
     def __setup(self):
         self.__setup_logger()

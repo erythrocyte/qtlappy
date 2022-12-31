@@ -125,8 +125,8 @@ class UIQtLapView:
         self.open_project_action = QtWidgets.QAction('&Open', widget)
         self.__project_menu.addAction(self.open_project_action)
 
-        self.save_project_action = QtWidgets.QAction('&Save', widget)
-        self.__project_menu.addAction(self.save_project_action)
+        # self.save_project_action = QtWidgets.QAction('&Save', widget)
+        # self.__project_menu.addAction(self.save_project_action)
 
         # self.open_project_action = QtWidgets.QAction('&Delete', widget)
         # self.__project_menu.addAction(self.open_project_action)
