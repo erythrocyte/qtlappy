@@ -17,7 +17,7 @@ class UIQtLapView:
 
     def __init__(self):
         self.__window_title = f'{prog.PRODUCT_NAME} v.{ prog.VERSION }'
-        self.central_widget = None
+        self.main_tab_widget = None
         self.__grid_layout = None
         self.menu_bar = None
         self.tool_bar = None
@@ -34,12 +34,13 @@ class UIQtLapView:
     def setup_ui(self, widget):
         widget.setMinimumSize(QtCore.QSize(640, 480))
 
-        self.central_widget = QtWidgets.QTabWidget(widget)
-        self.central_widget.document_mode = True
-        widget.setCentralWidget(self.central_widget)
+        self.main_tab_widget = QtWidgets.QTabWidget(widget)
+        self.main_tab_widget.document_mode = True
+        self.main_tab_widget.setTabsClosable(True)
+        widget.setCentralWidget(self.main_tab_widget)
 
         self.__grid_layout = QtWidgets.QGridLayout()
-        self.central_widget.setLayout(self.__grid_layout)
+        self.main_tab_widget.setLayout(self.__grid_layout)
 
         widget.showMaximized()
 

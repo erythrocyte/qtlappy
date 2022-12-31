@@ -18,7 +18,7 @@ from gui.services.project_contextmenu_maker import ProjectContextMenuMaker
 from gui.models.loglevelenum import LogLevelEnum
 from gui.utils.helpers import question_box, qtreewidgetitem_helper
 from gui.models.project_treeview_item_type import ProjectTreeViewItemType
-from gui.views.mapplotview import MapPlotView
+from gui.views.geomview import GeomView
 
 
 class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
@@ -45,7 +45,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         """
         add tab to pages
         """
-        self.central_widget.addTab(widget, name)
+        self.main_tab_widget.addTab(widget, name)
 
     def __connect(self):
         self.new_project_action.triggered.connect(self.__on_new_project_create)
@@ -53,12 +53,15 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             self.__prepareProjectItemContextMenu)
         self.proj_explorer_tree.itemClicked.connect(self.__on_item_clicked)
 
+        self.main_tab_widget.tabCloseRequested.connect(
+            lambda index: self.main_tab_widget.removeTab(index))
+
     @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, int)
     def __on_item_clicked(self, item, column):
         if not item:
             return
 
-        plot = MapPlotView()
+        plot = GeomView(self.main_tab_widget)
         self.__add_tab(plot, item.text(column))
 
     def __on_new_project_create(self):
@@ -125,24 +128,6 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             menu = maker.get_menu()
             point.setY(point.y() + 60)
             menu.exec_(self.mapToGlobal(point))
-
-        # if not project_item.Type == ProjectTreeViewItemType
-
-        # item = self.proj_explorer_tree.itemAt(point)
-        # name = item.text(0)  # The text of the node.
-        # tp = item.Type  # type(item.Type) //.__name__
-
-        # if tp == ProjectItemType.BOUND:
-        #     self.__boundContextMenu()
-
-        # self.log_message(f'context menu for {name} with type = {tp}',
-        #                  LogLevelEnum.info)
-
-    # def __boundContextMenu(self):
-    #     menu = QtWidgets.QMenu(self)
-    #     createAction = menu.addAction('Create')
-    #     createAction.triggered.connect(self.__createBound)
-    #     menu.popup(QtGui.QCursor.pos())
 
     def __readSettings(self):
         self.settings = QtCore.QSettings(prog.ORGANIZATION, prog.PRODUCT_NAME)

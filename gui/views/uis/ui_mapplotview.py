@@ -12,8 +12,6 @@ from gui.views.widgets.mpl_canvas import MplCanvas
 
 class UI_MapPlotView:
     def __init__(self):
-        self.__title = ''
-        self.__central_widget = None
         self.__layout = None
         self.scene = MplCanvas(self, width=50, height=4, dpi=100)
         self.toolbar = None

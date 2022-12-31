@@ -9,3 +9,7 @@ class MapPlotView(QtWidgets.QWidget, UI_MapPlotView):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+
+    def test(self):
+        self.toolbar.a

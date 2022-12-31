@@ -11,7 +11,7 @@ matplotlib.use('Qt5Agg')
 class MplCanvas(FigureCanvasQTAgg):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
-        self.__base_scale = 1.2
+        self.__base_scale = 1.0
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
         self.__press = None
