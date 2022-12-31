@@ -119,6 +119,10 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         pass
 
     def __delete_model(self, item):
+        model = self.__close_model(item)
+        project_remover_service.remove_project_files(model.project.main_file)
+
+    def __close_model(self, item):
         model = item.data(0, QtCore.Qt.UserRole)
 
         if not model:
@@ -128,6 +132,8 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
         self.proj_explorer_tree.takeTopLevelItem(
             self.proj_explorer_tree.indexOfTopLevelItem(item))
+
+        return model
 
     def __prepareProjectItemContextMenu(self, point):
         # Infos about the node selected.
@@ -139,6 +145,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         if selected_item.Type == ProjectTreeViewItemType.PROJECT:
             maker = ProjectContextMenuMaker(selected_item)
             maker.on_delete_model.connect(self.__delete_model)
+            maker.on_close_model.connect(self.__close_model)
             menu = maker.get_menu()
             point.setY(point.y() + 60)
             menu.exec_(self.mapToGlobal(point))
