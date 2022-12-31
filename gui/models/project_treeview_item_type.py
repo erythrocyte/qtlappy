@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from enum import Enum
+
+
+class ProjectTreeViewItemType(Enum):
+    PROJECT = 0
+    INIT_DATA = 1
+    INIT_DATA_CONTOURS = 2
+    INIT_DATA_WELLS = 3
+    INIT_DATA_WELLS_WELLSGEOM = 4
+    INIT_DATA_WELLS_WELLSEVENT = 5
+    INIT_DATA_WELLS_WELLSHISTORY = 6
+    INIT_DATA_FLUID = 7
+    INIT_DATA_RESERVOIR = 8
+    MODEL_DATA = 9
+    MODEL_DATA_GRID = 10
+    MODEL_DATA_MAPS = 11
+    MODEL_DATA_BOUND_CONDITION = 12
+    RESULTS = 13
+    RESULTS_MAPS = 14
+    RESULTS_WELL_WORK = 15
+    RESULTS_FIELD_DATA = 16

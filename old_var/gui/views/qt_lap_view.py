@@ -13,7 +13,7 @@ from gui.import_lib import *
 from gui.views.uis.ui_qt_lap_view import UIQtLapView
 from gui.models.lap_project_paths import LapProjectPaths
 from gui.views.map_plot_view import MapPlotView
-from gui.models.projectTreeItem import ProjectItemType
+from gui.models.project_treeview_item_type import ProjectItemType
 from gui.models.loglevelenum import LogLevelEnum
 from src.lappy.models.settings.global_setts import GlobalSetts
 from src.lappy.services.mesh_maker_2d import MeshMaker2D

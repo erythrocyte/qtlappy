@@ -3,7 +3,7 @@ qt lappy main view
 """
 
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 
 from src.models.lapmodel import LapModel
@@ -14,8 +14,10 @@ from src.services import project_remover_service
 from gui import prog
 from gui.views.uis.ui_qtlapview import UIQtLapView
 from gui.services import lapproject_service
+from gui.services.project_contextmenu_maker import ProjectContextMenuMaker
 from gui.models.loglevelenum import LogLevelEnum
-from gui.utils.helpers import question_box
+from gui.utils.helpers import question_box, qtreewidgetitem_helper
+from gui.models.project_treeview_item_type import ProjectTreeViewItemType
 
 
 class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
@@ -25,6 +27,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
     create_empty_project = QtCore.pyqtSignal(str, str)
     log_message = QtCore.pyqtSignal(str, LogLevelEnum)
+    delete_model = QtCore.pyqtSignal(LapModel)
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -45,7 +48,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
     def __connect(self):
         self.new_project_action.triggered.connect(self.__on_new_project_create)
-        self.save_project_action.triggered.connect(self.__on_save_project)
+        # self.save_project_action.triggered.connect(self.__on_save_project)
         self.proj_explorer_tree.customContextMenuRequested.connect(
             self.__prepareProjectItemContextMenu)
 
@@ -115,12 +118,32 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
     def __on_save_project(self):
         pass
 
+    def __delete_model(self, item):
+        model = item.data(0, QtCore.Qt.UserRole)
+
+        if not model:
+            return
+
+        self.delete_model.emit(model)
+
+        self.proj_explorer_tree.takeTopLevelItem(
+            self.proj_explorer_tree.indexOfTopLevelItem(item))
+
     def __prepareProjectItemContextMenu(self, point):
         # Infos about the node selected.
-        index = self.proj_explorer_tree.indexAt(point)
+        selected_item = self.proj_explorer_tree.itemAt(point)
 
-        if not index.isValid():
+        if not selected_item:
             return
+
+        if selected_item.Type == ProjectTreeViewItemType.PROJECT:
+            maker = ProjectContextMenuMaker(selected_item)
+            maker.on_delete_model.connect(self.__delete_model)
+            menu = maker.get_menu()
+            point.setY(point.y() + 60)
+            menu.exec_(self.mapToGlobal(point))
+
+        # if not project_item.Type == ProjectTreeViewItemType
 
         # item = self.proj_explorer_tree.itemAt(point)
         # name = item.text(0)  # The text of the node.
