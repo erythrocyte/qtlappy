@@ -2,7 +2,7 @@
 module description
 """
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.views.uis.ui_geomview import UI_GeomView
 from gui.views.dialogs.reservoir_size_dialog import ReservoirSizeDialog
@@ -19,13 +19,19 @@ class GeomView(QtWidgets.QWidget, UI_GeomView):
         super().__init__(parent)
         self.setup_ui(self)
 
-    def set_geom(self, geom: LapModelGeom):
+    def set_geom(self, geom: LapModelGeom) -> bool:
         if not geom:
             return
 
         if geom.frame.isNull():
             # shaw dialog
             frame_dialog = ReservoirSizeDialog(self)
-            a = frame_dialog.exec()
 
-            print(a)
+            result = frame_dialog.exec()
+            if result == QtWidgets.QDialog.Accepted:
+                rect = frame_dialog.get_rect()
+                if rect:
+                    geom.frame = rect
+                    return True
+
+        return False
