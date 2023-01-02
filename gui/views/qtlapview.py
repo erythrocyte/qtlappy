@@ -81,6 +81,8 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         plot.set_geom(model.geom)
         self.__add_tab(plot, item.text(column))
 
+        plot.map.scene.fig.tight_layout()
+
     def __on_new_project_create(self):
         last_dir = self.settings.value('new_project_last_dir')
         last_dir = '' if last_dir is None else last_dir
