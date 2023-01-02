@@ -35,6 +35,8 @@ class GeomView(QtWidgets.QWidget, UI_GeomView):
                     x1, y1, x2, y2 = geom.frame.getCoords()
                     self.map.scene.axes.set_xlim(x1, x2)
                     self.map.scene.axes.set_ylim(y1, y2)
+
+                    self.map.scene.fig.tight_layout()
                     return True
 
         return False

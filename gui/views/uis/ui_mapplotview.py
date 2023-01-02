@@ -26,3 +26,5 @@ class UI_MapPlotView:
         self.toolbar = NavigationToolbar(self.scene, self)
         self.__layout.addWidget(self.toolbar)
         self.__layout.addWidget(self.scene)
+
+        self.__layout.setContentsMargins(0, 0, 0, 0)
