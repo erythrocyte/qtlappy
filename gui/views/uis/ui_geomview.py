@@ -10,7 +10,7 @@ from gui.resources import resources
 class UI_GeomView:
     def __init__(self):
         self.__layout = QtWidgets.QGridLayout()
-        self.__map = MapPlotView()
+        self.map = MapPlotView()
         self.__toolbar = QtWidgets.QToolBar()
 
     def retranslateUi(self, widget):
@@ -19,7 +19,7 @@ class UI_GeomView:
     def setup_ui(self, widget):
         widget.setLayout(self.__layout)
         self.__layout.addWidget(self.__toolbar)
-        self.__layout.addWidget(self.__map)
+        self.__layout.addWidget(self.map)
 
         self.__setup_toolbar()
 

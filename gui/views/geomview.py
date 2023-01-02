@@ -32,6 +32,9 @@ class GeomView(QtWidgets.QWidget, UI_GeomView):
                 rect = frame_dialog.get_rect()
                 if rect:
                     geom.frame = rect
+                    x1, y1, x2, y2 = geom.frame.getCoords()
+                    self.map.scene.axes.set_xlim(x1, x2)
+                    self.map.scene.axes.set_ylim(y1, y2)
                     return True
 
         return False
