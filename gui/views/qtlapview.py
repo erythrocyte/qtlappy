@@ -34,7 +34,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         QtWidgets.QMainWindow.__init__(self)
         self.setup_ui(self)
         self.__connect()
-        self.__readSettings()
+        self.__read_settings()
 
     def add_project_to_projects_view(self, model: LapModel):
         item = lapproject_service.to_tree_widget_item(model)
@@ -50,7 +50,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
     def __connect(self):
         self.new_project_action.triggered.connect(self.__on_new_project_create)
         self.proj_explorer_tree.customContextMenuRequested.connect(
-            self.__prepareProjectItemContextMenu)
+            self.__prepare_project_item_context_menu)
         self.proj_explorer_tree.itemClicked.connect(self.__on_item_clicked)
 
         self.main_tab_widget.tabCloseRequested.connect(
@@ -105,11 +105,10 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
         self.settings.setValue('new_project_last_dir', project_folder)
 
-        input = QtWidgets.QInputDialog()
-        input.setWhatsThis('test')
+        input_diag = QtWidgets.QInputDialog()
 
-        project_name, status = input.getText(
-            self, 'Project name', 'Please, insert project name')
+        project_name, status = input_diag.getText(
+            self, 'Project name', 'Please, insert project name' + 20 * ' ')
 
         if not status:
             return
@@ -133,7 +132,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
         return model
 
-    def __prepareProjectItemContextMenu(self, point):
+    def __prepare_project_item_context_menu(self, point):
         # Infos about the node selected.
         selected_item = self.proj_explorer_tree.itemAt(point)
 
@@ -144,9 +143,27 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             maker = ProjectContextMenuMaker(selected_item)
             maker.on_delete_model.connect(self.__delete_model)
             maker.on_close_model.connect(self.__close_model)
+            maker.on_edit_model.connect(self.__edit_model)
             menu = maker.get_menu()
             point.setY(point.y() + 60)
             menu.exec_(self.mapToGlobal(point))
 
-    def __readSettings(self):
+    def __read_settings(self):
         self.settings = QtCore.QSettings(prog.ORGANIZATION, prog.PRODUCT_NAME)
+
+    def __edit_model(self, item: QtWidgets.QTreeWidgetItem):
+        model = item.data(0, QtCore.Qt.UserRole)
+
+        if not model:
+            return
+
+        input_diag = QtWidgets.QInputDialog()
+
+        project_name, status = input_diag.getText(
+            self, 'Project name', 'Please, insert project name' + 20 * ' ')
+
+        if not status:
+            return
+
+        model.name = project_name
+        item.setText(0, project_name)

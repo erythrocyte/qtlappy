@@ -2,15 +2,17 @@
 module description
 """
 
-from PyQt5 import QtWidgets, QtGui, QtCore
-
-from src.models.lapmodel import LapModel
+from PyQt5 import QtWidgets, QtCore
 
 
 class ProjectContextMenuMaker(QtCore.QObject):
+    """
+    context menu maker
+    """
 
     on_delete_model = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem)
     on_close_model = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem)
+    on_edit_model = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem)
 
     def __init__(self, item: QtWidgets.QTreeWidgetItem, parent: QtWidgets = None) -> None:
         self.__tree_item = item
@@ -18,12 +20,19 @@ class ProjectContextMenuMaker(QtCore.QObject):
         super().__init__()
 
     def get_menu(self):
-        menu = QtWidgets.QMenu(self.__parent)
-        createAction = menu.addAction('Close')
-        createAction.triggered.connect(self.__close_model)
+        """
+        prepare menu for project node
+        """
 
-        createAction = menu.addAction('Delete')
-        createAction.triggered.connect(self.__delete_model)
+        menu = QtWidgets.QMenu(self.__parent)
+        action = menu.addAction('Close')
+        action.triggered.connect(self.__close_model)
+
+        action = menu.addAction('Delete')
+        action.triggered.connect(self.__delete_model)
+
+        action = menu.addAction('Edit')
+        action.triggered.connect(self.__edit_model)
 
         return menu
 
@@ -32,3 +41,6 @@ class ProjectContextMenuMaker(QtCore.QObject):
 
     def __delete_model(self):
         self.on_delete_model.emit(self.__tree_item)
+
+    def __edit_model(self):
+        self.on_edit_model.emit(self.__tree_item)
