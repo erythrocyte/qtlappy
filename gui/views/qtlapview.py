@@ -19,6 +19,7 @@ from gui.models.loglevelenum import LogLevelEnum
 from gui.utils.helpers import question_box, qtreewidgetitem_helper
 from gui.models.project_treeview_item_type import ProjectTreeViewItemType
 from gui.views.geomview import GeomView
+from gui.views.dialogs.project_clone_input_dialog import ProjectCloneInputDialog
 
 
 class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
@@ -131,20 +132,20 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         model = item.data(0, QtCore.Qt.UserRole)
 
         if not model:
-            return None, False
+            return None
 
         ask_res = question_box.positive_answer(self,
                                                'Closing the project',
                                                f'Do you want to close the project {model.name}?')
         if not ask_res:
-            return None, False
+            return None
 
         self.close_model.emit(model)
 
         self.proj_explorer_tree.takeTopLevelItem(
             self.proj_explorer_tree.indexOfTopLevelItem(item))
 
-        return model, True
+        return model
 
     def __prepare_project_item_context_menu(self, point):
         # Infos about the node selected.
@@ -158,6 +159,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
             maker.on_delete_model.connect(self.__delete_model)
             maker.on_close_model.connect(self.__close_model)
             maker.on_edit_model.connect(self.__edit_model)
+            maker.on_clone_model.connect(self.__clone_model)
             menu = maker.get_menu()
             point.setY(point.y() + 60)
             menu.exec_(self.mapToGlobal(point))
@@ -200,5 +202,9 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
                                                   f'Do you want to clone the project {model.name}?')
         if not ask_result:
             return
+
+        dialog = ProjectCloneInputDialog(self)
+        if dialog.exec():
+            new_path, new_name = dialog.get_inputs()
         
-        project_cloner.remove_project_files(model.project.main_file)
+        # project_cloner.remove_project_files(model.project.main_file)

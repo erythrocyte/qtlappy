@@ -20,7 +20,7 @@ class LapProject:
         self.reservoir_props_file = ''
 
         self.grid_file = ''
-        self.geo_maps_files = List[str]
+        self.geo_maps_file = '' # file with files for each map 
         self.boundary_file = ''
 
         self.results_folder = ''

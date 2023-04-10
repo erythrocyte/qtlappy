@@ -13,6 +13,7 @@ class ProjectContextMenuMaker(QtCore.QObject):
     on_delete_model = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem)
     on_close_model = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem)
     on_edit_model = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem)
+    on_clone_model = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem)
 
     def __init__(self, item: QtWidgets.QTreeWidgetItem, parent: QtWidgets = None) -> None:
         self.__tree_item = item
@@ -34,6 +35,9 @@ class ProjectContextMenuMaker(QtCore.QObject):
         action = menu.addAction('Edit')
         action.triggered.connect(self.__edit_model)
 
+        action = menu.addAction('Clone')
+        action.triggered.connect(self.__clone_model)
+
         return menu
 
     def __close_model(self):
@@ -44,3 +48,6 @@ class ProjectContextMenuMaker(QtCore.QObject):
 
     def __edit_model(self):
         self.on_edit_model.emit(self.__tree_item)
+
+    def __clone_model(self):
+        self.on_clone_model.emit(self.__tree_item)

@@ -5,7 +5,7 @@ import sys
 import logging
 from PyQt5 import QtWidgets, QtCore
 from gui.views.qtlapview import QtLapView
-from src.services import model_creator_service
+from src.services import model_creator
 from gui.services.logtextedithandler import LogTextEditHandler
 from gui.models.loglevelenum import LogLevelEnum
 
@@ -60,7 +60,7 @@ class QtLappy:
         self.__main_window.close_model.connect(self.__close_model)
 
     def __create_empty_project(self, folder: str, name: str):
-        model = model_creator_service.create(self.__models, name, folder)
+        model = model_creator.create(self.__models, name, folder)
         if model is None:
             self.logger.warning('model not created')
             return

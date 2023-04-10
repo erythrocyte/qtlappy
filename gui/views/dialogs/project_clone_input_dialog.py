@@ -17,3 +17,6 @@ class ProjectCloneInputDialog(QtWidgets.QDialog, UIProjectCloneInputDialog):
         super().__init__(parent)
         self.setLayout(self.layout)
         self.setModal(True)
+
+    def get_inputs(self):
+        return None, None
