@@ -69,7 +69,7 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
         if not project_item:
             self.log_message.emit(
-                "Cant not define project item", LogLevelEnum.WARNING)
+                "Can not define project item", LogLevelEnum.WARNING)
             return
 
         model = project_item.data(0, QtCore.Qt.UserRole)
