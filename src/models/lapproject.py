@@ -2,6 +2,7 @@
 lap project (files)
 """
 
+from typing import List
 from src.utils.decorators import jsonpickle_decorators
 
 
@@ -13,14 +14,14 @@ class LapProject:
     def __init__(self) -> None:
         self.main_file = ''
         self.geom_file = ''
-        self.wells_event = ''
-        self.wells_history = ''
-        self.fluid_props = ''
-        self.reservoir_props = ''
+        self.wells_event_file = ''
+        self.wells_history_file = ''
+        self.fluid_props_file = ''
+        self.reservoir_props_file = ''
 
-        self.grid = ''
-        self.geo_maps = ''
-        self.boundary = ''
+        self.grid_file = ''
+        self.geo_maps_files = List[str]
+        self.boundary_file = ''
 
         self.results_folder = ''
 

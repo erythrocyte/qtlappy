@@ -1,4 +1,7 @@
 """
+project remover
+10.12.2022
+by erythrocyte
 """
 
 import os
@@ -31,14 +34,14 @@ def remove_project_files(project_main_file: str) -> None:
     project = typing.cast(LapProject, jsonpickle.decode(json_string))
 
     
-    file_helper.delete_file_if_exists(project.boundary)
+    file_helper.delete_file_if_exists(project.boundary_file)
     file_helper.delete_file_if_exists(project.geom_file)
-    file_helper.delete_file_if_exists(project.fluid_props)
+    file_helper.delete_file_if_exists(project.fluid_props_file)
     __remove_model_geo_maps(project.geo_maps)
-    file_helper.delete_file_if_exists(project.grid)
-    file_helper.delete_file_if_exists(project.reservoir_props)
-    file_helper.delete_file_if_exists(project.wells_event)
-    file_helper.delete_file_if_exists(project.wells_history)
+    file_helper.delete_file_if_exists(project.grid_file)
+    file_helper.delete_file_if_exists(project.reservoir_props_file)
+    file_helper.delete_file_if_exists(project.wells_event_file)
+    file_helper.delete_file_if_exists(project.wells_history_file)
     __remove_results(project.results_folder)
 
     file_helper.delete_file_if_exists(project_main_file)

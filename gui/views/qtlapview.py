@@ -3,12 +3,12 @@ qt lappy main view
 """
 
 
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore
 
 
 from src.models.lapmodel import LapModel
 from src.utils.helpers import dir_helper
-from src.services import project_remover_service
+from src.services import project_remover, project_cloner
 
 
 from gui import prog
@@ -28,10 +28,11 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
     create_empty_project = QtCore.pyqtSignal(str, str)
     log_message = QtCore.pyqtSignal(str, LogLevelEnum)
-    delete_model = QtCore.pyqtSignal(LapModel)
+    close_model = QtCore.pyqtSignal(LapModel)
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
+        UIQtLapView.__init__(self)
         self.setup_ui(self)
         self.__connect()
         self.__read_settings()
@@ -101,14 +102,14 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
                                                       'Do you want to delete previous project(s)?')
 
             if ask_result:
-                project_remover_service.remove_projects_in_dir(project_folder)
+                project_remover.remove_projects_in_dir(project_folder)
 
         self.settings.setValue('new_project_last_dir', project_folder)
 
         input_diag = QtWidgets.QInputDialog()
 
         project_name, status = input_diag.getText(
-            self, 'Project name', 'Please, insert project name' + 20 * ' ')
+            self, 'Project name', 'Please, insert the project name' + 20 * ' ')
 
         if not status:
             return
@@ -116,21 +117,34 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         self.create_empty_project.emit(project_folder, project_name)
 
     def __delete_model(self, item):
+        model = item.data(0, QtCore.Qt.UserRole)
+        ask_res = question_box.positive_answer(self,
+                                               'Delete the project',
+                                               f'Do you want to permanently delete the project {model.name}?')
+        if not ask_res:
+            return
+
         model = self.__close_model(item)
-        project_remover_service.remove_project_files(model.project.main_file)
+        project_remover.remove_project_files(model.project.main_file)
 
     def __close_model(self, item):
         model = item.data(0, QtCore.Qt.UserRole)
 
         if not model:
-            return
+            return None, False
 
-        self.delete_model.emit(model)
+        ask_res = question_box.positive_answer(self,
+                                               'Closing the project',
+                                               f'Do you want to close the project {model.name}?')
+        if not ask_res:
+            return None, False
+
+        self.close_model.emit(model)
 
         self.proj_explorer_tree.takeTopLevelItem(
             self.proj_explorer_tree.indexOfTopLevelItem(item))
 
-        return model
+        return model, True
 
     def __prepare_project_item_context_menu(self, point):
         # Infos about the node selected.
@@ -167,3 +181,24 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
 
         model.name = project_name
         item.setText(0, project_name)
+
+    def __clone_model(self, item: QtWidgets.QTreeWidgetItem):
+        """
+        Clone model
+
+        Args:
+            item (QtWidgets.QTreeWidgetItem): _description_
+        """
+        model = item.data(0, QtCore.Qt.UserRole)
+
+        if not model:
+            return
+
+        # ask to clone
+        ask_result = question_box.positive_answer(self,
+                                                  'Cloning the project',                                                  
+                                                  f'Do you want to clone the project {model.name}?')
+        if not ask_result:
+            return
+        
+        project_cloner.remove_project_files(model.project.main_file)

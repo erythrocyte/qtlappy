@@ -24,7 +24,7 @@ class UI_ReservoirSizeDialog():
         self.__btn_ok = QtWidgets.QPushButton(self)
         self.__btn_cancel = QtWidgets.QPushButton(self)
 
-    def retranslate_ui(self):
+    def retranslate_ui(self, widget: QtWidgets.QDialog):
         """
         """
 
@@ -46,11 +46,16 @@ class UI_ReservoirSizeDialog():
         self.__btn_cancel.setText("Cancel")
         self.__btn_cancel.setToolTip("Cancel")
 
-        self.setWindowTitle('Insert task frame size')
+        widget.setWindowTitle('Insert task frame size')
 
     def setup_ui(self, widget: QtWidgets.QWidget):
         """
+        _summary_
+
+        Args:
+            widget (QtWidgets.QWidget): _description_
         """
+
         widget.setLayout(self.__layout)
 
         self.__layout.addWidget(self.__x0label, 0, 0)
@@ -68,7 +73,7 @@ class UI_ReservoirSizeDialog():
         self.__layout.addWidget(self.__btn_ok, 2, 2)
         self.__layout.addWidget(self.__btn_cancel, 2, 3)
 
-        self.retranslate_ui()
+        self.retranslate_ui(widget)
 
         self.__set_default_values()
 
@@ -96,7 +101,6 @@ class UI_ReservoirSizeDialog():
         self.y1val.setValue(25.0)
 
     def __connections(self):
-        self.__btn_ok.clicked.connect(self.accept)
-        self.__btn_cancel.clicked.connect(self.reject)
-        # QObject::connect(acceptButton, SIGNAL(clicked()), this, SLOT(accept()));
-        # QObject::connect(rejectButton, SIGNAL(clicked()), this, SLOT(reject()));
+        pass
+        # self.__btn_ok.clicked.connect(self.accept)
+        # self.__btn_cancel.clicked.connect(self.reject)

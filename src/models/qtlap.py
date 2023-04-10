@@ -57,7 +57,7 @@ class QtLappy:
     def __connect_main_view(self):
         self.__main_window.create_empty_project.connect(
             self.__create_empty_project)
-        self.__main_window.delete_model.connect(self.__delete_model)
+        self.__main_window.close_model.connect(self.__close_model)
 
     def __create_empty_project(self, folder: str, name: str):
         model = model_creator_service.create(self.__models, name, folder)
@@ -69,7 +69,7 @@ class QtLappy:
 
         self.__main_window.add_project_to_projects_view(model)
 
-    def __delete_model(self, model):
+    def __close_model(self, model):
         if model in self.__models:
             self.__models.remove(model)
 
