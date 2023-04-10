@@ -61,8 +61,27 @@ class QtLapView(QtWidgets.QMainWindow, UIQtLapView):
         if not item:
             return
 
+        if item.Type == ProjectTreeViewItemType.INIT_DATA_GEOM:
+            self.__on_geom_open(item, column)
+
+    def __on_geom_open(self, item, column):
+        project_item = qtreewidgetitem_helper.get_item_king(item)
+
+        if not project_item:
+            self.log_message.emit(
+                "Can not define project item", LogLevelEnum.WARNING)
+            return
+
+        model = project_item.data(0, QtCore.Qt.UserRole)
+
+        if not model:
+            return
+
         plot = GeomView(self.main_tab_widget)
+        plot.set_geom(model.geom)
         self.__add_tab(plot, item.text(column))
+
+        plot.map.scene.fig.tight_layout()
 
     def __on_new_project_create(self):
         last_dir = self.settings.value('new_project_last_dir')

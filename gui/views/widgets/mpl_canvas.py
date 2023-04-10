@@ -14,10 +14,12 @@ class MplCanvas(FigureCanvasQTAgg):
         self.__base_scale = 1.0
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
+
         self.__press = None
         super(MplCanvas, self).__init__(self.fig)
 
-        self.fig.subplots_adjust(left=0.0, bottom=0.0, right=0.99, top=1.0)
+        self.axes.set_xlabel('x')
+        self.axes.set_ylabel('y')
 
         self.connect()
 

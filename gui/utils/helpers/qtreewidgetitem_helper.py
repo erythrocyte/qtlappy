@@ -13,9 +13,9 @@ def get_item_king(item: QtWidgets.QTreeWidgetItem) -> QtWidgets.QTreeWidgetItem:
     if not item:
         return None
 
-    parent = item.parent
+    parent = item.parent()
 
     if not parent:
         return item
 
-    get_item_king(parent)
+    return get_item_king(parent)
